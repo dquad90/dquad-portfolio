@@ -14,20 +14,17 @@
         .font-mono-code { font-family: 'JetBrains Mono', monospace; }
         .bg-grid-subtle {
             background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px);
-            background-size: 32px 32px;
+            background-size: 24px 24px;
         }
     </style>
 </head>
-<body class="antialiased bg-[#070709] text-[#ededed] selection:bg-fuchsia-600 selection:text-white overflow-x-hidden min-h-screen relative">
+<body class="antialiased bg-[#08080c] text-[#ededed] selection:bg-fuchsia-600 selection:text-white overflow-x-hidden min-h-screen relative">
 
-    <!-- 3D WebGL Background Universe Canvas -->
-    <canvas id="bg-3d-canvas" class="fixed inset-0 w-full h-full pointer-events-none z-0"></canvas>
+    <!-- High-End Ambient Studio Lighting Canvas (Linear / Apple Pro Aesthetic) -->
+    <canvas id="ambient-canvas" class="fixed inset-0 w-full h-full pointer-events-none z-0 filter blur-2xl opacity-75"></canvas>
 
-    <!-- Ambient Cosmic Nebulas & Volumetric Depth Glows -->
-    <div class="fixed top-0 left-1/2 -translate-x-1/2 w-[1200px] h-[600px] bg-gradient-to-b from-violet-600/20 via-fuchsia-600/10 to-transparent blur-[140px] pointer-events-none -z-10"></div>
-    <div class="fixed top-1/3 -left-48 w-[650px] h-[650px] bg-gradient-to-tr from-cyan-600/15 via-violet-600/10 to-transparent blur-[130px] rounded-full pointer-events-none -z-10"></div>
-    <div class="fixed top-2/3 -right-48 w-[700px] h-[700px] bg-gradient-to-bl from-fuchsia-600/15 via-purple-600/10 to-transparent blur-[140px] rounded-full pointer-events-none -z-10"></div>
-    <div class="fixed bottom-0 left-1/3 w-[800px] h-[500px] bg-gradient-to-t from-violet-900/20 via-cyan-900/10 to-transparent blur-[150px] pointer-events-none -z-10"></div>
+    <!-- Precision Engineering Dot Matrix Grid (Linear.app style) -->
+    <div class="fixed inset-0 bg-grid-subtle [mask-image:radial-gradient(ellipse_75%_65%_at_50%_35%,#000_30%,transparent_100%)] pointer-events-none z-0 opacity-35"></div>
 
     <!-- Navigation Header -->
     <header class="fixed top-0 left-0 right-0 z-50 pt-4 px-4">
@@ -62,7 +59,7 @@
         <!-- =====================================================
              1. OVERVIEW (Hero & 3D Holographic Card)
         ====================================================== -->
-        <section id="home" class="scroll-3d-section min-h-screen pt-36 pb-20 flex items-center justify-center relative px-4 scroll-3d-scene">
+        <section id="home" class="min-h-screen pt-36 pb-20 flex items-center justify-center relative px-4">
             <div class="max-w-6xl mx-auto w-full">
                 <div class="grid lg:grid-cols-12 gap-14 items-center">
                     
@@ -183,9 +180,9 @@
         </section>
 
         <!-- =====================================================
-             2. CAPABILITIES BENTO (Abilities Grid with 3D Depth)
+             2. CAPABILITIES BENTO (Abilities Grid)
         ====================================================== -->
-        <section id="bento" class="scroll-3d-section py-28 px-4 relative border-t border-white/5 scroll-3d-scene">
+        <section id="bento" class="py-28 px-4 relative border-t border-white/5">
             <div class="max-w-6xl mx-auto">
                 <div class="text-left mb-16 space-y-3">
                     <p class="text-xs font-mono-code uppercase tracking-[0.25em] text-violet-400 font-semibold">Engineered Architecture</p>
@@ -197,11 +194,11 @@
                     </p>
                 </div>
 
-                <!-- Bento Grid with Staggered 3D Depth Parallax -->
+                <!-- Bento Grid -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 
-                    <!-- Bento 1: Game Development (Depth Factor 1.3) -->
-                    <div class="md:col-span-2 bento-card rounded-3xl p-8 sm:p-10 flex flex-col justify-between scroll-3d-element" data-depth="1.3">
+                    <!-- Bento 1: Game Development -->
+                    <div class="md:col-span-2 bento-card rounded-3xl p-8 sm:p-10 flex flex-col justify-between">
                         <div class="bento-glow"></div>
                         <div class="relative z-10">
                             <div class="flex items-center justify-between mb-8">
@@ -227,8 +224,8 @@
                         </div>
                     </div>
 
-                    <!-- Bento 2: Web Architecture (Depth Factor 0.8) -->
-                    <div class="bento-card rounded-3xl p-8 flex flex-col justify-between scroll-3d-element" data-depth="0.8">
+                    <!-- Bento 2: Web Architecture -->
+                    <div class="bento-card rounded-3xl p-8 flex flex-col justify-between">
                         <div class="bento-glow"></div>
                         <div class="relative z-10">
                             <div class="flex items-center justify-between mb-8">
@@ -251,8 +248,8 @@
                         </div>
                     </div>
 
-                    <!-- Bento 3: Android Studio (Depth Factor 1.5) -->
-                    <div class="bento-card rounded-3xl p-8 flex flex-col justify-between scroll-3d-element" data-depth="1.5">
+                    <!-- Bento 3: Android Studio -->
+                    <div class="bento-card rounded-3xl p-8 flex flex-col justify-between">
                         <div class="bento-glow"></div>
                         <div class="relative z-10">
                             <div class="flex items-center justify-between mb-8">
@@ -275,8 +272,8 @@
                         </div>
                     </div>
 
-                    <!-- Bento 4: Live Telemetry (Depth Factor 1.1) -->
-                    <div class="md:col-span-2 bento-card rounded-3xl p-8 sm:p-10 flex flex-col justify-between scroll-3d-element" data-depth="1.1">
+                    <!-- Bento 4: Live Telemetry -->
+                    <div class="md:col-span-2 bento-card rounded-3xl p-8 sm:p-10 flex flex-col justify-between">
                         <div class="bento-glow"></div>
                         <div class="relative z-10">
                             <div class="flex items-center justify-between mb-6">
@@ -321,7 +318,7 @@
         <!-- =====================================================
              3. PLAYER PROFILE (Bio, Philosophy & Comms)
         ====================================================== -->
-        <section id="profile" class="scroll-3d-section py-28 px-4 relative border-t border-white/5 scroll-3d-scene">
+        <section id="profile" class="py-28 px-4 relative border-t border-white/5">
             <div class="max-w-6xl mx-auto">
                 <div class="grid md:grid-cols-2 gap-16 items-center">
                     <div class="space-y-6">
@@ -337,8 +334,8 @@
                         </p>
                     </div>
 
-                    <!-- Direct Comms Box with 3D Tilt on Scroll -->
-                    <div class="bento-card p-8 rounded-3xl space-y-6 scroll-3d-element" data-depth="1.3">
+                    <!-- Direct Comms Box -->
+                    <div class="bento-card p-8 rounded-3xl space-y-6">
                         <h3 class="text-xl font-bold text-white tracking-tight">Direct Comms Channels</h3>
                         
                         <div class="space-y-4">
@@ -376,9 +373,9 @@
         <!-- =====================================================
              4. TRANSMISSION (Contact / Mission Briefing)
         ====================================================== -->
-        <section id="contact" class="scroll-3d-section py-28 px-4 relative border-t border-white/5 scroll-3d-scene">
+        <section id="contact" class="py-28 px-4 relative border-t border-white/5">
             <div class="max-w-4xl mx-auto">
-                <div class="bento-card rounded-3xl p-8 sm:p-14 border border-white/10 shadow-2xl scroll-3d-element" data-depth="1.0">
+                <div class="bento-card rounded-3xl p-8 sm:p-14 border border-white/10 shadow-2xl">
                     <div class="max-w-xl mx-auto text-center space-y-4 mb-10">
                         <span class="inline-block px-3 py-1 rounded-full bg-fuchsia-500/10 border border-fuchsia-500/20 text-fuchsia-400 font-mono-code text-xs uppercase font-semibold">
                             Initiate Co-Op
