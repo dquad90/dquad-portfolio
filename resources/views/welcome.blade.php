@@ -55,7 +55,7 @@
 
     <!-- Main Hero Section with 3D Holographic Card -->
     <main>
-        <section id="home" class="min-h-screen pt-36 pb-20 flex items-center justify-center relative px-4">
+        <section id="home" class="section-3d min-h-screen pt-36 pb-20 flex items-center justify-center relative px-4">
             <div class="max-w-6xl mx-auto w-full">
                 <div class="grid lg:grid-cols-12 gap-14 items-center">
                     
@@ -184,7 +184,7 @@
         </section>
 
         <!-- Bento Grid Abilities Section (Apple Pro / Linear Aesthetic) -->
-        <section id="bento" class="py-28 px-4 relative">
+        <section id="bento" class="section-3d py-28 px-4 relative border-t border-white/5">
             <div class="max-w-6xl mx-auto">
                 <div class="text-left mb-16 space-y-3">
                     <p class="text-xs font-mono-code uppercase tracking-[0.25em] text-violet-400 font-semibold">Engineered Architecture</p>
@@ -318,7 +318,7 @@
         </section>
 
         <!-- Player Profile / About Section -->
-        <section id="profile" class="py-28 px-4 relative border-t border-white/5">
+        <section id="profile" class="section-3d py-28 px-4 relative border-t border-white/5">
             <div class="max-w-6xl mx-auto">
                 <div class="grid md:grid-cols-2 gap-16 items-center">
                     <div class="space-y-6">
@@ -370,7 +370,7 @@
         </section>
 
         <!-- Initiate Co-Op / Contact Section (Linear / Stripe Style Form) -->
-        <section id="contact" class="py-28 px-4 relative border-t border-white/5">
+        <section id="contact" class="section-3d py-28 px-4 relative border-t border-white/5">
             <div class="max-w-4xl mx-auto">
                 <div class="bento-card rounded-3xl p-8 sm:p-14 border border-white/10 shadow-2xl">
                     <div class="max-w-xl mx-auto text-center space-y-4 mb-10">
@@ -403,6 +403,31 @@
                 </div>
             </div>
         </section>
+
+        <!-- Floating 3D Sector Navigation Spine (HUD) -->
+        <aside class="fixed right-6 top-1/2 -translate-y-1/2 z-40 hidden xl:flex flex-col pointer-events-auto">
+            <div class="glass-modern px-3 py-5 rounded-full border border-white/10 flex flex-col items-center gap-3.5 shadow-2xl backdrop-blur-2xl">
+                <a href="#home" class="sector-link flex items-center gap-2 group text-[11px] font-mono-code text-gray-500 hover:text-white transition-all p-1" title="01 // Overview">
+                    <span class="sector-dot w-2 h-2 rounded-full bg-gray-600"></span>
+                    <span class="hidden group-hover:inline-block pr-1 font-semibold">01 HERO</span>
+                </a>
+                <div class="w-px h-2.5 bg-white/10"></div>
+                <a href="#bento" class="sector-link flex items-center gap-2 group text-[11px] font-mono-code text-gray-500 hover:text-white transition-all p-1" title="02 // Capabilities Bento">
+                    <span class="sector-dot w-2 h-2 rounded-full bg-gray-600"></span>
+                    <span class="hidden group-hover:inline-block pr-1 font-semibold">02 BENTO</span>
+                </a>
+                <div class="w-px h-2.5 bg-white/10"></div>
+                <a href="#profile" class="sector-link flex items-center gap-2 group text-[11px] font-mono-code text-gray-500 hover:text-white transition-all p-1" title="03 // Player Profile">
+                    <span class="sector-dot w-2 h-2 rounded-full bg-gray-600"></span>
+                    <span class="hidden group-hover:inline-block pr-1 font-semibold">03 PROFILE</span>
+                </a>
+                <div class="w-px h-2.5 bg-white/10"></div>
+                <a href="#contact" class="sector-link flex items-center gap-2 group text-[11px] font-mono-code text-gray-500 hover:text-white transition-all p-1" title="04 // Transmission">
+                    <span class="sector-dot w-2 h-2 rounded-full bg-gray-600"></span>
+                    <span class="hidden group-hover:inline-block pr-1 font-semibold">04 CONTACT</span>
+                </a>
+            </div>
+        </aside>
     </main>
 
     <!-- Footer -->
