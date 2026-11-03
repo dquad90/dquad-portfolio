@@ -74,7 +74,7 @@
         
         <div class="relative z-10 max-w-screen-xl mx-auto px-4 w-full">
             <div class="flex flex-col md:flex-row items-center justify-between gap-12">
-                <div class="text-left w-full md:w-2/3">
+                <div class="text-left w-full md:w-7/12">
                     <div class="clip-reveal mb-2">
                         <p class="text-lg md:text-xl text-violet-400 font-medium tracking-widest uppercase">Hello, World. I am</p>
                     </div>
@@ -121,13 +121,14 @@
                     </div>
                 </div>
                 
-                <div class="w-full md:w-1/3 flex justify-end">
-                    <!-- A decorative futuristic element -->
-                    <div class="relative w-64 h-64 border border-white/10 rounded-full flex items-center justify-center p-8 animate-[spin_30s_linear_infinite]">
-                        <div class="w-full h-full border border-dashed border-white/20 rounded-full flex items-center justify-center p-6 animate-[spin_20s_reverse_linear_infinite]">
-                            <div class="w-full h-full border border-white/30 rounded-full bg-gradient-to-tr from-violet-500/20 to-fuchsia-500/20 backdrop-blur-md flex items-center justify-center">
-                                <span class="font-bold text-2xl tracking-tighter animate-[spin_10s_linear_infinite]">DQ</span>
-                            </div>
+                <div class="w-full md:w-5/12 flex items-center justify-center relative">
+                    <!-- Interactive 3D Canvas Scene -->
+                    <div id="hero-3d-container" class="w-full h-[380px] md:h-[480px] relative flex items-center justify-center cursor-grab active:cursor-grabbing select-none">
+                        <canvas id="hero-3d-canvas" class="w-full h-full block"></canvas>
+                        <!-- Interactive HUD overlay -->
+                        <div class="absolute bottom-2 left-1/2 -translate-x-1/2 pointer-events-none glass-modern px-3.5 py-1.5 rounded-full border border-white/10 text-[11px] text-gray-300 tracking-widest uppercase flex items-center gap-2 whitespace-nowrap shadow-xl">
+                            <span class="w-2 h-2 rounded-full bg-fuchsia-500 animate-pulse"></span>
+                            <span>3D Quantum Core • Drag to Rotate</span>
                         </div>
                     </div>
                 </div>
@@ -349,40 +350,5 @@
             <p class="text-gray-500 text-sm font-medium">© 2026 Darun Naim Sindid. All rights reserved.</p>
         </div>
     </footer>
-
-    <!-- Modern Scripts -->
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // Intersection Observer for scroll reveals
-            const revealObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('is-visible');
-                    }
-                });
-            }, {
-                threshold: 0.15,
-                rootMargin: "0px 0px -50px 0px"
-            });
-
-            document.querySelectorAll('.clip-reveal').forEach((el) => {
-                revealObserver.observe(el);
-            });
-
-            // Spotlight Mouse Tracking for modern cards
-            const spotlights = document.querySelectorAll('.spotlight');
-            
-            spotlights.forEach(el => {
-                el.addEventListener('mousemove', e => {
-                    const rect = el.getBoundingClientRect();
-                    const x = e.clientX - rect.left;
-                    const y = e.clientY - rect.top;
-                    
-                    el.style.setProperty('--mouse-x', `${x}px`);
-                    el.style.setProperty('--mouse-y', `${y}px`);
-                });
-            });
-        });
-    </script>
 </body>
 </html>

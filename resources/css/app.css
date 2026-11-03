@@ -20,9 +20,12 @@
     -webkit-backdrop-filter: blur(24px);
   }
 
-  /* Spotlight mouse hover effect */
+  /* Spotlight mouse hover & 3D card tilt */
   .spotlight {
     position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.2s cubic-bezier(0.2, 1, 0.2, 1), border-color 0.3s ease;
+    will-change: transform;
   }
   .spotlight::before {
     content: "";
