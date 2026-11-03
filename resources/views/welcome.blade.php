@@ -197,7 +197,7 @@
 
                     <!-- 3D Rotating Holographic Disc & Gaming Controller -->
                     <div class="flex items-center justify-center lg:justify-end">
-                        <div id="controller-3d-container" class="relative w-[320px] sm:w-[360px] h-[220px] flex items-center justify-center cursor-grab active:cursor-grabbing select-none group">
+                        <div id="controller-3d-container" class="relative w-[340px] sm:w-[390px] h-[240px] flex items-center justify-center cursor-grab active:cursor-grabbing select-none group">
                             <canvas id="controller-3d-canvas" class="w-full h-full"></canvas>
                             <div class="absolute bottom-1 right-2 text-[10px] font-mono-code text-gray-500/70 group-hover:text-fuchsia-400 transition-colors pointer-events-none flex items-center gap-1.5">
                                 <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
