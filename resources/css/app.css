@@ -26,9 +26,10 @@
     border: 1px solid rgba(255, 255, 255, 0.08);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
-    transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
     position: relative;
     overflow: hidden;
+    transform-style: preserve-3d;
   }
   .bento-card:hover {
     border-color: rgba(255, 255, 255, 0.22);
@@ -54,6 +55,7 @@
   /* 3D Holographic Foil Card */
   .holo-container {
     perspective: 1200px;
+    transform-style: preserve-3d;
   }
   .holo-card {
     position: relative;
@@ -61,9 +63,6 @@
     transition: transform 0.12s ease-out;
     will-change: transform;
     border-radius: 1.5rem;
-  }
-  .holo-elevated {
-    transform: translateZ(35px);
   }
   .holo-glare {
     position: absolute;
@@ -104,104 +103,19 @@
     transition: opacity 0.25s ease;
   }
 
-  /* Subtle spotlight */
-  .spotlight {
-    position: relative;
-  }
-  .spotlight::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    background: radial-gradient(
-      500px circle at var(--mouse-x, 0) var(--mouse-y, 0),
-      rgba(255, 255, 255, 0.06),
-      transparent 45%
-    );
-    border-radius: inherit;
-    pointer-events: none;
-    z-index: 0;
-  }
-  .spotlight:hover::before {
-    opacity: 1;
-  }
-
   /* -------------------------------------------------------------
-     3D Rotating Cube / Deck World
+     3D Continuous Scroll Physics Elements
   ------------------------------------------------------------- */
-  .cube-viewport {
-    width: 100vw;
-    height: 100vh;
-    overflow: hidden;
-    perspective: 1400px;
+  .scroll-3d-scene {
+    perspective: 1200px;
     perspective-origin: 50% 50%;
-    position: relative;
-    background: #070709;
-  }
-
-  .cube-world {
-    width: 100vw;
-    height: 100vh;
-    position: relative;
     transform-style: preserve-3d;
-    transition: transform 1.05s cubic-bezier(0.16, 1, 0.3, 1);
-    will-change: transform;
-    transform: translateZ(-50vw) rotateY(0deg);
   }
 
-  .cube-face {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    overflow-y: auto;
-    overflow-x: hidden;
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
-    background: #070709;
-    box-shadow: 0 0 120px rgba(0, 0, 0, 0.85) inset;
-    transition: opacity 0.8s ease;
-  }
-
-  /* Custom scrollbar on face panels */
-  .cube-face::-webkit-scrollbar {
-    width: 6px;
-  }
-  .cube-face::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, 0.2);
-  }
-  .cube-face::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.15);
-    border-radius: 9999px;
-  }
-
-  /* 4 Faces positioned at 90deg intervals around center */
-  .cube-face-0 {
-    transform: rotateY(0deg) translateZ(50vw);
-  }
-  .cube-face-1 {
-    transform: rotateY(90deg) translateZ(50vw);
-  }
-  .cube-face-2 {
-    transform: rotateY(180deg) translateZ(50vw);
-  }
-  .cube-face-3 {
-    transform: rotateY(270deg) translateZ(50vw);
-  }
-
-  .face-shading {
-    position: absolute;
-    inset: 0;
-    background: #000000;
-    opacity: 0.65;
-    transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1);
-    pointer-events: none;
-    z-index: 40;
-  }
-  .cube-face.is-current .face-shading {
-    opacity: 0;
+  .scroll-3d-element {
+    transform-style: preserve-3d;
+    will-change: transform, opacity;
+    transition: transform 0.15s ease-out, opacity 0.15s ease-out;
   }
 
   /* Floating 3D Sector HUD */
@@ -219,9 +133,14 @@
   }
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   background: #070709;
   color: #ededed;
-  overflow: hidden;
+  overflow-x: hidden;
   font-family: 'Jost', 'Futura', -apple-system, sans-serif;
+  min-height: 100vh;
 }
