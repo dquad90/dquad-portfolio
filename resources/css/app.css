@@ -10,22 +10,103 @@
 
 @layer utilities {
   .font-futura {
-    font-family: 'Jost', 'Futura', sans-serif;
+    font-family: 'Jost', 'Futura', -apple-system, sans-serif;
   }
   
   .glass-modern {
-    background: rgba(15, 23, 42, 0.4);
+    background: rgba(18, 18, 24, 0.65);
     border: 1px solid rgba(255, 255, 255, 0.08);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
   }
 
-  /* Spotlight mouse hover & 3D card tilt */
-  .spotlight {
+  /* Linear / Apple Pro Bento Card */
+  .bento-card {
+    background: rgba(14, 14, 18, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    overflow: hidden;
+  }
+  .bento-card:hover {
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 12px 35px -10px rgba(0, 0, 0, 0.7), 0 0 25px -5px rgba(168, 85, 247, 0.12);
+  }
+  .bento-glow {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      450px circle at var(--mouse-x, 0) var(--mouse-y, 0),
+      rgba(255, 255, 255, 0.08),
+      transparent 45%
+    );
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    z-index: 1;
+  }
+  .bento-card:hover .bento-glow {
+    opacity: 1;
+  }
+
+  /* 3D Holographic Foil Card */
+  .holo-container {
+    perspective: 1200px;
+  }
+  .holo-card {
     position: relative;
     transform-style: preserve-3d;
-    transition: transform 0.2s cubic-bezier(0.2, 1, 0.2, 1), border-color 0.3s ease;
+    transition: transform 0.12s ease-out;
     will-change: transform;
+    border-radius: 1.5rem;
+  }
+  .holo-elevated {
+    transform: translateZ(35px);
+  }
+  .holo-glare {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(
+      circle at var(--holo-x, 50%) var(--holo-y, 50%),
+      rgba(255, 255, 255, 0.5) 0%,
+      rgba(217, 70, 239, 0.4) 25%,
+      rgba(6, 182, 212, 0.35) 50%,
+      transparent 75%
+    );
+    mix-blend-mode: color-dodge;
+    opacity: var(--holo-opacity, 0);
+    transition: opacity 0.25s ease;
+    pointer-events: none;
+    z-index: 20;
+  }
+  .holo-foil {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(
+      115deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.15) 25%,
+      rgba(217, 70, 239, 0.3) 45%,
+      rgba(6, 182, 212, 0.3) 55%,
+      rgba(250, 204, 21, 0.25) 70%,
+      transparent 100%
+    );
+    background-size: 220% 220%;
+    background-position: var(--holo-bg-pos, 50% 50%);
+    mix-blend-mode: overlay;
+    opacity: var(--holo-opacity, 0);
+    pointer-events: none;
+    z-index: 21;
+    transition: opacity 0.25s ease;
+  }
+
+  /* Subtle spotlight */
+  .spotlight {
+    position: relative;
   }
   .spotlight::before {
     content: "";
@@ -34,9 +115,9 @@
     opacity: 0;
     transition: opacity 0.3s ease;
     background: radial-gradient(
-      600px circle at var(--mouse-x, 0) var(--mouse-y, 0),
-      rgba(255, 255, 255, 0.08),
-      transparent 40%
+      500px circle at var(--mouse-x, 0) var(--mouse-y, 0),
+      rgba(255, 255, 255, 0.06),
+      transparent 45%
     );
     border-radius: inherit;
     pointer-events: none;
@@ -46,43 +127,24 @@
     opacity: 1;
   }
 
-  /* Morphing background blob */
-  .blob-shape {
-    animation: morph 8s ease-in-out infinite both alternate;
-  }
-
-  /* Text Reveal Effect */
+  /* Reveal text */
   .clip-reveal {
     overflow: hidden;
   }
   .clip-reveal > * {
     transform: translateY(100%);
     opacity: 0;
-    transition: transform 1s cubic-bezier(0.2, 1, 0.2, 1), opacity 1s ease-out;
+    transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.9s ease-out;
   }
   .clip-reveal.is-visible > * {
     transform: translateY(0);
     opacity: 1;
   }
-  
-  /* Smooth scale image/card hover */
-  .hover-scale-img {
-    transition: transform 0.6s cubic-bezier(0.2, 1, 0.2, 1);
-  }
-  .group:hover .hover-scale-img {
-    transform: scale(1.05);
-  }
-}
-
-@keyframes morph {
-  0% { border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; }
-  34% { border-radius: 70% 30% 50% 50% / 30% 30% 70% 70%; }
-  67% { border-radius: 100% 60% 60% 100% / 100% 100% 60% 60%; }
-  100% { border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; }
 }
 
 body {
-  background-color: #050505;
-  color: #f8fafc;
+  background: #070709;
+  color: #ededed;
   overflow-x: hidden;
+  font-family: 'Jost', 'Futura', -apple-system, sans-serif;
 }
