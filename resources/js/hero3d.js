@@ -1,288 +1,321 @@
 import * as THREE from 'three';
 
 export function initHero3D() {
-    const container = document.getElementById('hero-3d-container');
-    const canvas = document.getElementById('hero-3d-canvas');
-    if (!container || !canvas) return;
+    const canvas = document.getElementById('global-3d-canvas');
+    if (!canvas) return;
 
-    // Scene & Fog
+    // 1. Scene & Depth Fog
     const scene = new THREE.Scene();
-    scene.fog = new THREE.FogExp2(0x050505, 0.05);
+    scene.fog = new THREE.FogExp2(0x050505, 0.032);
 
-    // Camera with cinematic low-angle perspective
+    // 2. Camera Setup
     const camera = new THREE.PerspectiveCamera(
-        55,
-        container.clientWidth / container.clientHeight,
+        58,
+        window.innerWidth / window.innerHeight,
         0.1,
-        100
+        150
     );
-    camera.position.set(0, 3.4, 7.2);
-    camera.lookAt(0, -0.6, -1.5);
+    camera.position.set(0, 1.2, 7.5);
 
-    // WebGL Renderer with Alpha & Antialiasing
+    // 3. Renderer with High Performance & Alpha
     const renderer = new THREE.WebGLRenderer({
         canvas: canvas,
         alpha: true,
         antialias: true,
         powerPreference: 'high-performance'
     });
-    renderer.setSize(container.clientWidth, container.clientHeight);
+    renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-    // GLSL Simplex Noise + Wave Shader
-    const vertexShader = `
-        uniform float uTime;
-        uniform vec2 uMouse;
-        uniform float uMouseSpeed;
+    // 4. Global Lighting
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.9);
+    scene.add(ambientLight);
 
-        varying vec2 vUv;
-        varying float vElevation;
-        varying vec3 vPosition;
+    const lightCyan = new THREE.PointLight(0x06b6d4, 6, 45);
+    lightCyan.position.set(-5, 6, 5);
+    scene.add(lightCyan);
 
-        // Optimized 2D Simplex Noise for procedural liquid
-        vec3 permute(vec3 x) { return mod(((x*34.0)+1.0)*x, 289.0); }
+    const lightMagenta = new THREE.PointLight(0xd946ef, 7, 50);
+    lightMagenta.position.set(6, -4, -15);
+    scene.add(lightMagenta);
 
-        float snoise(vec2 v){
-          const vec4 C = vec4(0.211324865405187, 0.366025403784439,
-                   -0.577350269189626, 0.024390243902439);
-          vec2 i  = floor(v + dot(v, C.yy) );
-          vec2 x0 = v -   i + dot(i, C.xx);
-          vec2 i1;
-          i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
-          vec4 x12 = x0.xyxy + C.xxzz;
-          x12.xy -= i1;
-          i = mod(i, 289.0);
-          vec3 p = permute( permute( i.y + vec3(0.0, i1.y, 1.0 ))
-                + i.x + vec3(0.0, i1.x, 1.0 ));
-          vec3 m = max(0.5 - vec3(dot(x0,x0), dot(x12.xy,x12.xy),
-            dot(x12.zw,x12.zw)), 0.0);
-          m = m*m ;
-          m = m*m ;
-          vec3 x = 2.0 * fract(p * C.www) - 1.0;
-          vec3 h = abs(x) - 0.5;
-          vec3 ox = floor(x + 0.5);
-          vec3 a0 = x - ox;
-          m *= 1.79284291400159 - 0.85373472095314 * ( a0*a0 + h*h );
-          vec3 g;
-          g.x  = a0.x  * x0.x  + h.x  * x0.y;
-          g.yz = a0.yz * x12.xz + h.yz * x12.yw;
-          return 130.0 * dot(m, g);
-        }
+    const lightViolet = new THREE.PointLight(0x8b5cf6, 6, 60);
+    lightViolet.position.set(-4, -6, -38);
+    scene.add(lightViolet);
 
-        void main() {
-            vUv = uv;
-            vec3 pos = position;
+    // -------------------------------------------------------------
+    // LANDMARK 1: HERO CYBER CORE (Z = 0)
+    // -------------------------------------------------------------
+    const heroGroup = new THREE.Group();
+    heroGroup.position.set(3.2, 0.2, 0);
+    scene.add(heroGroup);
 
-            // Multi-frequency organic liquid swells
-            float wave1 = snoise(vec2(pos.x * 0.16 + uTime * 0.22, pos.y * 0.16 + uTime * 0.18)) * 0.95;
-            float wave2 = snoise(vec2(pos.x * 0.32 - uTime * 0.3, pos.y * 0.28 + uTime * 0.25)) * 0.4;
-            float swell = sin(pos.x * 0.65 + uTime * 1.4) * cos(pos.y * 0.65 + uTime * 1.1) * 0.25;
-
-            // Interactive mouse ripple & fluid distortion
-            vec2 mouseWorld = (uMouse - 0.5) * vec2(28.0, 18.0);
-            float dist = length(pos.xy - mouseWorld);
-            float ripple = sin(dist * 3.8 - uTime * 7.5) * exp(-dist * 0.38);
-            float interactiveDistortion = ripple * (uMouseSpeed * 1.6 + 0.35);
-
-            pos.z += wave1 + wave2 + swell + interactiveDistortion;
-            vElevation = pos.z;
-            vPosition = pos;
-
-            gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
-        }
-    `;
-
-    const fragmentShader = `
-        uniform float uTime;
-        uniform vec3 uColorA;
-        uniform vec3 uColorB;
-        uniform vec3 uColorC;
-        uniform vec3 uBgColor;
-
-        varying vec2 vUv;
-        varying float vElevation;
-        varying vec3 vPosition;
-
-        void main() {
-            // High-Tech Cyber Grid Matrix lines
-            vec2 grid = fract(vUv * vec2(70.0, 45.0));
-            vec2 gridDist = abs(grid - 0.5);
-            float lineX = smoothstep(0.44, 0.49, gridDist.x);
-            float lineY = smoothstep(0.44, 0.49, gridDist.y);
-            float matrixLine = max(lineX, lineY);
-
-            // Dynamic Elevation Color Interpolation
-            float normElev = smoothstep(-1.2, 1.8, vElevation);
-            vec3 liquidColor = mix(uColorA, uColorB, normElev);
-            liquidColor = mix(liquidColor, uColorC, smoothstep(0.5, 1.6, vElevation));
-
-            // Blend dark cyber surface with glowing matrix lines & wave crests
-            vec3 finalColor = mix(uBgColor * 0.3, liquidColor, 0.45);
-            finalColor += liquidColor * matrixLine * 1.75;
-
-            // Specular wave crest sparkle
-            float crest = pow(smoothstep(0.65, 1.5, vElevation), 3.0);
-            finalColor += vec3(1.0, 1.0, 1.0) * crest * 0.75;
-
-            // Radial Vignette / Atmospheric Fog Blend
-            float distFromCenter = length(vUv - vec2(0.5, 0.5)) * 1.5;
-            float alpha = smoothstep(1.15, 0.25, distFromCenter);
-
-            // Far horizon fade to blend into background
-            float horizonFade = smoothstep(1.0, 0.15, vUv.y);
-            alpha *= horizonFade;
-
-            gl_FragColor = vec4(finalColor, alpha * 0.95);
-        }
-    `;
-
-    // Uniforms
-    const uniforms = {
-        uTime: { value: 0 },
-        uMouse: { value: new THREE.Vector2(0.5, 0.5) },
-        uMouseSpeed: { value: 0 },
-        uColorA: { value: new THREE.Color(0x4f46e5) }, // Indigo / Electric Violet
-        uColorB: { value: new THREE.Color(0xec4899) }, // Neon Pink / Fuchsia
-        uColorC: { value: new THREE.Color(0x06b6d4) }, // Vivid Cyan
-        uBgColor: { value: new THREE.Color(0x050505) }  // Deep Space Dark
-    };
-
-    // 1. High-Density Liquid Wave Mesh (36 x 22 units)
-    const waveGeo = new THREE.PlaneGeometry(36, 22, 180, 120);
-    const waveMat = new THREE.ShaderMaterial({
-        vertexShader,
-        fragmentShader,
-        uniforms,
-        transparent: true,
-        depthWrite: false,
-        side: THREE.DoubleSide
+    const coreGeo = new THREE.OctahedronGeometry(1.5, 0);
+    const coreMat = new THREE.MeshPhysicalMaterial({
+        color: 0x0f051d,
+        emissive: 0xa855f7,
+        emissiveIntensity: 0.85,
+        roughness: 0.1,
+        metalness: 0.9,
+        clearcoat: 1.0,
+        flatShading: true
     });
+    const heroCore = new THREE.Mesh(coreGeo, coreMat);
+    heroGroup.add(heroCore);
 
-    const waveMesh = new THREE.Mesh(waveGeo, waveMat);
-    waveMesh.rotation.x = -Math.PI / 2.3;
-    waveMesh.position.y = -1.2;
-    waveMesh.position.z = -1.0;
-    scene.add(waveMesh);
+    const cageGeo = new THREE.IcosahedronGeometry(2.3, 1);
+    const cageMat = new THREE.MeshStandardMaterial({
+        color: 0xec4899,
+        wireframe: true,
+        emissive: 0xd946ef,
+        emissiveIntensity: 0.5
+    });
+    const heroCage = new THREE.Mesh(cageGeo, cageMat);
+    heroGroup.add(heroCage);
 
-    // 2. Floating Ambient 3D Particle Cloud hovering over the matrix
-    const particleCount = 200;
+    const ring1Geo = new THREE.TorusGeometry(3.0, 0.025, 16, 100);
+    const ringMat = new THREE.MeshBasicMaterial({ color: 0x38bdf8, transparent: true, opacity: 0.7 });
+    const heroRing1 = new THREE.Mesh(ring1Geo, ringMat);
+    heroRing1.rotation.x = Math.PI / 3;
+    heroGroup.add(heroRing1);
+
+    const ring2Geo = new THREE.TorusGeometry(3.4, 0.02, 16, 100);
+    const heroRing2 = new THREE.Mesh(ring2Geo, ringMat);
+    heroRing2.rotation.y = Math.PI / 4;
+    heroGroup.add(heroRing2);
+
+    // -------------------------------------------------------------
+    // LANDMARK 2: ABOUT / PLAYER PROFILE HOLOGRAM (Z = -18)
+    // -------------------------------------------------------------
+    const aboutGroup = new THREE.Group();
+    aboutGroup.position.set(3.5, -1.2, -18);
+    scene.add(aboutGroup);
+
+    const dodecaGeo = new THREE.DodecahedronGeometry(2.2, 0);
+    const dodecaMat = new THREE.MeshStandardMaterial({
+        color: 0x06b6d4,
+        wireframe: true,
+        emissive: 0x06b6d4,
+        emissiveIntensity: 0.6
+    });
+    const aboutDodeca = new THREE.Mesh(dodecaGeo, dodecaMat);
+    aboutGroup.add(aboutDodeca);
+
+    const aboutCoreGeo = new THREE.SphereGeometry(1.1, 16, 16);
+    const aboutCoreMat = new THREE.MeshPhysicalMaterial({
+        color: 0x1e1b4b,
+        emissive: 0x6366f1,
+        emissiveIntensity: 0.7,
+        roughness: 0.2,
+        metalness: 0.8
+    });
+    const aboutCore = new THREE.Mesh(aboutCoreGeo, aboutCoreMat);
+    aboutGroup.add(aboutCore);
+
+    // -------------------------------------------------------------
+    // LANDMARK 3: ABILITIES CYBER WAVE MATRIX (Z = -36)
+    // -------------------------------------------------------------
+    const waveGroup = new THREE.Group();
+    waveGroup.position.set(0, -4.5, -36);
+    scene.add(waveGroup);
+
+    const waveWidth = 38;
+    const waveHeight = 26;
+    const waveSegmentsX = 140;
+    const waveSegmentsY = 90;
+    const wavePlaneGeo = new THREE.PlaneGeometry(waveWidth, waveHeight, waveSegmentsX, waveSegmentsY);
+    const wavePlaneMat = new THREE.MeshStandardMaterial({
+        color: 0x0a0a14,
+        wireframe: true,
+        emissive: 0xa855f7,
+        emissiveIntensity: 0.45,
+        roughness: 0.3,
+        metalness: 0.85
+    });
+    const wavePlane = new THREE.Mesh(wavePlaneGeo, wavePlaneMat);
+    wavePlane.rotation.x = -Math.PI / 2.2;
+    waveGroup.add(wavePlane);
+
+    // Store base positions for dynamic procedural ripple
+    const baseWavePositions = wavePlaneGeo.attributes.position.array.slice();
+
+    // -------------------------------------------------------------
+    // LANDMARK 4: CONTACT HYPERSPACE WARP VORTEX (Z = -54)
+    // -------------------------------------------------------------
+    const contactGroup = new THREE.Group();
+    contactGroup.position.set(0, -3.2, -54);
+    scene.add(contactGroup);
+
+    const vortexRings = [];
+    for (let i = 0; i < 9; i++) {
+        const radius = 1.6 + i * 0.7;
+        const vRingGeo = new THREE.TorusGeometry(radius, 0.028, 16, 80);
+        const vRingMat = new THREE.MeshBasicMaterial({
+            color: i % 2 === 0 ? 0xec4899 : 0x06b6d4,
+            transparent: true,
+            opacity: 0.75 - i * 0.05
+        });
+        const ring = new THREE.Mesh(vRingGeo, vRingMat);
+        ring.position.z = -i * 1.8;
+        contactGroup.add(ring);
+        vortexRings.push(ring);
+    }
+
+    // -------------------------------------------------------------
+    // 5. HYPERSPACE 3D PARTICLE FIELD (Spanning Z = +15 to -70)
+    // -------------------------------------------------------------
+    const particleCount = 1200;
     const particleGeo = new THREE.BufferGeometry();
-    const particlePos = new Float32Array(particleCount * 3);
+    const particlePositions = new Float32Array(particleCount * 3);
+    const particleScales = new Float32Array(particleCount);
 
     for (let i = 0; i < particleCount * 3; i += 3) {
-        particlePos[i] = (Math.random() - 0.5) * 26;
-        particlePos[i + 1] = (Math.random() - 0.5) * 8 + 0.5;
-        particlePos[i + 2] = (Math.random() - 0.5) * 16;
+        particlePositions[i] = (Math.random() - 0.5) * 36;
+        particlePositions[i + 1] = (Math.random() - 0.5) * 24;
+        particlePositions[i + 2] = 15 - Math.random() * 85; // Distributed through full scroll depth
+        particleScales[i / 3] = Math.random();
     }
-    particleGeo.setAttribute('position', new THREE.BufferAttribute(particlePos, 3));
+
+    particleGeo.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
 
     const particleMat = new THREE.PointsMaterial({
-        size: 0.04,
-        color: 0x38bdf8,
+        size: 0.055,
+        color: 0xc084fc,
         transparent: true,
-        opacity: 0.65,
+        opacity: 0.8,
         blending: THREE.AdditiveBlending
     });
-    const particleField = new THREE.Points(particleGeo, particleMat);
-    scene.add(particleField);
+    const particleSystem = new THREE.Points(particleGeo, particleMat);
+    scene.add(particleSystem);
 
-    // Mouse Tracking & Dynamic Velocity Physics
-    let targetMouse = new THREE.Vector2(0.5, 0.5);
-    let currentMouse = new THREE.Vector2(0.5, 0.5);
-    let targetSpeed = 0;
-    let currentSpeed = 0;
-    let prevMouse = { x: 0, y: 0 };
-    let lastMoveTime = performance.now();
+    // -------------------------------------------------------------
+    // SCROLL & MOUSE INTERPOLATION
+    // -------------------------------------------------------------
+    let targetScroll = 0;
+    let currentScroll = 0;
+    let scrollVelocity = 0;
+    let lastScrollY = window.scrollY;
+
+    function updateScrollProgress() {
+        const maxScroll = Math.max(document.documentElement.scrollHeight - window.innerHeight, 1);
+        targetScroll = window.scrollY / maxScroll;
+
+        const delta = window.scrollY - lastScrollY;
+        scrollVelocity = Math.abs(delta) * 0.002;
+        lastScrollY = window.scrollY;
+    }
+    window.addEventListener('scroll', updateScrollProgress, { passive: true });
+    updateScrollProgress();
+
+    let targetMouse = { x: 0, y: 0 };
+    let currentMouse = { x: 0, y: 0 };
 
     window.addEventListener('mousemove', (e) => {
-        const now = performance.now();
-        const dt = Math.max((now - lastMoveTime) / 1000, 0.001);
-
-        const dx = e.clientX - prevMouse.x;
-        const dy = e.clientY - prevMouse.y;
-        const speed = Math.sqrt(dx * dx + dy * dy) / (dt * 1000);
-
-        targetSpeed = Math.min(speed * 0.45, 2.5);
-
-        prevMouse = { x: e.clientX, y: e.clientY };
-        lastMoveTime = now;
-
-        // Normalized mouse position (0 to 1 across window)
-        targetMouse.x = e.clientX / window.innerWidth;
-        targetMouse.y = 1.0 - (e.clientY / window.innerHeight);
+        targetMouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+        targetMouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
     });
 
-    // Touch support for mobile devices
-    window.addEventListener('touchmove', (e) => {
-        if (e.touches.length > 0) {
-            targetMouse.x = e.touches[0].clientX / window.innerWidth;
-            targetMouse.y = 1.0 - (e.touches[0].clientY / window.innerHeight);
-            targetSpeed = 1.2;
-        }
-    }, { passive: true });
-
-    // Expose preset color theme switcher to window for HUD buttons
-    window.setWaveTheme = function (theme) {
-        if (theme === 'cyber') {
-            uniforms.uColorA.value.set(0x4f46e5);
-            uniforms.uColorB.value.set(0xec4899);
-            uniforms.uColorC.value.set(0x06b6d4);
-        } else if (theme === 'neon') {
-            uniforms.uColorA.value.set(0x10b981);
-            uniforms.uColorB.value.set(0x06b6d4);
-            uniforms.uColorC.value.set(0xa855f7);
-        } else if (theme === 'inferno') {
-            uniforms.uColorA.value.set(0xf59e0b);
-            uniforms.uColorB.value.set(0xef4444);
-            uniforms.uColorC.value.set(0xd946ef);
-        }
-    };
-
-    // Window Resize Handling
+    // Handle Window Resize
     function onResize() {
-        if (!container) return;
-        const width = container.clientWidth;
-        const height = container.clientHeight;
-        if (width === 0 || height === 0) return;
-
-        camera.aspect = width / height;
+        camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
-        renderer.setSize(width, height);
+        renderer.setSize(window.innerWidth, window.innerHeight);
     }
     window.addEventListener('resize', onResize);
 
-    // Performance: Pause when scrolled off screen
-    let isVisible = true;
-    const observer = new IntersectionObserver(([entry]) => {
-        isVisible = entry.isIntersecting;
-    }, { threshold: 0.05 });
-    observer.observe(container);
-
-    // Animation Render Loop
+    // -------------------------------------------------------------
+    // ANIMATION & SCROLL FLIGHT LOOP
+    // -------------------------------------------------------------
     const clock = new THREE.Clock();
+
+    // Keyframes for the 3D Camera Flight through the sections
+    // progress: [0.0 (Hero), 0.33 (About), 0.66 (Abilities), 1.0 (Contact)]
+    const cameraWaypoints = [
+        { progress: 0.0,  pos: new THREE.Vector3(0, 1.2, 7.5),     look: new THREE.Vector3(0.5, 0.5, 0) },
+        { progress: 0.33, pos: new THREE.Vector3(1.8, -0.6, -11),  look: new THREE.Vector3(3.5, -1.2, -18) },
+        { progress: 0.66, pos: new THREE.Vector3(-0.8, -2.4, -27), look: new THREE.Vector3(0, -4.5, -36) },
+        { progress: 1.0,  pos: new THREE.Vector3(0, -2.2, -44),    look: new THREE.Vector3(0, -3.2, -54) }
+    ];
+
+    function getInterpolatedCamera(p) {
+        p = THREE.MathUtils.clamp(p, 0, 1);
+        let idx = 0;
+        for (let i = 0; i < cameraWaypoints.length - 1; i++) {
+            if (p >= cameraWaypoints[i].progress && p <= cameraWaypoints[i + 1].progress) {
+                idx = i;
+                break;
+            }
+        }
+        const w1 = cameraWaypoints[idx];
+        const w2 = cameraWaypoints[idx + 1];
+        const range = w2.progress - w1.progress;
+        const t = (p - w1.progress) / range;
+
+        // Smooth cubic ease-in-out
+        const smoothT = t * t * (3 - 2 * t);
+
+        const pos = new THREE.Vector3().lerpVectors(w1.pos, w2.pos, smoothT);
+        const look = new THREE.Vector3().lerpVectors(w1.look, w2.look, smoothT);
+        return { pos, look };
+    }
 
     function animate() {
         requestAnimationFrame(animate);
-        if (!isVisible) return;
 
         const elapsedTime = clock.getElapsedTime();
-        uniforms.uTime.value = elapsedTime;
 
-        // Smooth Lerp Mouse Position & Speed
-        currentMouse.lerp(targetMouse, 0.08);
-        uniforms.uMouse.value.copy(currentMouse);
+        // 1. Smooth lerp for scroll & mouse parallax
+        currentScroll += (targetScroll - currentScroll) * 0.06;
+        scrollVelocity *= 0.92;
 
-        targetSpeed *= 0.94; // Decays over time
-        currentSpeed += (targetSpeed - currentSpeed) * 0.1;
-        uniforms.uMouseSpeed.value = currentSpeed;
+        currentMouse.x += (targetMouse.x - currentMouse.x) * 0.05;
+        currentMouse.y += (targetMouse.y - currentMouse.y) * 0.05;
 
-        // Subtle camera swaying
-        camera.position.x = (currentMouse.x - 0.5) * 1.5;
-        camera.position.y = 3.4 + (currentMouse.y - 0.5) * 0.6;
-        camera.lookAt(0, -0.6, -1.5);
+        // 2. Flight path calculation
+        const flight = getInterpolatedCamera(currentScroll);
 
-        // Particle floating
-        particleField.rotation.y = elapsedTime * 0.015;
+        // Apply mouse parallax to camera position and look target
+        camera.position.x = flight.pos.x + currentMouse.x * 0.8;
+        camera.position.y = flight.pos.y + currentMouse.y * 0.6;
+        camera.position.z = flight.pos.z - scrollVelocity * 4.0; // Dynamic hyperspace surge on scroll!
+
+        const lookTarget = flight.look.clone();
+        lookTarget.x += currentMouse.x * 0.4;
+        lookTarget.y += currentMouse.y * 0.3;
+        camera.lookAt(lookTarget);
+
+        // 3. Animate Hero Core
+        heroGroup.rotation.y = elapsedTime * 0.4;
+        heroGroup.rotation.x = elapsedTime * 0.2;
+        heroRing1.rotation.z = elapsedTime * 0.6;
+        heroRing2.rotation.z = -elapsedTime * 0.5;
+
+        // 4. Animate About Hologram
+        aboutGroup.rotation.y = -elapsedTime * 0.5;
+        aboutGroup.rotation.z = Math.sin(elapsedTime * 0.8) * 0.3;
+        aboutCore.scale.setScalar(1 + Math.sin(elapsedTime * 2.0) * 0.08);
+
+        // 5. Animate Abilities Wave Grid
+        const posAttr = wavePlaneGeo.attributes.position;
+        const waveArr = posAttr.array;
+        for (let i = 0; i < waveArr.length; i += 3) {
+            const u = baseWavePositions[i];
+            const v = baseWavePositions[i + 1];
+            waveArr[i + 2] = Math.sin(u * 0.4 + elapsedTime * 1.6) * Math.cos(v * 0.4 + elapsedTime * 1.2) * 0.75
+                          + Math.sin(u * 0.8 - elapsedTime * 2.0) * 0.25;
+        }
+        posAttr.needsUpdate = true;
+
+        // 6. Animate Contact Vortex Rings
+        vortexRings.forEach((ring, index) => {
+            ring.rotation.z = elapsedTime * (0.3 + index * 0.08) * (index % 2 === 0 ? 1 : -1);
+            const scale = 1 + Math.sin(elapsedTime * 2.5 + index * 0.6) * 0.06;
+            ring.scale.set(scale, scale, 1);
+        });
+
+        // 7. Ambient Particle Drift
+        particleSystem.rotation.y = elapsedTime * 0.015;
+        particleSystem.rotation.z = currentScroll * 0.5;
 
         renderer.render(scene, camera);
     }

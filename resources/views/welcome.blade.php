@@ -6,25 +6,20 @@
     <title>DQUAD | Darun Naim Sindid</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- Jost is a beautiful geometric sans-serif that closely matches Futura's aesthetic -->
+    <!-- Jost (Futura aesthetic) -->
     <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         body { font-family: 'Jost', 'Futura', sans-serif; }
-        
-        /* Interactive grid */
-        .bg-grid-modern {
-            background-size: 50px 50px;
-            background-image: 
-                linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-                linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-        }
     </style>
 </head>
-<body class="antialiased bg-[#050505] text-white selection:bg-fuchsia-600 selection:text-white">
+<body class="antialiased bg-[#050505] text-white selection:bg-fuchsia-600 selection:text-white overflow-x-hidden">
     
+    <!-- Global 3D Universe Canvas (Fixed full-screen backdrop that reacts to scroll) -->
+    <canvas id="global-3d-canvas" class="fixed inset-0 w-full h-full pointer-events-none z-0"></canvas>
+
     <!-- Navbar -->
-    <nav class="fixed w-full z-50 top-0 start-0 border-b border-white/5 glass-modern">
+    <nav class="fixed w-full z-50 top-0 start-0 border-b border-white/5 glass-modern backdrop-blur-xl">
       <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4 md:py-5">
       <a href="#" class="flex items-center space-x-3 rtl:space-x-reverse group">
           <span class="self-center text-3xl font-bold tracking-tighter text-white">DQUAD</span>
@@ -64,18 +59,11 @@
       </div>
     </nav>
 
-    <!-- Hero Section -->
-    <section id="home" class="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
-        <!-- Interactive 3D GPU Liquid Wave Matrix Canvas (Full Bleed) -->
-        <div id="hero-3d-container" class="absolute inset-0 w-full h-full z-0 pointer-events-auto">
-            <canvas id="hero-3d-canvas" class="w-full h-full block"></canvas>
-            <!-- Atmospheric gradient overlay for contrast -->
-            <div class="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-[#050505]/60 pointer-events-none"></div>
-        </div>
-        
-        <div class="relative z-10 max-w-screen-xl mx-auto px-4 w-full pointer-events-none">
+    <!-- Hero Section (Section 1: Z = 0) -->
+    <section id="home" class="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden z-10">
+        <div class="relative max-w-screen-xl mx-auto px-4 w-full">
             <div class="flex flex-col md:flex-row items-center justify-between gap-12">
-                <div class="text-left w-full md:w-7/12 pointer-events-auto">
+                <div class="text-left w-full md:w-7/12">
                     <div class="clip-reveal mb-2">
                         <p class="text-lg md:text-xl text-violet-400 font-medium tracking-widest uppercase flex items-center gap-2">
                             <span class="inline-block w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
@@ -83,7 +71,7 @@
                         </p>
                     </div>
                     <div class="clip-reveal mb-4" style="transition-delay: 0.1s;">
-                        <h1 class="text-7xl md:text-[8.5rem] font-black tracking-tighter uppercase leading-none drop-shadow-[0_10px_35px_rgba(217,70,239,0.3)]">
+                        <h1 class="text-7xl md:text-[8.5rem] font-black tracking-tighter uppercase leading-none drop-shadow-[0_10px_40px_rgba(217,70,239,0.35)]">
                             DQUAD
                         </h1>
                     </div>
@@ -125,82 +113,69 @@
                     </div>
                 </div>
                 
-                <!-- Cyber Telemetry & Wave Matrix Control HUD -->
-                <div class="w-full md:w-5/12 flex justify-end pointer-events-auto">
+                <!-- Cyber Telemetry Card -->
+                <div class="w-full md:w-5/12 flex justify-end">
                     <div class="spotlight glass-modern p-6 md:p-8 rounded-3xl border border-white/10 w-full max-w-md shadow-2xl backdrop-blur-2xl">
                         <div class="flex items-center justify-between pb-4 mb-5 border-b border-white/10">
                             <div class="flex items-center gap-3">
-                                <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                                <span class="text-xs uppercase tracking-widest text-emerald-400 font-semibold">Matrix System Active</span>
+                                <span class="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-ping"></span>
+                                <span class="text-xs uppercase tracking-widest text-cyan-400 font-semibold">3D Dimension Active</span>
                             </div>
-                            <span class="text-[11px] font-mono text-gray-500 uppercase">GPU v4.2</span>
+                            <span class="text-[11px] font-mono text-gray-500 uppercase">Sector: 01 Hero</span>
                         </div>
 
-                        <!-- Live Telemetry Status -->
-                        <div class="space-y-3.5 mb-6 text-sm">
-                            <div class="flex justify-between items-center text-xs">
-                                <span class="text-gray-400 font-mono uppercase">Wave Engine:</span>
-                                <span class="text-white font-mono font-medium">3D Simplex GPU Displacement</span>
+                        <!-- 3D Waypoints Guide -->
+                        <div class="space-y-3 mb-6 text-xs font-mono">
+                            <div class="flex justify-between items-center text-gray-300">
+                                <span class="text-gray-500 uppercase">01 // Hero:</span>
+                                <span class="text-white">Cyber Core (Z=0)</span>
                             </div>
-                            <div class="flex justify-between items-center text-xs">
-                                <span class="text-gray-400 font-mono uppercase">Interactive Surface:</span>
-                                <span class="text-cyan-400 font-mono font-medium">Real-time Cursor Ripple</span>
+                            <div class="flex justify-between items-center text-gray-300">
+                                <span class="text-gray-500 uppercase">02 // Profile:</span>
+                                <span class="text-cyan-400">Hologram Dodecahedron (Z=-18)</span>
                             </div>
-                            <div class="flex justify-between items-center text-xs">
-                                <span class="text-gray-400 font-mono uppercase">Displacement Grid:</span>
-                                <span class="text-fuchsia-400 font-mono font-medium">180 x 120 Vertices</span>
+                            <div class="flex justify-between items-center text-gray-300">
+                                <span class="text-gray-500 uppercase">03 // Abilities:</span>
+                                <span class="text-fuchsia-400">Cyber Wave Grid (Z=-36)</span>
+                            </div>
+                            <div class="flex justify-between items-center text-gray-300">
+                                <span class="text-gray-500 uppercase">04 // Contact:</span>
+                                <span class="text-emerald-400">Hyperspace Vortex (Z=-54)</span>
                             </div>
                         </div>
 
-                        <!-- Dynamic Wave Visualizer bars -->
-                        <div class="flex items-end gap-1 h-10 mb-6 px-3 py-2 bg-black/40 rounded-xl border border-white/5">
-                            <div class="flex-1 bg-gradient-to-t from-violet-600 to-fuchsia-500 rounded-sm animate-[pulse_1.2s_ease-in-out_infinite]" style="height: 65%;"></div>
-                            <div class="flex-1 bg-gradient-to-t from-violet-600 to-fuchsia-500 rounded-sm animate-[pulse_0.9s_ease-in-out_infinite]" style="height: 90%;"></div>
-                            <div class="flex-1 bg-gradient-to-t from-violet-600 to-fuchsia-500 rounded-sm animate-[pulse_1.5s_ease-in-out_infinite]" style="height: 45%;"></div>
-                            <div class="flex-1 bg-gradient-to-t from-violet-600 to-fuchsia-500 rounded-sm animate-[pulse_1.1s_ease-in-out_infinite]" style="height: 80%;"></div>
-                            <div class="flex-1 bg-gradient-to-t from-violet-600 to-fuchsia-500 rounded-sm animate-[pulse_0.8s_ease-in-out_infinite]" style="height: 100%;"></div>
-                            <div class="flex-1 bg-gradient-to-t from-violet-600 to-fuchsia-500 rounded-sm animate-[pulse_1.4s_ease-in-out_infinite]" style="height: 55%;"></div>
-                            <div class="flex-1 bg-gradient-to-t from-violet-600 to-fuchsia-500 rounded-sm animate-[pulse_1.0s_ease-in-out_infinite]" style="height: 85%;"></div>
-                            <div class="flex-1 bg-gradient-to-t from-violet-600 to-fuchsia-500 rounded-sm animate-[pulse_1.3s_ease-in-out_infinite]" style="height: 70%;"></div>
-                        </div>
-
-                        <!-- Live Shader Theme Switcher -->
-                        <div>
-                            <p class="text-[11px] font-mono uppercase tracking-wider text-gray-400 mb-2.5">Switch Wave Spectrum:</p>
-                            <div class="grid grid-cols-3 gap-2">
-                                <button onclick="window.setWaveTheme('cyber')" class="px-3 py-1.5 rounded-lg text-xs font-medium border border-violet-500/30 bg-violet-500/10 hover:bg-violet-500/20 text-violet-300 transition-all text-center">
-                                    Cyber
-                                </button>
-                                <button onclick="window.setWaveTheme('neon')" class="px-3 py-1.5 rounded-lg text-xs font-medium border border-emerald-500/30 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 transition-all text-center">
-                                    Emerald
-                                </button>
-                                <button onclick="window.setWaveTheme('inferno')" class="px-3 py-1.5 rounded-lg text-xs font-medium border border-amber-500/30 bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 transition-all text-center">
-                                    Inferno
-                                </button>
+                        <!-- Scroll prompt box -->
+                        <div class="p-3.5 rounded-2xl bg-white/5 border border-white/10 flex items-center gap-3">
+                            <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-violet-600 to-fuchsia-600 flex items-center justify-center text-xs font-bold shadow-lg">
+                                3D
+                            </div>
+                            <div>
+                                <p class="text-xs font-semibold text-white">Full-Site 3D Flight</p>
+                                <p class="text-[11px] text-gray-400">Scroll down to navigate through dimensions</p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             
-            <div class="absolute bottom-8 left-1/2 -translate-x-1/2 clip-reveal pointer-events-auto" style="transition-delay: 0.6s;">
+            <div class="absolute bottom-8 left-1/2 -translate-x-1/2 clip-reveal" style="transition-delay: 0.6s;">
                 <a href="#about" class="flex flex-col items-center text-gray-500 hover:text-white transition-colors">
-                    <span class="text-xs uppercase tracking-widest mb-2 font-medium">Scroll down</span>
+                    <span class="text-xs uppercase tracking-widest mb-2 font-medium">Scroll to Fly</span>
                     <div class="w-px h-10 bg-gradient-to-b from-gray-500 to-transparent"></div>
                 </a>
             </div>
         </div>
     </section>
 
-    <!-- About Section -->
-    <section id="about" class="py-32 relative z-10 border-t border-white/5 bg-[#030303]">
+    <!-- About Section (Section 2: Z = -18) -->
+    <section id="about" class="py-32 relative z-10 border-t border-white/5 bg-transparent backdrop-blur-[2px]">
         <div class="max-w-screen-xl mx-auto px-4">
             <div class="grid md:grid-cols-2 gap-16 items-center">
                 <div class="clip-reveal">
                     <div>
-                        <h2 class="text-5xl md:text-6xl font-black mb-8 tracking-tighter">PLAYER<br><span class="text-gray-600">PROFILE.</span></h2>
-                        <div class="h-1 w-20 bg-white mb-10"></div>
-                        <p class="text-gray-400 text-xl md:text-2xl font-light leading-relaxed mb-6">
+                        <h2 class="text-5xl md:text-6xl font-black mb-8 tracking-tighter">PLAYER<br><span class="text-cyan-400">PROFILE.</span></h2>
+                        <div class="h-1 w-20 bg-cyan-400 mb-10"></div>
+                        <p class="text-gray-300 text-xl md:text-2xl font-light leading-relaxed mb-6">
                             I'm <strong class="text-white font-medium">Darun Naim Sindid</strong>, operating under the alias <strong class="text-white font-medium">DQUAD</strong>.
                         </p>
                         <p class="text-gray-400 text-lg leading-relaxed">
@@ -209,9 +184,8 @@
                     </div>
                 </div>
                 <div class="clip-reveal spotlight glass-modern rounded-3xl p-1 md:p-8" style="transition-delay: 0.2s;">
-                    <div class="relative w-full aspect-square md:aspect-[4/3] rounded-2xl overflow-hidden bg-gray-900 group">
-                        <!-- Placeholder for a real photo or 3D render -->
-                        <div class="absolute inset-0 bg-gradient-to-tr from-violet-600/30 to-fuchsia-600/30 mix-blend-overlay z-10 group-hover:opacity-0 transition-opacity duration-700"></div>
+                    <div class="relative w-full aspect-square md:aspect-[4/3] rounded-2xl overflow-hidden bg-gray-900 group border border-white/10">
+                        <div class="absolute inset-0 bg-gradient-to-tr from-cyan-600/30 to-fuchsia-600/30 mix-blend-overlay z-10 group-hover:opacity-0 transition-opacity duration-700"></div>
                         <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=2070&auto=format&fit=crop" alt="Gaming Setup" class="w-full h-full object-cover grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 hover-scale-img z-0">
                     </div>
                 </div>
@@ -219,20 +193,20 @@
         </div>
     </section>
 
-    <!-- Abilities Section (Cards with Spotlight Hover) -->
-    <section id="skills" class="py-32 relative z-10 border-t border-white/5">
+    <!-- Abilities Section (Section 3: Z = -36) -->
+    <section id="skills" class="py-32 relative z-10 border-t border-white/5 bg-transparent backdrop-blur-[2px]">
         <div class="max-w-screen-xl mx-auto px-4">
             <div class="clip-reveal mb-20">
                 <div class="flex items-center gap-6">
-                    <h2 class="text-5xl md:text-6xl font-black tracking-tighter">TECH<br><span class="text-gray-600">ABILITIES.</span></h2>
-                    <div class="flex-1 h-px bg-gradient-to-r from-white/20 to-transparent"></div>
+                    <h2 class="text-5xl md:text-6xl font-black tracking-tighter">TECH<br><span class="text-fuchsia-400">ABILITIES.</span></h2>
+                    <div class="flex-1 h-px bg-gradient-to-r from-fuchsia-500/30 to-transparent"></div>
                 </div>
             </div>
 
             <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6" id="spotlight-container">
                 <!-- Card 1 -->
                 <div class="clip-reveal" style="transition-delay: 0.1s;">
-                    <div class="spotlight glass-modern p-8 rounded-3xl h-full border border-white/5 hover:border-white/20 transition-colors z-10 relative flex flex-col justify-between">
+                    <div class="spotlight glass-modern p-8 rounded-3xl h-full border border-white/5 hover:border-white/20 transition-colors z-10 relative flex flex-col justify-between backdrop-blur-xl">
                         <div class="relative z-10">
                             <div class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center mb-6">
                                 <span class="text-white font-bold text-xl">01</span>
@@ -250,7 +224,7 @@
 
                 <!-- Card 2 -->
                 <div class="clip-reveal" style="transition-delay: 0.2s;">
-                    <div class="spotlight glass-modern p-8 rounded-3xl h-full border border-white/5 hover:border-white/20 transition-colors z-10 relative flex flex-col justify-between">
+                    <div class="spotlight glass-modern p-8 rounded-3xl h-full border border-white/5 hover:border-white/20 transition-colors z-10 relative flex flex-col justify-between backdrop-blur-xl">
                         <div class="relative z-10">
                             <div class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center mb-6">
                                 <span class="text-white font-bold text-xl">02</span>
@@ -267,7 +241,7 @@
 
                 <!-- Card 3: Game Developer -->
                 <div class="clip-reveal" style="transition-delay: 0.3s;">
-                    <div class="spotlight glass-modern p-8 rounded-3xl h-full border border-white/5 hover:border-white/20 transition-colors z-10 relative flex flex-col justify-between">
+                    <div class="spotlight glass-modern p-8 rounded-3xl h-full border border-white/5 hover:border-white/20 transition-colors z-10 relative flex flex-col justify-between backdrop-blur-xl">
                         <div class="relative z-10">
                             <div class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center mb-6">
                                 <span class="text-white font-bold text-xl">03</span>
@@ -285,7 +259,7 @@
 
                 <!-- Card 4 -->
                 <div class="clip-reveal" style="transition-delay: 0.4s;">
-                    <div class="spotlight glass-modern p-8 rounded-3xl h-full border border-white/5 hover:border-white/20 transition-colors z-10 relative flex flex-col justify-between">
+                    <div class="spotlight glass-modern p-8 rounded-3xl h-full border border-white/5 hover:border-white/20 transition-colors z-10 relative flex flex-col justify-between backdrop-blur-xl">
                         <div class="relative z-10">
                             <div class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center mb-6">
                                 <span class="text-white font-bold text-xl">04</span>
@@ -303,13 +277,13 @@
         </div>
     </section>
 
-    <!-- Contact Section -->
-    <section id="contact" class="py-32 relative z-10 bg-[#030303] border-t border-white/5">
+    <!-- Contact Section (Section 4: Z = -54) -->
+    <section id="contact" class="py-32 relative z-10 bg-transparent border-t border-white/5 backdrop-blur-[2px]">
         <div class="max-w-screen-xl mx-auto px-4">
             <div class="grid md:grid-cols-2 gap-16">
                 <div class="clip-reveal">
-                    <h2 class="text-5xl md:text-7xl font-black tracking-tighter mb-8">INITIATE<br><span class="text-violet-500">CO-OP.</span></h2>
-                    <p class="text-xl text-gray-400 font-light mb-12 max-w-md">Ready to spawn into a new project? Reach out directly or follow my work across GitHub and YouTube.</p>
+                    <h2 class="text-5xl md:text-7xl font-black tracking-tighter mb-8">INITIATE<br><span class="text-emerald-400">CO-OP.</span></h2>
+                    <p class="text-xl text-gray-300 font-light mb-12 max-w-md">Ready to spawn into a new project? Reach out directly or follow my work across GitHub and YouTube.</p>
                     
                     <div class="space-y-6">
                         <!-- Comms Line -->
@@ -360,7 +334,7 @@
                 
                 <!-- Modern Minimal Form -->
                 <div class="clip-reveal" style="transition-delay: 0.2s;">
-                    <form class="glass-modern p-8 md:p-12 rounded-3xl spotlight">
+                    <form class="glass-modern p-8 md:p-12 rounded-3xl spotlight border border-white/10 shadow-2xl backdrop-blur-xl">
                         <h3 class="text-2xl font-bold mb-8">Send Transmission</h3>
                         <div class="mb-8">
                             <input type="email" id="email" class="w-full bg-transparent border-0 border-b border-white/20 focus:ring-0 focus:border-white text-white text-lg py-3 px-0 transition-colors placeholder:text-gray-600" placeholder="Your Email Address" required>
@@ -378,11 +352,11 @@
     </section>
 
     <!-- Footer -->
-    <footer class="border-t border-white/5 py-12">
+    <footer class="border-t border-white/5 py-12 relative z-10 bg-transparent">
         <div class="max-w-screen-xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-6">
             <div class="flex items-center space-x-3">
                 <span class="text-2xl font-bold tracking-tighter text-white">DQUAD</span>
-                <span class="text-xs text-gray-500 border border-white/10 px-2 py-0.5 rounded-full">v1.0</span>
+                <span class="text-xs text-gray-500 border border-white/10 px-2 py-0.5 rounded-full">3D Universe v2.0</span>
             </div>
             
             <div class="flex items-center space-x-6 text-gray-400">
