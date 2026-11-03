@@ -1,15 +1,16 @@
 import * as THREE from 'three';
 
 /**
- * 3D Metallic Blue Gaming Controller & Holographic Rotating Disc
- * Matches the reference image:
- * - Electric Cobalt / Metallic Blue chassis with gradient specular reflections
- * - Left raised circular platform with puffy 4-way D-Pad
- * - Right raised circular platform with 4 pearl-white spherical action buttons
- * - Dual collar-mounted pearl-white analog thumbsticks
- * - Dual middle pill buttons and top shoulder bumpers
- * - Holographic rotating disc elevated right beneath/around the controller
- * - Full interactive 360° mouse drag + floating hover physics
+ * EXACT 3D Designer Controller & Rotating Disc
+ * Matches the reference image media_1793733251544_372a819d.png:
+ * - Matte midnight purple-indigo chunky ergonomic chassis
+ * - Two deep sunken circular wells on left and right faces
+ * - Left well: Puffy pastel baby-blue / white 4-way cross D-Pad
+ * - Right well: 4 candy buttons (Lime North, Golden West, Coral-Orange East, Cyan South)
+ * - Lower angled chin with dual white mushroom analog thumbsticks
+ * - Top white accent bracket with signature coiled purple cable loop
+ * - Elevated holographic rotating disc framing the controller
+ * - Full interactive 360° mouse drag + floating hover animation
  */
 export function initBentoController() {
     const container = document.getElementById('controller-3d-container');
@@ -23,7 +24,7 @@ export function initBentoController() {
     const height = container.clientHeight || 240;
 
     const camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 100);
-    camera.position.set(0, 1.1, 5.8);
+    camera.position.set(0, 0.9, 5.8);
     camera.lookAt(0, 0, 0);
 
     const renderer = new THREE.WebGLRenderer({
@@ -35,59 +36,57 @@ export function initBentoController() {
     renderer.setSize(width, height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-    // 2. High-Fidelity Studio Lighting (To match reference image highlights)
-    const ambientLight = new THREE.AmbientLight(0xffffff, 1.1);
+    // 2. Studio Lighting (Replicating the clean clay studio lighting in reference image)
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
     scene.add(ambientLight);
 
-    // Key Light (Crisp specular gloss on top-left of controller)
-    const keyLight = new THREE.DirectionalLight(0xffffff, 2.8);
-    keyLight.position.set(-4, 7, 6);
+    // Main Top-Left Key Light (Soft smooth clay highlights)
+    const keyLight = new THREE.DirectionalLight(0xffffff, 2.6);
+    keyLight.position.set(-5, 8, 6);
     scene.add(keyLight);
 
-    // Sky Blue Rim Light (Left flank cyan sheen)
-    const rimCyan = new THREE.PointLight(0x38bdf8, 8, 20);
-    rimCyan.position.set(-5, 2, 4);
+    // Front-Right Fill Light
+    const fillLight = new THREE.DirectionalLight(0x93c5fd, 1.2);
+    fillLight.position.set(5, 3, 5);
+    scene.add(fillLight);
+
+    // Subtle Cyan/Violet Rim Lights
+    const rimCyan = new THREE.PointLight(0x38bdf8, 5, 15);
+    rimCyan.position.set(-4, -1, 3);
     scene.add(rimCyan);
 
-    // Deep Cobalt / Violet Rim Light (Right & bottom depth)
-    const rimBlue = new THREE.PointLight(0x1d4ed8, 9, 20);
-    rimBlue.position.set(5, -2, 4);
-    scene.add(rimBlue);
+    const rimViolet = new THREE.PointLight(0xa855f7, 5, 15);
+    rimViolet.position.set(4, 2, 3);
+    scene.add(rimViolet);
 
-    // Subtle Under-glow for the disc
-    const discGlow = new THREE.PointLight(0x06b6d4, 6, 12);
-    discGlow.position.set(0, -1.2, 1);
-    scene.add(discGlow);
-
-    // Master Group
+    // Master Root Group
     const rootGroup = new THREE.Group();
     scene.add(rootGroup);
 
     // -------------------------------------------------------------
-    // 3. THE ROTATING DISC (Moved Higher to frame the controller)
+    // 3. THE ELEVATED ROTATING DISC (Directly framing the controller)
     // -------------------------------------------------------------
     const discGroup = new THREE.Group();
-    // Elevated higher as requested: -0.55 instead of -1.2
-    discGroup.position.set(0, -0.55, 0);
-    discGroup.rotation.x = 0.35; // tilted towards viewer
+    discGroup.position.set(0, -0.62, 0);
+    discGroup.rotation.x = 0.38; // Tilted toward viewer
     rootGroup.add(discGroup);
 
-    // Main Disc Base Platter
+    // Disc Base Turntable
     const platterGeo = new THREE.CylinderGeometry(2.35, 2.45, 0.08, 64);
     const platterMat = new THREE.MeshPhysicalMaterial({
-        color: 0x0b1120, // Deep dark navy metallic
-        roughness: 0.18,
-        metalness: 0.85,
+        color: 0x141029, // Midnight purple-navy platter
+        roughness: 0.2,
+        metalness: 0.8,
         clearcoat: 1.0,
-        clearcoatRoughness: 0.1
+        clearcoatRoughness: 0.15
     });
     const platter = new THREE.Mesh(platterGeo, platterMat);
     discGroup.add(platter);
 
-    // Outer Glowing Electric Cyan Rim
+    // Outer Neon Violet Rim
     const outerRimGeo = new THREE.TorusGeometry(2.45, 0.04, 16, 64);
     const outerRimMat = new THREE.MeshBasicMaterial({
-        color: 0x06b6d4, // Cyan
+        color: 0xa855f7, // Violet
         transparent: true,
         opacity: 0.95
     });
@@ -95,10 +94,10 @@ export function initBentoController() {
     outerRim.rotation.x = Math.PI / 2;
     discGroup.add(outerRim);
 
-    // Middle Royal Blue Track
+    // Middle Cyan Laser Track
     const midRimGeo = new THREE.TorusGeometry(1.75, 0.028, 16, 64);
     const midRimMat = new THREE.MeshBasicMaterial({
-        color: 0x3b82f6, // Electric Blue
+        color: 0x06b6d4, // Cyan
         transparent: true,
         opacity: 0.85
     });
@@ -106,22 +105,22 @@ export function initBentoController() {
     midRim.rotation.x = Math.PI / 2;
     discGroup.add(midRim);
 
-    // Inner Radiant Neon Violet Core Ring
-    const innerRimGeo = new THREE.TorusGeometry(1.0, 0.032, 16, 64);
+    // Inner Glowing Amber/Gold Track (Harmonizing with candy buttons)
+    const innerRimGeo = new THREE.TorusGeometry(1.05, 0.03, 16, 64);
     const innerRimMat = new THREE.MeshBasicMaterial({
-        color: 0xa855f7, // Violet
+        color: 0xfacc15, // Golden yellow
         transparent: true,
-        opacity: 0.95
+        opacity: 0.9
     });
     const innerRim = new THREE.Mesh(innerRimGeo, innerRimMat);
     innerRim.rotation.x = Math.PI / 2;
     discGroup.add(innerRim);
 
-    // Holographic Radial Spokes
+    // Radial Holographic Crossbars
     const spokeMat = new THREE.MeshBasicMaterial({
-        color: 0x38bdf8,
+        color: 0xc084fc,
         transparent: true,
-        opacity: 0.45
+        opacity: 0.4
     });
     for (let i = 0; i < 4; i++) {
         const spokeGeo = new THREE.BoxGeometry(4.6, 0.02, 0.04);
@@ -131,201 +130,213 @@ export function initBentoController() {
     }
 
     // -------------------------------------------------------------
-    // 4. THE 3D METALLIC BLUE GAMING CONTROLLER
+    // 4. THE EXACT 3D DESIGNER CONTROLLER
     // -------------------------------------------------------------
     const controllerGroup = new THREE.Group();
-    // Positioned gracefully above the elevated disc
-    controllerGroup.position.set(0, 0.12, 0);
+    controllerGroup.position.set(0, 0.15, 0);
     rootGroup.add(controllerGroup);
 
-    // Materials Matching the Reference Image:
-    // Electric Cobalt Blue Chassis with Satin Clearcoat
-    const blueChassisMat = new THREE.MeshPhysicalMaterial({
-        color: 0x1d4ed8, // Vibrant Cobalt Blue
-        emissive: 0x0284c7, // Sky Blue ambient sheen
-        emissiveIntensity: 0.18,
-        roughness: 0.22,
-        metalness: 0.65,
-        clearcoat: 1.0,
-        clearcoatRoughness: 0.12
+    // --- Materials Matching Reference Image ---
+    // Deep Midnight Purple-Indigo Chassis (Satin clay finish)
+    const purpleChassisMat = new THREE.MeshPhysicalMaterial({
+        color: 0x242042, // Rich dark purple-indigo
+        roughness: 0.32,
+        metalness: 0.22,
+        clearcoat: 0.65,
+        clearcoatRoughness: 0.25
     });
 
-    // Darker Blue Shadow / Underbelly Material
-    const darkBlueMat = new THREE.MeshPhysicalMaterial({
-        color: 0x172554, // Deep Navy Blue
-        roughness: 0.35,
-        metalness: 0.6
+    // Sunken Well Inset Material (Darker interior depth)
+    const wellMat = new THREE.MeshStandardMaterial({
+        color: 0x16132b, // Deeper midnight purple
+        roughness: 0.5,
+        metalness: 0.1
     });
 
-    // Accent Sky Blue Material for D-Pad & Plates
-    const skyBlueMat = new THREE.MeshPhysicalMaterial({
-        color: 0x38bdf8,
-        roughness: 0.25,
-        metalness: 0.5,
+    // Pastel Baby-Blue / Off-White for D-Pad
+    const dpadMat = new THREE.MeshPhysicalMaterial({
+        color: 0xe0e7ff, // Pastel off-white with sky tint
+        roughness: 0.18,
+        metalness: 0.05,
         clearcoat: 0.8
     });
 
-    // Pearl / Cream White Glossy Material for Buttons & Sticks
+    // Pearl White for Thumbstick Mushroom Caps & Top Bracket
     const pearlWhiteMat = new THREE.MeshPhysicalMaterial({
         color: 0xf8fafc,
-        roughness: 0.12,
-        metalness: 0.08,
-        clearcoat: 1.0,
-        clearcoatRoughness: 0.08
+        roughness: 0.15,
+        metalness: 0.05,
+        clearcoat: 0.9,
+        clearcoatRoughness: 0.1
     });
 
-    // 4A. Controller Central Body Housing
-    const mainBodyGeo = new THREE.BoxGeometry(1.65, 1.05, 0.55);
-    const mainBody = new THREE.Mesh(mainBodyGeo, blueChassisMat);
+    // Candy Action Button Materials (Exact colors from reference)
+    const btnLimeMat = new THREE.MeshPhysicalMaterial({ color: 0xbef264, roughness: 0.15, clearcoat: 0.9 });   // North
+    const btnYellowMat = new THREE.MeshPhysicalMaterial({ color: 0xfacc15, roughness: 0.15, clearcoat: 0.9 }); // West
+    const btnCoralMat = new THREE.MeshPhysicalMaterial({ color: 0xf97316, roughness: 0.15, clearcoat: 0.9 });  // East
+    const btnCyanMat = new THREE.MeshPhysicalMaterial({ color: 0x06b6d4, roughness: 0.15, clearcoat: 0.9 });   // South
+
+    // 4A. Central Body Bridge
+    const mainBodyGeo = new THREE.BoxGeometry(1.8, 1.25, 0.65);
+    const mainBody = new THREE.Mesh(mainBodyGeo, purpleChassisMat);
     controllerGroup.add(mainBody);
 
-    // Smooth Curved Top Bridge
-    const bridgeGeo = new THREE.CylinderGeometry(0.82, 0.82, 0.55, 32, 1, false, 0, Math.PI);
-    const bridge = new THREE.Mesh(bridgeGeo, blueChassisMat);
-    bridge.rotation.z = Math.PI / 2;
-    bridge.rotation.y = Math.PI / 2;
-    bridge.position.y = 0.52;
-    controllerGroup.add(bridge);
+    // Top Curved Chamfer Bridge
+    const topBridgeGeo = new THREE.CylinderGeometry(0.9, 0.9, 0.65, 32, 1, false, 0, Math.PI);
+    const topBridge = new THREE.Mesh(topBridgeGeo, purpleChassisMat);
+    topBridge.rotation.z = Math.PI / 2;
+    topBridge.rotation.y = Math.PI / 2;
+    topBridge.position.y = 0.62;
+    controllerGroup.add(topBridge);
 
-    // 4B. Ergonomic Left & Right Curved Handles
-    const gripGeo = new THREE.CylinderGeometry(0.34, 0.44, 1.65, 32);
+    // 4B. Chunky Curved Handles
+    const gripGeo = new THREE.CylinderGeometry(0.36, 0.46, 1.6, 32);
 
-    const leftGrip = new THREE.Mesh(gripGeo, blueChassisMat);
-    leftGrip.position.set(-1.12, -0.48, 0.06);
-    leftGrip.rotation.z = -0.36;
+    const leftGrip = new THREE.Mesh(gripGeo, purpleChassisMat);
+    leftGrip.position.set(-1.18, -0.45, 0.05);
+    leftGrip.rotation.z = -0.38;
     leftGrip.rotation.x = 0.14;
     controllerGroup.add(leftGrip);
 
-    const rightGrip = new THREE.Mesh(gripGeo, blueChassisMat);
-    rightGrip.position.set(1.12, -0.48, 0.06);
-    rightGrip.rotation.z = 0.36;
+    const rightGrip = new THREE.Mesh(gripGeo, purpleChassisMat);
+    rightGrip.position.set(1.18, -0.45, 0.05);
+    rightGrip.rotation.z = 0.38;
     rightGrip.rotation.x = 0.14;
     controllerGroup.add(rightGrip);
 
-    // Bulbous Handle Bottom Pods
-    const podGeo = new THREE.SphereGeometry(0.44, 24, 24);
-    const leftPod = new THREE.Mesh(podGeo, blueChassisMat);
-    leftPod.position.set(-1.38, -1.12, 0.1);
+    // Bulbous Handle Bottom Tips
+    const podGeo = new THREE.SphereGeometry(0.46, 24, 24);
+    const leftPod = new THREE.Mesh(podGeo, purpleChassisMat);
+    leftPod.position.set(-1.42, -1.08, 0.1);
     controllerGroup.add(leftPod);
 
-    const rightPod = new THREE.Mesh(podGeo, blueChassisMat);
-    rightPod.position.set(1.38, -1.12, 0.1);
+    const rightPod = new THREE.Mesh(podGeo, purpleChassisMat);
+    rightPod.position.set(1.42, -1.08, 0.1);
     controllerGroup.add(rightPod);
 
-    // 4C. Left Raised Circular Dish Platform (for D-Pad)
-    const leftDishGeo = new THREE.CylinderGeometry(0.68, 0.72, 0.18, 32);
-    const leftDish = new THREE.Mesh(leftDishGeo, blueChassisMat);
-    leftDish.rotation.x = Math.PI / 2;
-    leftDish.position.set(-0.68, 0.38, 0.28);
-    controllerGroup.add(leftDish);
+    // 4C. Left Deep Sunken Well & Bevelled Rim (for D-Pad)
+    const leftRim = new THREE.Mesh(new THREE.TorusGeometry(0.68, 0.08, 16, 48), purpleChassisMat);
+    leftRim.position.set(-0.68, 0.35, 0.33);
+    controllerGroup.add(leftRim);
 
-    // Puffy 3D 4-Way D-Pad (as seen in reference image)
+    const leftWellBottom = new THREE.Mesh(new THREE.CylinderGeometry(0.64, 0.64, 0.12, 32), wellMat);
+    leftWellBottom.rotation.x = Math.PI / 2;
+    leftWellBottom.position.set(-0.68, 0.35, 0.28);
+    controllerGroup.add(leftWellBottom);
+
+    // White Puffy 3D Cross D-Pad (inside the left well)
     const dpadGroup = new THREE.Group();
-    dpadGroup.position.set(-0.68, 0.38, 0.38);
+    dpadGroup.position.set(-0.68, 0.35, 0.36);
 
-    const dpadArmGeoH = new THREE.CapsuleGeometry(0.14, 0.48, 16, 16);
-    const dpadArmH = new THREE.Mesh(dpadArmGeoH, skyBlueMat);
+    const dpadArmH = new THREE.Mesh(new THREE.CapsuleGeometry(0.14, 0.52, 16, 16), dpadMat);
     dpadArmH.rotation.z = Math.PI / 2;
     dpadGroup.add(dpadArmH);
 
-    const dpadArmGeoV = new THREE.CapsuleGeometry(0.14, 0.48, 16, 16);
-    const dpadArmV = new THREE.Mesh(dpadArmGeoV, skyBlueMat);
+    const dpadArmV = new THREE.Mesh(new THREE.CapsuleGeometry(0.14, 0.52, 16, 16), dpadMat);
     dpadGroup.add(dpadArmV);
-
-    const dpadCenter = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.18, 0.12, 24), darkBlueMat);
-    dpadCenter.rotation.x = Math.PI / 2;
-    dpadGroup.add(dpadCenter);
     controllerGroup.add(dpadGroup);
 
-    // 4D. Right Raised Circular Dish Platform (for Action Buttons)
-    const rightDishGeo = new THREE.CylinderGeometry(0.68, 0.72, 0.18, 32);
-    const rightDish = new THREE.Mesh(rightDishGeo, blueChassisMat);
-    rightDish.rotation.x = Math.PI / 2;
-    rightDish.position.set(0.68, 0.38, 0.28);
-    controllerGroup.add(rightDish);
+    // 4D. Right Deep Sunken Well & Bevelled Rim (for Action Buttons)
+    const rightRim = new THREE.Mesh(new THREE.TorusGeometry(0.68, 0.08, 16, 48), purpleChassisMat);
+    rightRim.position.set(0.68, 0.35, 0.33);
+    controllerGroup.add(rightRim);
 
-    // 4 Pearl-White Spherical Action Buttons (Diamond layout)
-    const buttonGroup = new THREE.Group();
-    buttonGroup.position.set(0.68, 0.38, 0.38);
+    const rightWellBottom = new THREE.Mesh(new THREE.CylinderGeometry(0.64, 0.64, 0.12, 32), wellMat);
+    rightWellBottom.rotation.x = Math.PI / 2;
+    rightWellBottom.position.set(0.68, 0.35, 0.28);
+    controllerGroup.add(rightWellBottom);
 
-    const btnRadius = 0.12;
-    const btnOffsets = [
-        { x: 0, y: 0.22 },   // North
-        { x: 0.22, y: 0 },   // East
-        { x: 0, y: -0.22 },  // South
-        { x: -0.22, y: 0 }   // West
+    // 4 Spherical Candy Action Buttons (Lime, Yellow, Coral, Cyan)
+    const candyGroup = new THREE.Group();
+    candyGroup.position.set(0.68, 0.35, 0.36);
+
+    const btnRadius = 0.11;
+    const btnConfigs = [
+        { x: 0, y: 0.22, mat: btnLimeMat },     // North: Lime
+        { x: -0.22, y: 0, mat: btnYellowMat },  // West: Yellow
+        { x: 0.22, y: 0, mat: btnCoralMat },    // East: Coral-Orange
+        { x: 0, y: -0.22, mat: btnCyanMat }     // South: Cyan
     ];
 
-    btnOffsets.forEach((pos) => {
-        const btnMesh = new THREE.Mesh(new THREE.SphereGeometry(btnRadius, 24, 24), pearlWhiteMat);
-        btnMesh.position.set(pos.x, pos.y, 0.04);
-        btnMesh.scale.z = 0.75; // slightly flattened dome
-        buttonGroup.add(btnMesh);
+    btnConfigs.forEach((cfg) => {
+        const btn = new THREE.Mesh(new THREE.SphereGeometry(btnRadius, 24, 24), cfg.mat);
+        btn.position.set(cfg.x, cfg.y, 0.05);
+        btn.scale.z = 0.8; // Rounded dome
+        candyGroup.add(btn);
     });
-    controllerGroup.add(buttonGroup);
+    controllerGroup.add(candyGroup);
 
-    // 4E. Dual Collar-Mounted Pearl-White Analog Thumbsticks
-    function createStick(x, y) {
+    // 4E. Lower Chin with Dual White Mushroom Thumbsticks
+    const chinGeo = new THREE.BoxGeometry(1.2, 0.5, 0.35);
+    const chin = new THREE.Mesh(chinGeo, purpleChassisMat);
+    chin.position.set(0, -0.32, 0.28);
+    chin.rotation.x = 0.25;
+    controllerGroup.add(chin);
+
+    function createThumbstick(x, y) {
         const stickSub = new THREE.Group();
-        stickSub.position.set(x, y, 0.28);
+        stickSub.position.set(x, y, 0.38);
 
-        // Raised Cylindrical Base Collar
-        const collarGeo = new THREE.CylinderGeometry(0.36, 0.4, 0.2, 32);
-        const collar = new THREE.Mesh(collarGeo, blueChassisMat);
-        collar.rotation.x = Math.PI / 2;
+        // Angled Base Collar
+        const collar = new THREE.Mesh(new THREE.CylinderGeometry(0.32, 0.38, 0.18, 32), purpleChassisMat);
+        collar.rotation.x = Math.PI / 2 + 0.25;
         stickSub.add(collar);
 
-        // Thin Inner Stem
-        const stemGeo = new THREE.CylinderGeometry(0.09, 0.1, 0.22, 16);
-        const stem = new THREE.Mesh(stemGeo, darkBlueMat);
-        stem.rotation.x = Math.PI / 2;
-        stem.position.z = 0.12;
+        // Inner Stem
+        const stem = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.1, 0.22, 16), wellMat);
+        stem.rotation.x = Math.PI / 2 + 0.25;
+        stem.position.set(0, -0.02, 0.12);
         stickSub.add(stem);
 
-        // Signature Pearl-White Mushroom Cap
-        const capGeo = new THREE.SphereGeometry(0.24, 32, 32);
-        const cap = new THREE.Mesh(capGeo, pearlWhiteMat);
-        cap.position.z = 0.24;
-        cap.scale.z = 0.72;
+        // White Mushroom Cap
+        const cap = new THREE.Mesh(new THREE.SphereGeometry(0.25, 32, 32), pearlWhiteMat);
+        cap.position.set(0, -0.04, 0.24);
+        cap.scale.z = 0.72; // Flattened mushroom dome
         stickSub.add(cap);
 
         return stickSub;
     }
 
-    const leftStick = createStick(-0.42, -0.16);
+    const leftStick = createThumbstick(-0.38, -0.26);
     controllerGroup.add(leftStick);
 
-    const rightStick = createStick(0.42, -0.16);
+    const rightStick = createThumbstick(0.38, -0.26);
     controllerGroup.add(rightStick);
 
-    // 4F. Center Control Buttons (Two small pill buttons)
-    const centerBtnGeo = new THREE.CapsuleGeometry(0.06, 0.12, 12, 12);
-    const leftCenterBtn = new THREE.Mesh(centerBtnGeo, skyBlueMat);
-    leftCenterBtn.rotation.x = Math.PI / 2;
-    leftCenterBtn.position.set(-0.16, 0.26, 0.28);
-    controllerGroup.add(leftCenterBtn);
+    // 4F. Top White Accent Bracket & Coiled Purple Cable Loop (The Signature Touch!)
+    const whiteBracketGeo = new THREE.BoxGeometry(0.85, 0.14, 0.48);
+    const whiteBracket = new THREE.Mesh(whiteBracketGeo, pearlWhiteMat);
+    whiteBracket.position.set(0, 0.82, 0);
+    controllerGroup.add(whiteBracket);
 
-    const rightCenterBtn = new THREE.Mesh(centerBtnGeo, skyBlueMat);
-    rightCenterBtn.rotation.x = Math.PI / 2;
-    rightCenterBtn.position.set(0.16, 0.26, 0.28);
-    controllerGroup.add(rightCenterBtn);
+    // Coiled Purple Cable Loop standing atop the controller
+    const cableLoopGeo = new THREE.TorusGeometry(0.32, 0.08, 16, 48);
+    const cableLoop = new THREE.Mesh(cableLoopGeo, purpleChassisMat);
+    cableLoop.position.set(0, 1.15, -0.04);
+    cableLoop.rotation.x = 0.2; // Tilted slightly backwards
+    controllerGroup.add(cableLoop);
 
-    // 4G. Top Shoulder Bumpers (L1 / R1)
-    const bumperGeo = new THREE.BoxGeometry(0.72, 0.18, 0.32);
-    const leftBumper = new THREE.Mesh(bumperGeo, blueChassisMat);
-    leftBumper.position.set(-0.88, 0.65, -0.06);
+    // Coiled cable plug stem connecting bracket into loop
+    const plugStem = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.1, 0.2, 16), purpleChassisMat);
+    plugStem.position.set(0, 0.92, -0.02);
+    controllerGroup.add(plugStem);
+
+    // 4G. Shoulder Bumpers (Top L1 / R1)
+    const bumperGeo = new THREE.BoxGeometry(0.72, 0.18, 0.34);
+    const leftBumper = new THREE.Mesh(bumperGeo, purpleChassisMat);
+    leftBumper.position.set(-0.92, 0.74, -0.05);
     leftBumper.rotation.z = -0.16;
     controllerGroup.add(leftBumper);
 
-    const rightBumper = new THREE.Mesh(bumperGeo, blueChassisMat);
-    rightBumper.position.set(0.88, 0.65, -0.06);
+    const rightBumper = new THREE.Mesh(bumperGeo, purpleChassisMat);
+    rightBumper.position.set(0.92, 0.74, -0.05);
     rightBumper.rotation.z = 0.16;
     controllerGroup.add(rightBumper);
 
     // Initial 3D Display Angle (Matching the iconic perspective angle in reference image)
-    rootGroup.rotation.x = 0.36;
-    rootGroup.rotation.y = -0.32;
-    rootGroup.rotation.z = -0.04;
+    rootGroup.rotation.x = 0.35;
+    rootGroup.rotation.y = -0.36;
+    rootGroup.rotation.z = -0.05;
 
     // -------------------------------------------------------------
     // 5. Interactive Drag & Rotation Controls
@@ -334,8 +345,8 @@ export function initBentoController() {
     let prevMouseX = 0;
     let prevMouseY = 0;
     let autoRotateSpeed = 0.012;
-    let targetRotY = -0.32;
-    let targetRotX = 0.36;
+    let targetRotY = -0.36;
+    let targetRotX = 0.35;
 
     container.addEventListener('mousedown', (e) => {
         isDragging = true;
@@ -387,7 +398,6 @@ export function initBentoController() {
         }
     }, { passive: true });
 
-    // Resize Handler
     function handleResize() {
         if (!container) return;
         const w = container.clientWidth;
@@ -399,7 +409,6 @@ export function initBentoController() {
     }
     window.addEventListener('resize', handleResize);
 
-    // Performance Visibility Check
     let isVisible = true;
     const observer = new IntersectionObserver(([entry]) => {
         isVisible = entry.isIntersecting;
@@ -415,7 +424,7 @@ export function initBentoController() {
 
         const elapsedTime = now * 0.001;
 
-        // Auto spin when user is not dragging
+        // Auto spin when not dragging
         if (!isDragging) {
             targetRotY += autoRotateSpeed;
         }
@@ -424,11 +433,11 @@ export function initBentoController() {
         rootGroup.rotation.y += (targetRotY - rootGroup.rotation.y) * 0.08;
         rootGroup.rotation.x += (targetRotX - rootGroup.rotation.x) * 0.08;
 
-        // Disc rotates continuously around its own axis
+        // Disc rotates continuously around its axis
         discGroup.rotation.y += 0.018;
 
-        // Subtle floating / breathing hover physics on the controller
-        controllerGroup.position.y = 0.12 + Math.sin(elapsedTime * 2.2) * 0.08;
+        // Floating hover physics on the controller
+        controllerGroup.position.y = 0.15 + Math.sin(elapsedTime * 2.2) * 0.08;
         controllerGroup.rotation.z = Math.sin(elapsedTime * 1.6) * 0.03;
 
         // Subtle dynamic twitch on the analog thumbsticks (alive gaming feel)
