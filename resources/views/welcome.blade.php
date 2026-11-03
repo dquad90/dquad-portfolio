@@ -184,14 +184,27 @@
         ====================================================== -->
         <section id="bento" class="py-28 px-4 relative border-t border-white/5">
             <div class="max-w-6xl mx-auto">
-                <div class="text-left mb-16 space-y-3">
-                    <p class="text-xs font-mono-code uppercase tracking-[0.25em] text-violet-400 font-semibold">Engineered Architecture</p>
-                    <h2 class="text-4xl sm:text-5xl font-black tracking-tight text-white">
-                        CAPABILITIES BENTO<span class="text-fuchsia-500">.</span>
-                    </h2>
-                    <p class="text-gray-400 max-w-xl text-base font-light">
-                        A breakdown of engineering disciplines, toolchains, and real-time interactive capabilities.
-                    </p>
+                <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6 mb-16">
+                    <div class="text-left space-y-3 max-w-xl">
+                        <p class="text-xs font-mono-code uppercase tracking-[0.25em] text-violet-400 font-semibold">Engineered Architecture</p>
+                        <h2 class="text-4xl sm:text-5xl font-black tracking-tight text-white">
+                            CAPABILITIES BENTO<span class="text-fuchsia-500">.</span>
+                        </h2>
+                        <p class="text-gray-400 text-base font-light">
+                            A breakdown of engineering disciplines, toolchains, and real-time interactive capabilities.
+                        </p>
+                    </div>
+
+                    <!-- 3D Rotating Holographic Disc & Gaming Controller -->
+                    <div class="flex items-center justify-center lg:justify-end">
+                        <div id="controller-3d-container" class="relative w-[320px] sm:w-[360px] h-[220px] flex items-center justify-center cursor-grab active:cursor-grabbing select-none group">
+                            <canvas id="controller-3d-canvas" class="w-full h-full"></canvas>
+                            <div class="absolute bottom-1 right-2 text-[10px] font-mono-code text-gray-500/70 group-hover:text-fuchsia-400 transition-colors pointer-events-none flex items-center gap-1.5">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                                DRAG TO ROTATE ✦
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Bento Grid -->

@@ -1,11 +1,17 @@
 import 'flowbite';
 import { initAmbientBackground } from './ambient';
+import { initBentoController } from './controller3d';
 
 document.addEventListener('DOMContentLoaded', () => {
     // -----------------------------------------------------------
     // 1. Initialize High-End Ambient Studio Lighting Canvas
     // -----------------------------------------------------------
     initAmbientBackground();
+
+    // -----------------------------------------------------------
+    // 2. Initialize 3D Rotating Disc & Game Controller
+    // -----------------------------------------------------------
+    initBentoController();
 
     // -----------------------------------------------------------
     // 2. 3D Holographic Player Card (Hero Micro-Physics)
