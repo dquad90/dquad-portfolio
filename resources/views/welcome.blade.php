@@ -95,6 +95,9 @@
                                 <span class="w-2 h-2 rounded-full bg-fuchsia-500"></span> Hardcore Gamer
                             </span>
                             <span class="glass-modern px-5 py-2 rounded-full text-white text-sm font-medium border border-white/10 flex items-center gap-2">
+                                <span class="w-2 h-2 rounded-full bg-amber-400"></span> Game Developer
+                            </span>
+                            <span class="glass-modern px-5 py-2 rounded-full text-white text-sm font-medium border border-white/10 flex items-center gap-2">
                                 <span class="w-2 h-2 rounded-full bg-blue-500"></span> Web Developer
                             </span>
                             <span class="glass-modern px-5 py-2 rounded-full text-white text-sm font-medium border border-white/10 flex items-center gap-2">
@@ -176,55 +179,73 @@
                 </div>
             </div>
 
-            <div class="grid md:grid-cols-3 gap-6" id="spotlight-container">
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6" id="spotlight-container">
                 <!-- Card 1 -->
                 <div class="clip-reveal" style="transition-delay: 0.1s;">
-                    <div class="spotlight glass-modern p-10 rounded-3xl h-full border border-white/5 hover:border-white/20 transition-colors z-10 relative">
+                    <div class="spotlight glass-modern p-8 rounded-3xl h-full border border-white/5 hover:border-white/20 transition-colors z-10 relative flex flex-col justify-between">
                         <div class="relative z-10">
-                            <div class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center mb-8">
+                            <div class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center mb-6">
                                 <span class="text-white font-bold text-xl">01</span>
                             </div>
-                            <h3 class="text-2xl font-bold text-white mb-4">Web Architecture</h3>
-                            <p class="text-gray-400 text-lg mb-8 leading-relaxed font-light">Building robust, high-performance web applications with modern stacks. Seamlessly blending backend logic with beautiful frontend UI.</p>
-                            <div class="flex flex-wrap gap-2 mt-auto">
-                                <span class="text-xs font-medium px-3 py-1 bg-white/5 text-white rounded-full">PHP</span>
-                                <span class="text-xs font-medium px-3 py-1 bg-white/5 text-white rounded-full">Laravel</span>
-                                <span class="text-xs font-medium px-3 py-1 bg-white/5 text-white rounded-full">Tailwind</span>
-                            </div>
+                            <h3 class="text-2xl font-bold text-white mb-3">Web Architecture</h3>
+                            <p class="text-gray-400 text-base mb-6 leading-relaxed font-light">Building robust, high-performance web applications with modern stacks. Seamlessly blending backend logic with beautiful frontend UI.</p>
+                        </div>
+                        <div class="flex flex-wrap gap-2 relative z-10 mt-auto">
+                            <span class="text-xs font-medium px-3 py-1 bg-white/5 text-white rounded-full">PHP</span>
+                            <span class="text-xs font-medium px-3 py-1 bg-white/5 text-white rounded-full">Laravel</span>
+                            <span class="text-xs font-medium px-3 py-1 bg-white/5 text-white rounded-full">Tailwind</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- Card 2 -->
                 <div class="clip-reveal" style="transition-delay: 0.2s;">
-                    <div class="spotlight glass-modern p-10 rounded-3xl h-full border border-white/5 hover:border-white/20 transition-colors z-10 relative">
+                    <div class="spotlight glass-modern p-8 rounded-3xl h-full border border-white/5 hover:border-white/20 transition-colors z-10 relative flex flex-col justify-between">
                         <div class="relative z-10">
-                            <div class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center mb-8">
+                            <div class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center mb-6">
                                 <span class="text-white font-bold text-xl">02</span>
                             </div>
-                            <h3 class="text-2xl font-bold text-white mb-4">Android Studio</h3>
-                            <p class="text-gray-400 text-lg mb-8 leading-relaxed font-light">Translating great work ideas into functional native mobile applications. Focusing on intuitive user experiences and performance.</p>
-                            <div class="flex flex-wrap gap-2 mt-auto">
-                                <span class="text-xs font-medium px-3 py-1 bg-white/5 text-white rounded-full">Java / Kotlin</span>
-                                <span class="text-xs font-medium px-3 py-1 bg-white/5 text-white rounded-full">UX Design</span>
-                            </div>
+                            <h3 class="text-2xl font-bold text-white mb-3">Android Studio</h3>
+                            <p class="text-gray-400 text-base mb-6 leading-relaxed font-light">Translating great work ideas into functional native mobile applications. Focusing on intuitive user experiences and performance.</p>
+                        </div>
+                        <div class="flex flex-wrap gap-2 relative z-10 mt-auto">
+                            <span class="text-xs font-medium px-3 py-1 bg-white/5 text-white rounded-full">Java / Kotlin</span>
+                            <span class="text-xs font-medium px-3 py-1 bg-white/5 text-white rounded-full">UX Design</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Card 3 -->
+                <!-- Card 3: Game Developer -->
                 <div class="clip-reveal" style="transition-delay: 0.3s;">
-                    <div class="spotlight glass-modern p-10 rounded-3xl h-full border border-white/5 hover:border-white/20 transition-colors z-10 relative">
+                    <div class="spotlight glass-modern p-8 rounded-3xl h-full border border-white/5 hover:border-white/20 transition-colors z-10 relative flex flex-col justify-between">
                         <div class="relative z-10">
-                            <div class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center mb-8">
+                            <div class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center mb-6">
                                 <span class="text-white font-bold text-xl">03</span>
                             </div>
-                            <h3 class="text-2xl font-bold text-white mb-4">Interactive Design</h3>
-                            <p class="text-gray-400 text-lg mb-8 leading-relaxed font-light">Bringing the high-octane energy of gaming into digital environments. Developing modern, fluid, and memorable interfaces.</p>
-                            <div class="flex flex-wrap gap-2 mt-auto">
-                                <span class="text-xs font-medium px-3 py-1 bg-white/5 text-white rounded-full">Animations</span>
-                                <span class="text-xs font-medium px-3 py-1 bg-white/5 text-white rounded-full">Flowbite</span>
+                            <h3 class="text-2xl font-bold text-white mb-3">Game Developer</h3>
+                            <p class="text-gray-400 text-base mb-6 leading-relaxed font-light">Crafting immersive game mechanics, real-time physics, and engaging interactive experiences across multiple game engines.</p>
+                        </div>
+                        <div class="flex flex-wrap gap-2 relative z-10 mt-auto">
+                            <span class="text-xs font-medium px-3 py-1 bg-white/5 text-white rounded-full">Unity 6</span>
+                            <span class="text-xs font-medium px-3 py-1 bg-white/5 text-white rounded-full">Godot 4</span>
+                            <span class="text-xs font-medium px-3 py-1 bg-white/5 text-white rounded-full">HTML5</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 4 -->
+                <div class="clip-reveal" style="transition-delay: 0.4s;">
+                    <div class="spotlight glass-modern p-8 rounded-3xl h-full border border-white/5 hover:border-white/20 transition-colors z-10 relative flex flex-col justify-between">
+                        <div class="relative z-10">
+                            <div class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center mb-6">
+                                <span class="text-white font-bold text-xl">04</span>
                             </div>
+                            <h3 class="text-2xl font-bold text-white mb-3">Interactive Design</h3>
+                            <p class="text-gray-400 text-base mb-6 leading-relaxed font-light">Bringing the high-octane energy of gaming into digital environments. Developing modern, fluid, and memorable interfaces.</p>
+                        </div>
+                        <div class="flex flex-wrap gap-2 relative z-10 mt-auto">
+                            <span class="text-xs font-medium px-3 py-1 bg-white/5 text-white rounded-full">Animations</span>
+                            <span class="text-xs font-medium px-3 py-1 bg-white/5 text-white rounded-full">Flowbite</span>
                         </div>
                     </div>
                 </div>
