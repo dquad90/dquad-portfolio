@@ -23,9 +23,11 @@
     <!-- 3D WebGL Background Universe Canvas -->
     <canvas id="bg-3d-canvas" class="fixed inset-0 w-full h-full pointer-events-none z-0"></canvas>
 
-    <!-- Ambient Top Glow -->
-    <div class="fixed top-0 left-1/2 -translate-x-1/2 w-[1100px] h-[550px] bg-gradient-to-b from-violet-600/15 via-fuchsia-600/5 to-transparent blur-[120px] pointer-events-none -z-10"></div>
-    <div class="fixed inset-0 bg-grid-subtle [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none -z-10"></div>
+    <!-- Ambient Cosmic Nebulas & Volumetric Depth Glows -->
+    <div class="fixed top-0 left-1/2 -translate-x-1/2 w-[1200px] h-[600px] bg-gradient-to-b from-violet-600/20 via-fuchsia-600/10 to-transparent blur-[140px] pointer-events-none -z-10"></div>
+    <div class="fixed top-1/3 -left-48 w-[650px] h-[650px] bg-gradient-to-tr from-cyan-600/15 via-violet-600/10 to-transparent blur-[130px] rounded-full pointer-events-none -z-10"></div>
+    <div class="fixed top-2/3 -right-48 w-[700px] h-[700px] bg-gradient-to-bl from-fuchsia-600/15 via-purple-600/10 to-transparent blur-[140px] rounded-full pointer-events-none -z-10"></div>
+    <div class="fixed bottom-0 left-1/3 w-[800px] h-[500px] bg-gradient-to-t from-violet-900/20 via-cyan-900/10 to-transparent blur-[150px] pointer-events-none -z-10"></div>
 
     <!-- Navigation Header -->
     <header class="fixed top-0 left-0 right-0 z-50 pt-4 px-4">
