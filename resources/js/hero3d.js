@@ -5,16 +5,21 @@ export function initHero3D() {
     const canvas = document.getElementById('hero-3d-canvas');
     if (!container || !canvas) return;
 
-    // Scene, Camera, Renderer
+    // Scene & Fog
     const scene = new THREE.Scene();
+    scene.fog = new THREE.FogExp2(0x050505, 0.05);
+
+    // Camera with cinematic low-angle perspective
     const camera = new THREE.PerspectiveCamera(
-        45,
+        55,
         container.clientWidth / container.clientHeight,
         0.1,
-        1000
+        100
     );
-    camera.position.z = 7.5;
+    camera.position.set(0, 3.4, 7.2);
+    camera.lookAt(0, -0.6, -1.5);
 
+    // WebGL Renderer with Alpha & Antialiasing
     const renderer = new THREE.WebGLRenderer({
         canvas: canvas,
         alpha: true,
@@ -24,165 +29,217 @@ export function initHero3D() {
     renderer.setSize(container.clientWidth, container.clientHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-    // Master Group
-    const coreGroup = new THREE.Group();
-    scene.add(coreGroup);
+    // GLSL Simplex Noise + Wave Shader
+    const vertexShader = `
+        uniform float uTime;
+        uniform vec2 uMouse;
+        uniform float uMouseSpeed;
 
-    // 1. Central Glossy Cyber Crystal (Octahedron)
-    const innerGeo = new THREE.OctahedronGeometry(1.35, 0);
-    const innerMat = new THREE.MeshPhysicalMaterial({
-        color: 0x090514,
-        emissive: 0x9333ea,
-        emissiveIntensity: 0.8,
-        roughness: 0.15,
-        metalness: 0.85,
-        clearcoat: 1.0,
-        clearcoatRoughness: 0.1,
-        flatShading: true
-    });
-    const innerMesh = new THREE.Mesh(innerGeo, innerMat);
-    coreGroup.add(innerMesh);
+        varying vec2 vUv;
+        varying float vElevation;
+        varying vec3 vPosition;
 
-    // 2. Outer Geometric Wireframe Cage (Icosahedron)
-    const cageGeo = new THREE.IcosahedronGeometry(2.0, 1);
-    const cageMat = new THREE.MeshStandardMaterial({
-        color: 0xec4899,
-        wireframe: true,
-        roughness: 0.2,
-        metalness: 0.9,
-        emissive: 0xd946ef,
-        emissiveIntensity: 0.4
-    });
-    const cageMesh = new THREE.Mesh(cageGeo, cageMat);
-    coreGroup.add(cageMesh);
+        // Optimized 2D Simplex Noise for procedural liquid
+        vec3 permute(vec3 x) { return mod(((x*34.0)+1.0)*x, 289.0); }
 
-    // 3. Glowing Node Points on Cage Vertices
-    const pointsGeo = new THREE.IcosahedronGeometry(2.0, 1);
-    const pointsMat = new THREE.PointsMaterial({
-        color: 0x38bdf8,
-        size: 0.08,
+        float snoise(vec2 v){
+          const vec4 C = vec4(0.211324865405187, 0.366025403784439,
+                   -0.577350269189626, 0.024390243902439);
+          vec2 i  = floor(v + dot(v, C.yy) );
+          vec2 x0 = v -   i + dot(i, C.xx);
+          vec2 i1;
+          i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
+          vec4 x12 = x0.xyxy + C.xxzz;
+          x12.xy -= i1;
+          i = mod(i, 289.0);
+          vec3 p = permute( permute( i.y + vec3(0.0, i1.y, 1.0 ))
+                + i.x + vec3(0.0, i1.x, 1.0 ));
+          vec3 m = max(0.5 - vec3(dot(x0,x0), dot(x12.xy,x12.xy),
+            dot(x12.zw,x12.zw)), 0.0);
+          m = m*m ;
+          m = m*m ;
+          vec3 x = 2.0 * fract(p * C.www) - 1.0;
+          vec3 h = abs(x) - 0.5;
+          vec3 ox = floor(x + 0.5);
+          vec3 a0 = x - ox;
+          m *= 1.79284291400159 - 0.85373472095314 * ( a0*a0 + h*h );
+          vec3 g;
+          g.x  = a0.x  * x0.x  + h.x  * x0.y;
+          g.yz = a0.yz * x12.xz + h.yz * x12.yw;
+          return 130.0 * dot(m, g);
+        }
+
+        void main() {
+            vUv = uv;
+            vec3 pos = position;
+
+            // Multi-frequency organic liquid swells
+            float wave1 = snoise(vec2(pos.x * 0.16 + uTime * 0.22, pos.y * 0.16 + uTime * 0.18)) * 0.95;
+            float wave2 = snoise(vec2(pos.x * 0.32 - uTime * 0.3, pos.y * 0.28 + uTime * 0.25)) * 0.4;
+            float swell = sin(pos.x * 0.65 + uTime * 1.4) * cos(pos.y * 0.65 + uTime * 1.1) * 0.25;
+
+            // Interactive mouse ripple & fluid distortion
+            vec2 mouseWorld = (uMouse - 0.5) * vec2(28.0, 18.0);
+            float dist = length(pos.xy - mouseWorld);
+            float ripple = sin(dist * 3.8 - uTime * 7.5) * exp(-dist * 0.38);
+            float interactiveDistortion = ripple * (uMouseSpeed * 1.6 + 0.35);
+
+            pos.z += wave1 + wave2 + swell + interactiveDistortion;
+            vElevation = pos.z;
+            vPosition = pos;
+
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
+        }
+    `;
+
+    const fragmentShader = `
+        uniform float uTime;
+        uniform vec3 uColorA;
+        uniform vec3 uColorB;
+        uniform vec3 uColorC;
+        uniform vec3 uBgColor;
+
+        varying vec2 vUv;
+        varying float vElevation;
+        varying vec3 vPosition;
+
+        void main() {
+            // High-Tech Cyber Grid Matrix lines
+            vec2 grid = fract(vUv * vec2(70.0, 45.0));
+            vec2 gridDist = abs(grid - 0.5);
+            float lineX = smoothstep(0.44, 0.49, gridDist.x);
+            float lineY = smoothstep(0.44, 0.49, gridDist.y);
+            float matrixLine = max(lineX, lineY);
+
+            // Dynamic Elevation Color Interpolation
+            float normElev = smoothstep(-1.2, 1.8, vElevation);
+            vec3 liquidColor = mix(uColorA, uColorB, normElev);
+            liquidColor = mix(liquidColor, uColorC, smoothstep(0.5, 1.6, vElevation));
+
+            // Blend dark cyber surface with glowing matrix lines & wave crests
+            vec3 finalColor = mix(uBgColor * 0.3, liquidColor, 0.45);
+            finalColor += liquidColor * matrixLine * 1.75;
+
+            // Specular wave crest sparkle
+            float crest = pow(smoothstep(0.65, 1.5, vElevation), 3.0);
+            finalColor += vec3(1.0, 1.0, 1.0) * crest * 0.75;
+
+            // Radial Vignette / Atmospheric Fog Blend
+            float distFromCenter = length(vUv - vec2(0.5, 0.5)) * 1.5;
+            float alpha = smoothstep(1.15, 0.25, distFromCenter);
+
+            // Far horizon fade to blend into background
+            float horizonFade = smoothstep(1.0, 0.15, vUv.y);
+            alpha *= horizonFade;
+
+            gl_FragColor = vec4(finalColor, alpha * 0.95);
+        }
+    `;
+
+    // Uniforms
+    const uniforms = {
+        uTime: { value: 0 },
+        uMouse: { value: new THREE.Vector2(0.5, 0.5) },
+        uMouseSpeed: { value: 0 },
+        uColorA: { value: new THREE.Color(0x4f46e5) }, // Indigo / Electric Violet
+        uColorB: { value: new THREE.Color(0xec4899) }, // Neon Pink / Fuchsia
+        uColorC: { value: new THREE.Color(0x06b6d4) }, // Vivid Cyan
+        uBgColor: { value: new THREE.Color(0x050505) }  // Deep Space Dark
+    };
+
+    // 1. High-Density Liquid Wave Mesh (36 x 22 units)
+    const waveGeo = new THREE.PlaneGeometry(36, 22, 180, 120);
+    const waveMat = new THREE.ShaderMaterial({
+        vertexShader,
+        fragmentShader,
+        uniforms,
         transparent: true,
-        opacity: 0.95
+        depthWrite: false,
+        side: THREE.DoubleSide
     });
-    const pointsMesh = new THREE.Points(pointsGeo, pointsMat);
-    coreGroup.add(pointsMesh);
 
-    // 4. Dual Orbital Gyro Rings
-    const ringGeo1 = new THREE.TorusGeometry(2.65, 0.022, 16, 100);
-    const ringMat1 = new THREE.MeshBasicMaterial({
-        color: 0x8b5cf6,
-        transparent: true,
-        opacity: 0.6
-    });
-    const ring1 = new THREE.Mesh(ringGeo1, ringMat1);
-    ring1.rotation.x = Math.PI / 3;
-    ring1.rotation.y = Math.PI / 6;
-    coreGroup.add(ring1);
+    const waveMesh = new THREE.Mesh(waveGeo, waveMat);
+    waveMesh.rotation.x = -Math.PI / 2.3;
+    waveMesh.position.y = -1.2;
+    waveMesh.position.z = -1.0;
+    scene.add(waveMesh);
 
-    const ringGeo2 = new THREE.TorusGeometry(2.95, 0.018, 16, 100);
-    const ringMat2 = new THREE.MeshBasicMaterial({
-        color: 0x06b6d4,
-        transparent: true,
-        opacity: 0.5
-    });
-    const ring2 = new THREE.Mesh(ringGeo2, ringMat2);
-    ring2.rotation.x = -Math.PI / 4;
-    ring2.rotation.z = Math.PI / 4;
-    coreGroup.add(ring2);
+    // 2. Floating Ambient 3D Particle Cloud hovering over the matrix
+    const particleCount = 200;
+    const particleGeo = new THREE.BufferGeometry();
+    const particlePos = new Float32Array(particleCount * 3);
 
-    // 5. Surrounding 3D Particle Constellation / Dust Swarm
-    const particlesCount = 400;
-    const posArray = new Float32Array(particlesCount * 3);
-    for (let i = 0; i < particlesCount * 3; i += 3) {
-        const r = 2.6 + Math.random() * 3.2;
-        const theta = Math.random() * Math.PI * 2;
-        const phi = Math.acos(2 * Math.random() - 1);
-        posArray[i] = r * Math.sin(phi) * Math.cos(theta);
-        posArray[i + 1] = r * Math.sin(phi) * Math.sin(theta);
-        posArray[i + 2] = r * Math.cos(phi);
+    for (let i = 0; i < particleCount * 3; i += 3) {
+        particlePos[i] = (Math.random() - 0.5) * 26;
+        particlePos[i + 1] = (Math.random() - 0.5) * 8 + 0.5;
+        particlePos[i + 2] = (Math.random() - 0.5) * 16;
     }
-    const starGeo = new THREE.BufferGeometry();
-    starGeo.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
-    const starMat = new THREE.PointsMaterial({
-        size: 0.035,
-        color: 0xd8b4fe,
+    particleGeo.setAttribute('position', new THREE.BufferAttribute(particlePos, 3));
+
+    const particleMat = new THREE.PointsMaterial({
+        size: 0.04,
+        color: 0x38bdf8,
         transparent: true,
-        opacity: 0.8
+        opacity: 0.65,
+        blending: THREE.AdditiveBlending
     });
-    const starField = new THREE.Points(starGeo, starMat);
-    scene.add(starField);
+    const particleField = new THREE.Points(particleGeo, particleMat);
+    scene.add(particleField);
 
-    // Dynamic Lighting
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.9);
-    scene.add(ambientLight);
-
-    const light1 = new THREE.PointLight(0xd946ef, 5, 20);
-    light1.position.set(4, 4, 4);
-    scene.add(light1);
-
-    const light2 = new THREE.PointLight(0x06b6d4, 4, 20);
-    light2.position.set(-4, -4, 3);
-    scene.add(light2);
-
-    // User Interaction & Smooth Mouse Drag/Parallax
-    let targetRotationX = 0;
-    let targetRotationY = 0;
-    let isDragging = false;
-    let previousMousePosition = { x: 0, y: 0 };
-
-    container.addEventListener('mousedown', (e) => {
-        isDragging = true;
-        previousMousePosition = { x: e.clientX, y: e.clientY };
-    });
-
-    window.addEventListener('mouseup', () => {
-        isDragging = false;
-    });
+    // Mouse Tracking & Dynamic Velocity Physics
+    let targetMouse = new THREE.Vector2(0.5, 0.5);
+    let currentMouse = new THREE.Vector2(0.5, 0.5);
+    let targetSpeed = 0;
+    let currentSpeed = 0;
+    let prevMouse = { x: 0, y: 0 };
+    let lastMoveTime = performance.now();
 
     window.addEventListener('mousemove', (e) => {
-        if (isDragging) {
-            const deltaX = e.clientX - previousMousePosition.x;
-            const deltaY = e.clientY - previousMousePosition.y;
+        const now = performance.now();
+        const dt = Math.max((now - lastMoveTime) / 1000, 0.001);
 
-            targetRotationY += deltaX * 0.008;
-            targetRotationX += deltaY * 0.008;
+        const dx = e.clientX - prevMouse.x;
+        const dy = e.clientY - prevMouse.y;
+        const speed = Math.sqrt(dx * dx + dy * dy) / (dt * 1000);
 
-            previousMousePosition = { x: e.clientX, y: e.clientY };
-        } else {
-            // Subtle Parallax when moving mouse over hero
-            const normX = (e.clientX / window.innerWidth) * 2 - 1;
-            const normY = -(e.clientY / window.innerHeight) * 2 + 1;
-            targetRotationY = normX * 0.45;
-            targetRotationX = -normY * 0.35;
-        }
+        targetSpeed = Math.min(speed * 0.45, 2.5);
+
+        prevMouse = { x: e.clientX, y: e.clientY };
+        lastMoveTime = now;
+
+        // Normalized mouse position (0 to 1 across window)
+        targetMouse.x = e.clientX / window.innerWidth;
+        targetMouse.y = 1.0 - (e.clientY / window.innerHeight);
     });
 
-    // Touch support for mobile / tablets
-    container.addEventListener('touchstart', (e) => {
-        if (e.touches.length === 1) {
-            isDragging = true;
-            previousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
-        }
-    }, { passive: true });
-
-    window.addEventListener('touchend', () => {
-        isDragging = false;
-    });
-
+    // Touch support for mobile devices
     window.addEventListener('touchmove', (e) => {
-        if (isDragging && e.touches.length === 1) {
-            const deltaX = e.touches[0].clientX - previousMousePosition.x;
-            const deltaY = e.touches[0].clientY - previousMousePosition.y;
-
-            targetRotationY += deltaX * 0.01;
-            targetRotationX += deltaY * 0.01;
-
-            previousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+        if (e.touches.length > 0) {
+            targetMouse.x = e.touches[0].clientX / window.innerWidth;
+            targetMouse.y = 1.0 - (e.touches[0].clientY / window.innerHeight);
+            targetSpeed = 1.2;
         }
     }, { passive: true });
 
-    // Window Resize handling
-    function handleResize() {
+    // Expose preset color theme switcher to window for HUD buttons
+    window.setWaveTheme = function (theme) {
+        if (theme === 'cyber') {
+            uniforms.uColorA.value.set(0x4f46e5);
+            uniforms.uColorB.value.set(0xec4899);
+            uniforms.uColorC.value.set(0x06b6d4);
+        } else if (theme === 'neon') {
+            uniforms.uColorA.value.set(0x10b981);
+            uniforms.uColorB.value.set(0x06b6d4);
+            uniforms.uColorC.value.set(0xa855f7);
+        } else if (theme === 'inferno') {
+            uniforms.uColorA.value.set(0xf59e0b);
+            uniforms.uColorB.value.set(0xef4444);
+            uniforms.uColorC.value.set(0xd946ef);
+        }
+    };
+
+    // Window Resize Handling
+    function onResize() {
         if (!container) return;
         const width = container.clientWidth;
         const height = container.clientHeight;
@@ -192,16 +249,16 @@ export function initHero3D() {
         camera.updateProjectionMatrix();
         renderer.setSize(width, height);
     }
-    window.addEventListener('resize', handleResize);
+    window.addEventListener('resize', onResize);
 
-    // Performance: Pause rendering when out of viewport
+    // Performance: Pause when scrolled off screen
     let isVisible = true;
     const observer = new IntersectionObserver(([entry]) => {
         isVisible = entry.isIntersecting;
-    }, { threshold: 0.1 });
+    }, { threshold: 0.05 });
     observer.observe(container);
 
-    // Render / Animation Loop
+    // Animation Render Loop
     const clock = new THREE.Clock();
 
     function animate() {
@@ -209,26 +266,23 @@ export function initHero3D() {
         if (!isVisible) return;
 
         const elapsedTime = clock.getElapsedTime();
+        uniforms.uTime.value = elapsedTime;
 
-        // Constant baseline idle spin
-        coreGroup.rotation.y += 0.005;
-        coreGroup.rotation.x += 0.002;
+        // Smooth Lerp Mouse Position & Speed
+        currentMouse.lerp(targetMouse, 0.08);
+        uniforms.uMouse.value.copy(currentMouse);
 
-        // Smooth damping towards mouse position
-        coreGroup.rotation.y += (targetRotationY - coreGroup.rotation.y) * 0.05;
-        coreGroup.rotation.x += (targetRotationX - coreGroup.rotation.x) * 0.05;
+        targetSpeed *= 0.94; // Decays over time
+        currentSpeed += (targetSpeed - currentSpeed) * 0.1;
+        uniforms.uMouseSpeed.value = currentSpeed;
 
-        // Counter-spin rings for gyroscope feeling
-        ring1.rotation.z = elapsedTime * 0.35;
-        ring2.rotation.z = -elapsedTime * 0.28;
+        // Subtle camera swaying
+        camera.position.x = (currentMouse.x - 0.5) * 1.5;
+        camera.position.y = 3.4 + (currentMouse.y - 0.5) * 0.6;
+        camera.lookAt(0, -0.6, -1.5);
 
-        // Subtle inner core breathing pulse
-        const pulse = 1 + Math.sin(elapsedTime * 2.5) * 0.06;
-        innerMesh.scale.set(pulse, pulse, pulse);
-
-        // Slow starfield rotation
-        starField.rotation.y = elapsedTime * 0.02;
-        starField.rotation.x = elapsedTime * 0.01;
+        // Particle floating
+        particleField.rotation.y = elapsedTime * 0.015;
 
         renderer.render(scene, camera);
     }

@@ -65,32 +65,36 @@
     </nav>
 
     <!-- Hero Section -->
-    <section id="home" class="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden bg-grid-modern">
-        <!-- Abstract Morphing Background -->
-        <div class="absolute inset-0 z-0 flex items-center justify-center opacity-40">
-            <div class="w-[600px] h-[600px] bg-gradient-to-r from-violet-600/40 to-fuchsia-600/40 blob-shape blur-3xl mix-blend-screen"></div>
-            <div class="absolute w-[500px] h-[500px] bg-gradient-to-l from-blue-600/30 to-purple-600/30 blob-shape blur-3xl mix-blend-screen" style="animation-delay: -3s; animation-duration: 12s;"></div>
+    <section id="home" class="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
+        <!-- Interactive 3D GPU Liquid Wave Matrix Canvas (Full Bleed) -->
+        <div id="hero-3d-container" class="absolute inset-0 w-full h-full z-0 pointer-events-auto">
+            <canvas id="hero-3d-canvas" class="w-full h-full block"></canvas>
+            <!-- Atmospheric gradient overlay for contrast -->
+            <div class="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-[#050505]/60 pointer-events-none"></div>
         </div>
         
-        <div class="relative z-10 max-w-screen-xl mx-auto px-4 w-full">
+        <div class="relative z-10 max-w-screen-xl mx-auto px-4 w-full pointer-events-none">
             <div class="flex flex-col md:flex-row items-center justify-between gap-12">
-                <div class="text-left w-full md:w-7/12">
+                <div class="text-left w-full md:w-7/12 pointer-events-auto">
                     <div class="clip-reveal mb-2">
-                        <p class="text-lg md:text-xl text-violet-400 font-medium tracking-widest uppercase">Hello, World. I am</p>
+                        <p class="text-lg md:text-xl text-violet-400 font-medium tracking-widest uppercase flex items-center gap-2">
+                            <span class="inline-block w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
+                            Hello, World. I am
+                        </p>
                     </div>
                     <div class="clip-reveal mb-4" style="transition-delay: 0.1s;">
-                        <h1 class="text-7xl md:text-[8rem] font-black tracking-tighter uppercase leading-none">
+                        <h1 class="text-7xl md:text-[8.5rem] font-black tracking-tighter uppercase leading-none drop-shadow-[0_10px_35px_rgba(217,70,239,0.3)]">
                             DQUAD
                         </h1>
                     </div>
                     <div class="clip-reveal mb-8" style="transition-delay: 0.2s;">
-                        <p class="text-2xl md:text-3xl text-gray-400 font-light">
+                        <p class="text-2xl md:text-3xl text-gray-300 font-light">
                             Darun Naim Sindid <span class="text-white font-medium">— Developer & Gamer.</span>
                         </p>
                     </div>
                     
                     <div class="clip-reveal" style="transition-delay: 0.3s;">
-                        <div class="flex flex-wrap gap-4 mb-6">
+                        <div class="flex flex-wrap gap-3 mb-6">
                             <span class="glass-modern px-5 py-2 rounded-full text-white text-sm font-medium border border-white/10 flex items-center gap-2">
                                 <span class="w-2 h-2 rounded-full bg-fuchsia-500"></span> Hardcore Gamer
                             </span>
@@ -121,23 +125,68 @@
                     </div>
                 </div>
                 
-                <div class="w-full md:w-5/12 flex items-center justify-center relative">
-                    <!-- Interactive 3D Canvas Scene -->
-                    <div id="hero-3d-container" class="w-full h-[380px] md:h-[480px] relative flex items-center justify-center cursor-grab active:cursor-grabbing select-none">
-                        <canvas id="hero-3d-canvas" class="w-full h-full block"></canvas>
-                        <!-- Interactive HUD overlay -->
-                        <div class="absolute bottom-2 left-1/2 -translate-x-1/2 pointer-events-none glass-modern px-3.5 py-1.5 rounded-full border border-white/10 text-[11px] text-gray-300 tracking-widest uppercase flex items-center gap-2 whitespace-nowrap shadow-xl">
-                            <span class="w-2 h-2 rounded-full bg-fuchsia-500 animate-pulse"></span>
-                            <span>3D Quantum Core • Drag to Rotate</span>
+                <!-- Cyber Telemetry & Wave Matrix Control HUD -->
+                <div class="w-full md:w-5/12 flex justify-end pointer-events-auto">
+                    <div class="spotlight glass-modern p-6 md:p-8 rounded-3xl border border-white/10 w-full max-w-md shadow-2xl backdrop-blur-2xl">
+                        <div class="flex items-center justify-between pb-4 mb-5 border-b border-white/10">
+                            <div class="flex items-center gap-3">
+                                <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                                <span class="text-xs uppercase tracking-widest text-emerald-400 font-semibold">Matrix System Active</span>
+                            </div>
+                            <span class="text-[11px] font-mono text-gray-500 uppercase">GPU v4.2</span>
+                        </div>
+
+                        <!-- Live Telemetry Status -->
+                        <div class="space-y-3.5 mb-6 text-sm">
+                            <div class="flex justify-between items-center text-xs">
+                                <span class="text-gray-400 font-mono uppercase">Wave Engine:</span>
+                                <span class="text-white font-mono font-medium">3D Simplex GPU Displacement</span>
+                            </div>
+                            <div class="flex justify-between items-center text-xs">
+                                <span class="text-gray-400 font-mono uppercase">Interactive Surface:</span>
+                                <span class="text-cyan-400 font-mono font-medium">Real-time Cursor Ripple</span>
+                            </div>
+                            <div class="flex justify-between items-center text-xs">
+                                <span class="text-gray-400 font-mono uppercase">Displacement Grid:</span>
+                                <span class="text-fuchsia-400 font-mono font-medium">180 x 120 Vertices</span>
+                            </div>
+                        </div>
+
+                        <!-- Dynamic Wave Visualizer bars -->
+                        <div class="flex items-end gap-1 h-10 mb-6 px-3 py-2 bg-black/40 rounded-xl border border-white/5">
+                            <div class="flex-1 bg-gradient-to-t from-violet-600 to-fuchsia-500 rounded-sm animate-[pulse_1.2s_ease-in-out_infinite]" style="height: 65%;"></div>
+                            <div class="flex-1 bg-gradient-to-t from-violet-600 to-fuchsia-500 rounded-sm animate-[pulse_0.9s_ease-in-out_infinite]" style="height: 90%;"></div>
+                            <div class="flex-1 bg-gradient-to-t from-violet-600 to-fuchsia-500 rounded-sm animate-[pulse_1.5s_ease-in-out_infinite]" style="height: 45%;"></div>
+                            <div class="flex-1 bg-gradient-to-t from-violet-600 to-fuchsia-500 rounded-sm animate-[pulse_1.1s_ease-in-out_infinite]" style="height: 80%;"></div>
+                            <div class="flex-1 bg-gradient-to-t from-violet-600 to-fuchsia-500 rounded-sm animate-[pulse_0.8s_ease-in-out_infinite]" style="height: 100%;"></div>
+                            <div class="flex-1 bg-gradient-to-t from-violet-600 to-fuchsia-500 rounded-sm animate-[pulse_1.4s_ease-in-out_infinite]" style="height: 55%;"></div>
+                            <div class="flex-1 bg-gradient-to-t from-violet-600 to-fuchsia-500 rounded-sm animate-[pulse_1.0s_ease-in-out_infinite]" style="height: 85%;"></div>
+                            <div class="flex-1 bg-gradient-to-t from-violet-600 to-fuchsia-500 rounded-sm animate-[pulse_1.3s_ease-in-out_infinite]" style="height: 70%;"></div>
+                        </div>
+
+                        <!-- Live Shader Theme Switcher -->
+                        <div>
+                            <p class="text-[11px] font-mono uppercase tracking-wider text-gray-400 mb-2.5">Switch Wave Spectrum:</p>
+                            <div class="grid grid-cols-3 gap-2">
+                                <button onclick="window.setWaveTheme('cyber')" class="px-3 py-1.5 rounded-lg text-xs font-medium border border-violet-500/30 bg-violet-500/10 hover:bg-violet-500/20 text-violet-300 transition-all text-center">
+                                    Cyber
+                                </button>
+                                <button onclick="window.setWaveTheme('neon')" class="px-3 py-1.5 rounded-lg text-xs font-medium border border-emerald-500/30 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 transition-all text-center">
+                                    Emerald
+                                </button>
+                                <button onclick="window.setWaveTheme('inferno')" class="px-3 py-1.5 rounded-lg text-xs font-medium border border-amber-500/30 bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 transition-all text-center">
+                                    Inferno
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
             
-            <div class="absolute bottom-10 left-1/2 -translate-x-1/2 clip-reveal" style="transition-delay: 0.6s;">
+            <div class="absolute bottom-8 left-1/2 -translate-x-1/2 clip-reveal pointer-events-auto" style="transition-delay: 0.6s;">
                 <a href="#about" class="flex flex-col items-center text-gray-500 hover:text-white transition-colors">
-                    <span class="text-xs uppercase tracking-widest mb-2 font-medium">Scroll</span>
-                    <div class="w-px h-12 bg-gradient-to-b from-gray-500 to-transparent"></div>
+                    <span class="text-xs uppercase tracking-widest mb-2 font-medium">Scroll down</span>
+                    <div class="w-px h-10 bg-gradient-to-b from-gray-500 to-transparent"></div>
                 </a>
             </div>
         </div>
