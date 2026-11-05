@@ -5,6 +5,7 @@ import { initAudioUI } from './audio';
 import { initMagneticCursor } from './cursor';
 import { initBentoMiniGame } from './minigame';
 import { initApiTerminal } from './api-terminal';
+import { initTransmissionDispatcher } from './transmission';
 
 document.addEventListener('DOMContentLoaded', () => {
     // -----------------------------------------------------------
@@ -36,6 +37,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // 6. Initialize Interactive Laravel API Simulator
     // -----------------------------------------------------------
     initApiTerminal();
+
+    // -----------------------------------------------------------
+    // 7. Initialize Cybernetic Transmission Dispatcher
+    // -----------------------------------------------------------
+    initTransmissionDispatcher();
 
     // -----------------------------------------------------------
     // 2. 3D Holographic Player Card (Hero Micro-Physics & 3D Flip)

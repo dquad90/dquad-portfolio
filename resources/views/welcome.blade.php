@@ -621,19 +621,36 @@
                         </p>
                     </div>
 
-                    <form class="max-w-lg mx-auto space-y-5">
+                    <form id="transmission-form" class="max-w-lg mx-auto space-y-5 relative">
+                        <!-- Canvas for celebration particle burst -->
+                        <canvas id="transmission-particle-canvas" class="absolute -inset-10 w-[calc(100%+80px)] h-[calc(100%+80px)] pointer-events-none z-30"></canvas>
+
                         <div>
                             <label class="block text-xs font-mono-code text-gray-400 uppercase tracking-wider mb-2">Your Email</label>
-                            <input type="email" placeholder="player@domain.com" required class="w-full px-4 py-3.5 rounded-xl bg-white/[0.03] border border-white/10 focus:border-fuchsia-500 focus:ring-1 focus:ring-fuchsia-500 text-white placeholder:text-gray-600 transition-all outline-none text-sm">
+                            <input id="transmission-email" type="email" placeholder="player@domain.com" required class="w-full px-4 py-3.5 rounded-xl bg-white/[0.03] border border-white/10 focus:border-fuchsia-500 focus:ring-1 focus:ring-fuchsia-500 text-white placeholder:text-gray-600 transition-all outline-none text-sm disabled:opacity-50 disabled:cursor-not-allowed">
                         </div>
 
                         <div>
                             <label class="block text-xs font-mono-code text-gray-400 uppercase tracking-wider mb-2">Mission Briefing</label>
-                            <textarea rows="4" placeholder="Describe your game idea, web development requirements, or app concept..." required class="w-full px-4 py-3.5 rounded-xl bg-white/[0.03] border border-white/10 focus:border-fuchsia-500 focus:ring-1 focus:ring-fuchsia-500 text-white placeholder:text-gray-600 transition-all outline-none text-sm resize-none"></textarea>
+                            <textarea id="transmission-briefing" rows="4" placeholder="Describe your game idea, web development requirements, or app concept..." required class="w-full px-4 py-3.5 rounded-xl bg-white/[0.03] border border-white/10 focus:border-fuchsia-500 focus:ring-1 focus:ring-fuchsia-500 text-white placeholder:text-gray-600 transition-all outline-none text-sm resize-none disabled:opacity-50 disabled:cursor-not-allowed"></textarea>
                         </div>
 
-                        <button type="submit" class="w-full py-4 rounded-xl bg-white text-black font-bold text-sm hover:bg-gray-200 transition-all shadow-xl">
-                            Deploy Transmission
+                        <!-- Cybernetic Transmission Telemetry HUD Box -->
+                        <div id="transmission-telemetry-hud" class="hidden rounded-xl border border-white/10 bg-black/70 p-3.5 font-mono-code text-[11px] space-y-1.5 shadow-inner">
+                            <div class="flex items-center justify-between pb-1.5 border-b border-white/10 text-[9px] uppercase tracking-wider text-gray-400">
+                                <span class="flex items-center gap-1.5">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping"></span>
+                                    <span>ENCRYPTED DISPATCH // DHAKA GATEWAY</span>
+                                </span>
+                                <span class="text-cyan-400 font-bold">PORT 443 [TLS 1.3]</span>
+                            </div>
+                            <div id="transmission-hud-log" class="space-y-1 text-xs">
+                                <!-- Dynamic logs appear here -->
+                            </div>
+                        </div>
+
+                        <button id="transmission-submit-btn" type="submit" class="w-full py-4 rounded-xl bg-white text-black font-bold text-sm hover:bg-gray-200 transition-all shadow-xl cursor-pointer flex items-center justify-center gap-2">
+                            <span id="transmission-btn-label">Deploy Transmission</span>
                         </button>
                     </form>
                 </div>

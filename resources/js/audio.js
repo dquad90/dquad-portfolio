@@ -203,6 +203,60 @@ class TacticalAudioEngine {
             });
         } catch (e) {}
     }
+
+    /**
+     * Digital encryption pulse (3 rapid cyber beeps)
+     */
+    playEncryptPulse() {
+        if (!this.initContext()) return;
+        try {
+            const freqs = [880, 1320, 1760];
+            freqs.forEach((freq, idx) => {
+                const now = this.ctx.currentTime + idx * 0.045;
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(freq, now);
+
+                gain.gain.setValueAtTime(0.06, now);
+                gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.04);
+
+                osc.connect(gain);
+                gain.connect(this.masterGain);
+
+                osc.start(now);
+                osc.stop(now + 0.05);
+            });
+        } catch (e) {}
+    }
+
+    /**
+     * Uplifting transmission delivery confirmation chime (C5, G5, C6, E6 harmonic chord)
+     */
+    playTransmissionSuccess() {
+        if (!this.initContext()) return;
+        try {
+            const chord = [523.25, 783.99, 1046.50, 1318.51];
+            chord.forEach((freq, idx) => {
+                const now = this.ctx.currentTime + idx * 0.06;
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(freq, now);
+
+                gain.gain.setValueAtTime(0.08, now);
+                gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.45);
+
+                osc.connect(gain);
+                gain.connect(this.masterGain);
+
+                osc.start(now);
+                osc.stop(now + 0.5);
+            });
+        } catch (e) {}
+    }
 }
 
 // Global instance
