@@ -48,8 +48,11 @@
                 <a href="https://www.youtube.com/@dquaddq" target="_blank" rel="noopener noreferrer" class="p-2 text-gray-400 hover:text-red-500 transition-colors" title="YouTube">
                     <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M19.812 5.418c.861.23 1.538.907 1.768 1.768C21.998 8.746 22 12 22 12s0 3.255-.418 4.814a2.504 2.504 0 0 1-1.768 1.768c-1.56.419-7.814.419-7.814.419s-6.255 0-7.814-.419a2.505 2.505 0 0 1-1.768-1.768C2 15.255 2 12 2 12s0-3.255.417-4.814a2.507 2.507 0 0 1 1.768-1.768C5.744 5 12 5 12 5s6.255 0 7.812.418ZM15.194 12 10 15V9l5.194 3Z" clip-rule="evenodd" /></svg>
                 </a>
-                <a href="#contact" class="px-4 py-2 rounded-full bg-white text-black font-semibold text-xs hover:bg-gray-200 transition-all shadow-md">
-                    Initiate Co-Op
+                <a href="#contact" class="relative group/btn overflow-hidden px-4 py-2 rounded-full bg-white text-black font-semibold text-xs transition-all duration-300 shadow-md hover:text-white hover:shadow-[0_0_26px_rgba(168,85,247,0.7)] hover:-translate-y-0.5 active:translate-y-0 border border-transparent hover:border-purple-400/50">
+                    <span class="absolute inset-0 bg-gradient-to-r from-purple-600 via-fuchsia-600 to-violet-600 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300 rounded-full"></span>
+                    <span class="relative z-10 flex items-center gap-1.5">
+                        Initiate Co-Op
+                    </span>
                 </a>
             </div>
         </nav>
@@ -331,8 +334,8 @@
 
                         <div class="relative z-10 flex items-center justify-between pt-4 border-t border-white/5 text-xs text-gray-400">
                             <span>Ready to collaborate on games, web apps, or Android solutions.</span>
-                            <a href="#contact" class="text-white hover:text-fuchsia-400 font-medium transition-colors flex items-center gap-1">
-                                Initiate Co-Op <span>→</span>
+                            <a href="#contact" class="text-white hover:text-purple-400 font-medium transition-all flex items-center gap-1 group/link hover:drop-shadow-[0_0_10px_rgba(168,85,247,0.85)]">
+                                Initiate Co-Op <span class="group-hover/link:translate-x-1 transition-transform">→</span>
                             </a>
                         </div>
                     </div>
