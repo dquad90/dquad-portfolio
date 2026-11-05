@@ -6,6 +6,7 @@ import { initMagneticCursor } from './cursor';
 import { initBentoMiniGame } from './minigame';
 import { initApiTerminal } from './api-terminal';
 import { initTransmissionDispatcher } from './transmission';
+import { initKonamiCode } from './konami';
 
 document.addEventListener('DOMContentLoaded', () => {
     // -----------------------------------------------------------
@@ -42,6 +43,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // 7. Initialize Cybernetic Transmission Dispatcher
     // -----------------------------------------------------------
     initTransmissionDispatcher();
+
+    // -----------------------------------------------------------
+    // 8. Initialize Konami Code Secret Achievement & Overdrive
+    // -----------------------------------------------------------
+    initKonamiCode();
 
     // -----------------------------------------------------------
     // 2. 3D Holographic Player Card (Hero Micro-Physics & 3D Flip)

@@ -257,6 +257,78 @@ class TacticalAudioEngine {
             });
         } catch (e) {}
     }
+
+    /**
+     * Konami Code Achievement 8-Bit Retro Synth Triumph Fanfare
+     * Fast upbeat arpeggiator (retro square waves) + grand harmonic chord & chime flourish
+     */
+    playKonamiFanfare() {
+        if (!this.initContext()) return;
+        try {
+            const now = this.ctx.currentTime;
+
+            // 1. Classic 8-bit retro arpeggiator (square waveform for authentic arcade vibe)
+            const arpeggio = [
+                { f: 261.63, d: 0.07 }, // C4
+                { f: 329.63, d: 0.07 }, // E4
+                { f: 392.00, d: 0.07 }, // G4
+                { f: 523.25, d: 0.07 }, // C5
+                { f: 659.25, d: 0.07 }, // E5
+                { f: 783.99, d: 0.07 }, // G5
+                { f: 880.00, d: 0.085 }, // A5
+                { f: 987.77, d: 0.085 }, // B5
+                { f: 1046.50, d: 0.48 }, // C6 (triumphant sustain!)
+            ];
+
+            let noteTime = now;
+            arpeggio.forEach((note, i) => {
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                const filter = this.ctx.createBiquadFilter();
+
+                osc.type = 'square';
+                osc.frequency.setValueAtTime(note.f, noteTime);
+
+                filter.type = 'lowpass';
+                filter.frequency.setValueAtTime(3200, noteTime);
+
+                const vol = (i === arpeggio.length - 1) ? 0.12 : 0.075;
+                gain.gain.setValueAtTime(vol, noteTime);
+                gain.gain.exponentialRampToValueAtTime(0.0001, noteTime + note.d);
+
+                osc.connect(filter);
+                filter.connect(gain);
+                gain.connect(this.masterGain);
+
+                osc.start(noteTime);
+                osc.stop(noteTime + note.d + 0.02);
+
+                noteTime += (i < 6 ? 0.06 : 0.085);
+            });
+
+            // 2. Grand harmonic chime flourish layered on the final C6 chord
+            const flourishTime = now + 0.52;
+            const chord = [523.25, 659.25, 783.99, 1046.50, 1318.51, 1567.98, 2093.00];
+            chord.forEach((freq) => {
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(freq, flourishTime);
+
+                gain.gain.setValueAtTime(0.06, flourishTime);
+                gain.gain.exponentialRampToValueAtTime(0.0001, flourishTime + 1.25);
+
+                osc.connect(gain);
+                gain.connect(this.masterGain);
+
+                osc.start(flourishTime);
+                osc.stop(flourishTime + 1.3);
+            });
+        } catch (e) {
+            console.warn('[Audio] Konami fanfare fallback:', e);
+        }
+    }
 }
 
 // Global instance

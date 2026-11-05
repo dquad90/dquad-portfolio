@@ -27,6 +27,55 @@
     <!-- Precision Engineering Dot Matrix Grid (Linear.app style) -->
     <div class="fixed inset-0 bg-grid-subtle [mask-image:radial-gradient(ellipse_75%_65%_at_50%_35%,#000_30%,transparent_100%)] pointer-events-none z-0 opacity-35"></div>
 
+    <!-- Fullscreen Celebratory Konami Confetti Canvas -->
+    <canvas id="konami-confetti-canvas" class="fixed inset-0 w-full h-full pointer-events-none z-50"></canvas>
+
+    <!-- 10-Second Rainbow Holographic Overdrive Countdown HUD (Top Center) -->
+    <div id="konami-overdrive-hud" class="fixed top-20 left-1/2 -translate-x-1/2 z-50 pointer-events-none opacity-0 transform -translate-y-6 transition-all duration-500">
+        <div class="px-5 py-2 rounded-full bg-[#090812]/95 border border-fuchsia-500/60 shadow-[0_0_35px_rgba(217,70,239,0.5),0_0_15px_rgba(56,189,248,0.4)] backdrop-blur-2xl flex items-center gap-3 text-xs font-mono-code text-white">
+            <span class="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-ping"></span>
+            <span class="font-extrabold tracking-wider bg-gradient-to-r from-pink-400 via-purple-300 via-cyan-300 to-amber-300 bg-clip-text text-transparent uppercase">
+                Holographic Overdrive Active
+            </span>
+            <span class="text-white/20">|</span>
+            <span id="konami-overdrive-timer" class="text-cyan-300 font-bold tabular-nums">10.0s</span>
+        </div>
+    </div>
+
+    <!-- Steam / Xbox Style Achievement Toast Notification (Top Right) -->
+    <div id="konami-achievement-toast" class="fixed top-6 right-6 z-50 pointer-events-none transform translate-y-[-160%] opacity-0 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] max-w-sm w-full sm:w-auto">
+        <div class="relative overflow-hidden rounded-2xl bg-[#0b0a16]/95 backdrop-blur-2xl border border-amber-500/40 p-4 shadow-[0_25px_60px_rgba(0,0,0,0.85),0_0_35px_rgba(245,158,11,0.25)] flex items-center gap-3.5">
+            <!-- Top Animated Rainbow Prismatic Beam -->
+            <div class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-pink-500 via-purple-500 via-cyan-400 via-emerald-400 to-amber-400 animate-pulse"></div>
+
+            <!-- Rare Diamond Trophy Badge Icon -->
+            <div class="relative flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-amber-400/20 to-amber-600/10 border border-amber-400/50 flex items-center justify-center shadow-[0_0_20px_rgba(245,158,11,0.35)]">
+                <span class="text-2xl animate-bounce">🏆</span>
+                <span class="absolute -inset-1 rounded-xl border border-amber-400/30 animate-ping pointer-events-none"></span>
+            </div>
+
+            <!-- Achievement Text Details -->
+            <div class="flex-1 min-w-0 pr-1">
+                <div class="flex items-center gap-1.5 text-[10px] font-mono-code font-bold uppercase tracking-widest text-amber-400">
+                    <span>🏆 ACHIEVEMENT UNLOCKED</span>
+                    <span class="text-white/40">•</span>
+                    <span class="bg-amber-400/20 text-amber-300 px-1.5 py-0.5 rounded font-black text-[9px] tracking-normal">100G</span>
+                </div>
+                <h4 class="text-white font-extrabold text-sm tracking-tight truncate mt-0.5">
+                    SECRET ARCHITECT
+                </h4>
+                <p class="text-gray-400 text-[11px] font-mono-code truncate">
+                    Overclocked Dhaka Core // Konami Overdrive [10s]
+                </p>
+            </div>
+
+            <!-- Dismiss Button -->
+            <button id="konami-toast-close" type="button" class="text-gray-500 hover:text-white p-1 transition-colors text-xs cursor-pointer flex-shrink-0" title="Dismiss">
+                ✕
+            </button>
+        </div>
+    </div>
+
     <!-- Navigation Header -->
     <header class="fixed top-0 left-0 right-0 z-50 pt-4 px-4">
         <nav class="max-w-5xl mx-auto px-5 py-3 rounded-full border border-white/10 glass-modern shadow-2xl flex items-center justify-between backdrop-blur-2xl">

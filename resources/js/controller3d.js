@@ -399,7 +399,7 @@ export function initBentoController() {
     const raycaster = new THREE.Raycaster();
     const mouseVec = new THREE.Vector2();
 
-    function pressMesh(mesh) {
+    function pressMesh(mesh, hit = null) {
         if (!mesh || !mesh.userData) return;
         const u = mesh.userData;
         if (u.isPressed) return; // Prevent concurrent trigger glitching
@@ -438,6 +438,21 @@ export function initBentoController() {
         triggerInputFeedback(u.label);
         if (window.DQUAD_AUDIO) {
             window.DQUAD_AUDIO.playControllerButton(u.label);
+        }
+
+        // Forward to Konami easter egg tracker if active
+        if (window.DQUAD_KONAMI) {
+            if (u.id === 'BTN_B_CORAL') {
+                window.DQUAD_KONAMI.pushInput('b');
+            } else if (u.id === 'BTN_A_CYAN') {
+                window.DQUAD_KONAMI.pushInput('a');
+            } else if (u.id === 'DPAD_UD') {
+                const dir = (hit && hit.point && hit.point.y > 0.35) ? 'up' : 'down';
+                window.DQUAD_KONAMI.pushInput(dir);
+            } else if (u.id === 'DPAD_LR') {
+                const dir = (hit && hit.point && hit.point.x < -0.66) ? 'left' : 'right';
+                window.DQUAD_KONAMI.pushInput(dir);
+            }
         }
     }
 
@@ -478,7 +493,7 @@ export function initBentoController() {
             raycaster.setFromCamera(mouseVec, camera);
             const hits = raycaster.intersectObjects(interactiveMeshes, false);
             if (hits.length > 0) {
-                pressMesh(hits[0].object);
+                pressMesh(hits[0].object, hits[0]);
             }
         }
     });
@@ -525,7 +540,7 @@ export function initBentoController() {
                 raycaster.setFromCamera(mouseVec, camera);
                 const hits = raycaster.intersectObjects(interactiveMeshes, false);
                 if (hits.length > 0) {
-                    pressMesh(hits[0].object);
+                    pressMesh(hits[0].object, hits[0]);
                 }
             }
         }
@@ -647,20 +662,20 @@ export function initBentoController() {
 
         // Edge-triggered Buttons (Prevents continuous 60FPS hammering)
         const buttonList = [
-            { btn: activeGp.buttons[0], mesh: candyMeshes[3] }, // South (A / Cyan)
-            { btn: activeGp.buttons[1], mesh: candyMeshes[2] }, // East (B / Coral)
-            { btn: activeGp.buttons[2], mesh: candyMeshes[1] }, // West (X / Gold)
-            { btn: activeGp.buttons[3], mesh: candyMeshes[0] }, // North (Y / Lime)
-            { btn: activeGp.buttons[4], mesh: leftBumper },     // L1 Bumper
-            { btn: activeGp.buttons[5], mesh: rightBumper },    // R1 Bumper
-            { btn: activeGp.buttons[6], mesh: leftBumper },     // L2 Trigger
-            { btn: activeGp.buttons[7], mesh: rightBumper },    // R2 Trigger
-            { btn: activeGp.buttons[10], mesh: leftStickObj.cap }, // L3 Stick Click
-            { btn: activeGp.buttons[11], mesh: rightStickObj.cap }, // R3 Stick Click
-            { btn: activeGp.buttons[12], mesh: dpadArmV },     // D-Pad Up
-            { btn: activeGp.buttons[13], mesh: dpadArmV },     // D-Pad Down
-            { btn: activeGp.buttons[14], mesh: dpadArmH },     // D-Pad Left
-            { btn: activeGp.buttons[15], mesh: dpadArmH },     // D-Pad Right
+            { btn: activeGp.buttons[0], mesh: candyMeshes[3], konami: 'a' },     // South (A / Cyan)
+            { btn: activeGp.buttons[1], mesh: candyMeshes[2], konami: 'b' },     // East (B / Coral)
+            { btn: activeGp.buttons[2], mesh: candyMeshes[1], konami: null },    // West (X / Gold)
+            { btn: activeGp.buttons[3], mesh: candyMeshes[0], konami: null },    // North (Y / Lime)
+            { btn: activeGp.buttons[4], mesh: leftBumper, konami: null },        // L1 Bumper
+            { btn: activeGp.buttons[5], mesh: rightBumper, konami: null },       // R1 Bumper
+            { btn: activeGp.buttons[6], mesh: leftBumper, konami: null },        // L2 Trigger
+            { btn: activeGp.buttons[7], mesh: rightBumper, konami: null },       // R2 Trigger
+            { btn: activeGp.buttons[10], mesh: leftStickObj.cap, konami: null }, // L3 Stick Click
+            { btn: activeGp.buttons[11], mesh: rightStickObj.cap, konami: null },// R3 Stick Click
+            { btn: activeGp.buttons[12], mesh: dpadArmV, konami: 'up' },         // D-Pad Up
+            { btn: activeGp.buttons[13], mesh: dpadArmV, konami: 'down' },       // D-Pad Down
+            { btn: activeGp.buttons[14], mesh: dpadArmH, konami: 'left' },       // D-Pad Left
+            { btn: activeGp.buttons[15], mesh: dpadArmH, konami: 'right' },      // D-Pad Right
         ];
 
         buttonList.forEach((entry, idx) => {
@@ -671,6 +686,9 @@ export function initBentoController() {
             if (isPressed && !wasPressed) {
                 if (entry.mesh) {
                     pressMesh(entry.mesh);
+                }
+                if (entry.konami && window.DQUAD_KONAMI) {
+                    window.DQUAD_KONAMI.pushInput(entry.konami);
                 }
             }
             prevGpButtons.set(idx, isPressed);
