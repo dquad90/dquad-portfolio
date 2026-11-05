@@ -504,8 +504,8 @@
                                 <button type="button" data-route="architecture" class="api-tab px-2 py-0.5 rounded bg-white/[0.03] text-gray-400 hover:text-white border border-transparent hover:border-white/10 transition-all cursor-pointer">
                                     GET /stack
                                 </button>
-                                <button type="button" data-route="dispatch" class="api-tab px-2 py-0.5 rounded bg-white/[0.03] text-gray-400 hover:text-white border border-transparent hover:border-white/10 transition-all cursor-pointer">
-                                    POST /queue
+                                <button type="button" data-route="profile" class="api-tab px-2 py-0.5 rounded bg-white/[0.03] text-gray-400 hover:text-white border border-transparent hover:border-white/10 transition-all cursor-pointer">
+                                    GET /profile
                                 </button>
                             </div>
 
