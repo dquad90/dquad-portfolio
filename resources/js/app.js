@@ -49,19 +49,51 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // -----------------------------------------------------------
-    // 3. Bento Grid & Controller Interactive Hairline Spotlight
+    // 3. Bento Grid & Controller Viscous Hairline Spotlight Physics
     // -----------------------------------------------------------
     const spotlightCards = document.querySelectorAll('.bento-card, .hairline-spotlight');
+    const cardTracking = [];
+
     spotlightCards.forEach(card => {
+        const state = {
+            card: card,
+            currentX: -500,
+            currentY: -500,
+            targetX: -500,
+            targetY: -500,
+            isHovered: false
+        };
+
+        card.addEventListener('mouseenter', () => {
+            state.isHovered = true;
+        });
+
         card.addEventListener('mousemove', (e) => {
             const rect = card.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-
-            card.style.setProperty('--mouse-x', `${x}px`);
-            card.style.setProperty('--mouse-y', `${y}px`);
+            state.targetX = e.clientX - rect.left;
+            state.targetY = e.clientY - rect.top;
         });
+
+        card.addEventListener('mouseleave', () => {
+            state.isHovered = false;
+        });
+
+        cardTracking.push(state);
     });
+
+    function updateSpotlightPhysics() {
+        cardTracking.forEach(state => {
+            if (state.isHovered) {
+                // Smooth viscous spring damping for liquid hairline spotlight
+                state.currentX += (state.targetX - state.currentX) * 0.14;
+                state.currentY += (state.targetY - state.currentY) * 0.14;
+                state.card.style.setProperty('--mouse-x', `${state.currentX.toFixed(1)}px`);
+                state.card.style.setProperty('--mouse-y', `${state.currentY.toFixed(1)}px`);
+            }
+        });
+        requestAnimationFrame(updateSpotlightPhysics);
+    }
+    requestAnimationFrame(updateSpotlightPhysics);
 
     // -----------------------------------------------------------
     // 4. Smooth Scroll Spy & Sector HUD Engine
