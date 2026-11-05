@@ -2,9 +2,12 @@
  * DQUAD VECTOR INTERCEPTOR // Bento Canvas Mini-Game
  * Features:
  * - 60 FPS HTML5 Canvas Vector Combat
- * - Multi-input: Mouse aim/click, WASD / Arrow Keys + Space, and Physical Gamepad!
+ * - Stand-off mouse aiming (ship never overlaps or gets trapped under cursor)
+ * - In-game precision HUD crosshair with dotted trajectory beam & drone target lock
  * - Autonomous showcase AI when idle, instant manual control on interaction
- * - Particle explosions & Web Audio API laser/explosion sound effects
+ * - Score awards ONLY during Manual Override (no auto-farming inflation)
+ * - Sanitized high-score logic with reset support
+ * - Full WASD/Arrow Keys + Spacebar & Physical Gamepad dual-stick support
  */
 
 export function initBentoMiniGame() {
@@ -14,37 +17,58 @@ export function initBentoMiniGame() {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    let width = canvas.clientWidth || 380;
+    let width = canvas.clientWidth || 400;
     let height = canvas.clientHeight || 200;
-    canvas.width = width * (window.devicePixelRatio > 1 ? 2 : 1);
-    canvas.height = height * (window.devicePixelRatio > 1 ? 2 : 1);
-    ctx.scale(window.devicePixelRatio > 1 ? 2 : 1, window.devicePixelRatio > 1 ? 2 : 1);
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
+    ctx.scale(dpr, dpr);
 
     function resize() {
         if (!canvas) return;
-        width = canvas.clientWidth || 380;
+        width = canvas.clientWidth || 400;
         height = canvas.clientHeight || 200;
-        const dpr = Math.min(window.devicePixelRatio || 1, 2);
-        canvas.width = width * dpr;
-        canvas.height = height * dpr;
-        ctx.scale(dpr, dpr);
+        const currentDpr = Math.min(window.devicePixelRatio || 1, 2);
+        canvas.width = width * currentDpr;
+        canvas.height = height * currentDpr;
+        ctx.scale(currentDpr, currentDpr);
     }
     window.addEventListener('resize', resize);
 
     // Game State
     let isManual = false;
     let score = 0;
-    let highScore = parseInt(localStorage.getItem('dquad_game_high') || '1200', 10);
+
+    // Sanitize any corrupted/farmed 700k score from previous bug
+    let storedHigh = parseInt(localStorage.getItem('dquad_game_high') || '2400', 10);
+    if (isNaN(storedHigh) || storedHigh > 50000) {
+        storedHigh = 2400;
+        localStorage.setItem('dquad_game_high', '2400');
+    }
+    let highScore = storedHigh;
+
+    // Reset button hook in UI if present
+    const resetBtn = document.getElementById('bento-game-reset-btn');
+    if (resetBtn) {
+        resetBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            score = 0;
+            highScore = 2400;
+            localStorage.setItem('dquad_game_high', '2400');
+            if (window.DQUAD_AUDIO) window.DQUAD_AUDIO.playClick();
+        });
+    }
+
     let lastShootTime = 0;
 
     // Player Ship
     const player = {
-        x: width * 0.25,
+        x: width * 0.2,
         y: height * 0.5,
         vx: 0,
         vy: 0,
         angle: 0,
-        speed: 4.5,
+        speed: 4.8,
         radius: 12
     };
 
@@ -67,7 +91,7 @@ export function initBentoMiniGame() {
 
     // Input state
     const keys = { w: false, a: false, s: false, d: false, space: false };
-    let mouseAimX = width * 0.7;
+    let mouseAimX = width * 0.65;
     let mouseAimY = height * 0.5;
     let isMouseOver = false;
 
@@ -87,7 +111,7 @@ export function initBentoMiniGame() {
         isMouseOver = false;
     });
 
-    canvas.addEventListener('click', (e) => {
+    canvas.addEventListener('mousedown', (e) => {
         const rect = canvas.getBoundingClientRect();
         mouseAimX = e.clientX - rect.left;
         mouseAimY = e.clientY - rect.top;
@@ -120,33 +144,33 @@ export function initBentoMiniGame() {
     // Weapon firing
     function fireLaser() {
         const now = performance.now();
-        if (now - lastShootTime < 140) return; // Fire rate limit
+        if (now - lastShootTime < 130) return; // Fire rate limit
         lastShootTime = now;
 
         const forwardX = Math.cos(player.angle);
         const forwardY = Math.sin(player.angle);
 
-        // Double pulse lasers from wings
+        // Double pulse lasers from ship wings
         const perpX = -forwardY * 7;
         const perpY = forwardX * 7;
 
         lasers.push({
             x: player.x + forwardX * 14 + perpX,
             y: player.y + forwardY * 14 + perpY,
-            vx: forwardX * 9,
-            vy: forwardY * 9,
-            life: 60
+            vx: forwardX * 9.5,
+            vy: forwardY * 9.5,
+            life: 65
         });
 
         lasers.push({
             x: player.x + forwardX * 14 - perpX,
             y: player.y + forwardY * 14 - perpY,
-            vx: forwardX * 9,
-            vy: forwardY * 9,
-            life: 60
+            vx: forwardX * 9.5,
+            vy: forwardY * 9.5,
+            life: 65
         });
 
-        // Trigger Web Audio API sound
+        // Trigger Web Audio API laser sound
         if (window.DQUAD_AUDIO) {
             window.DQUAD_AUDIO.playControllerButton('CORAL');
         }
@@ -157,16 +181,16 @@ export function initBentoMiniGame() {
     function spawnDrone() {
         const colors = ['#a855f7', '#ec4899', '#f59e0b', '#38bdf8'];
         drones.push({
-            x: width + 20,
-            y: Math.random() * (height - 40) + 20,
-            vx: -(1.2 + Math.random() * 1.5),
-            vy: (Math.random() - 0.5) * 0.8,
-            radius: 12 + Math.random() * 5,
+            x: width + 25,
+            y: Math.random() * (height - 50) + 25,
+            vx: -(1.1 + Math.random() * 1.3),
+            vy: (Math.random() - 0.5) * 0.7,
+            radius: 11 + Math.random() * 5,
             hp: 2,
             maxHp: 2,
             color: colors[Math.floor(Math.random() * colors.length)],
             rot: Math.random() * Math.PI * 2,
-            rotSpeed: (Math.random() - 0.5) * 0.05
+            rotSpeed: (Math.random() - 0.5) * 0.04
         });
     }
 
@@ -192,11 +216,8 @@ export function initBentoMiniGame() {
     }
 
     // Main Game Loop (60 FPS)
-    let animationFrameId;
-    let lastTime = performance.now();
-
     function gameLoop(now) {
-        animationFrameId = requestAnimationFrame(gameLoop);
+        requestAnimationFrame(gameLoop);
 
         // Hardware Gamepad polling for the Mini-Game
         const gamepads = navigator.getGamepads ? navigator.getGamepads() : [];
@@ -229,50 +250,57 @@ export function initBentoMiniGame() {
 
         // Spawn drone cadence
         if (now - lastDroneSpawn > 1400) {
-            if (drones.length < 6) {
+            if (drones.length < 5) {
                 spawnDrone();
             }
             lastDroneSpawn = now;
         }
 
         // Control Logic (Manual vs Autonomous AI Showcase)
+        const isUsingKeys = keys.w || keys.s || keys.a || keys.d;
+
         if (isManual) {
-            // Keyboard Controls
+            // Keyboard Movement (Full 2D Flight)
             if (keys.w) player.y -= player.speed;
             if (keys.s) player.y += player.speed;
             if (keys.a) player.x -= player.speed;
             if (keys.d) player.x += player.speed;
             if (keys.space) fireLaser();
 
-            // Mouse Aim
+            // Mouse Aiming & Movement Standoff
             if (isMouseOver) {
-                const targetAngle = Math.atan2(mouseAimY - player.y, mouseAimX - player.x);
-                player.angle = targetAngle;
-                // Gently gravitate toward mouse
-                player.x += (mouseAimX - player.x) * 0.05;
-                player.y += (mouseAimY - player.y) * 0.05;
+                // Precise angle from ship to mouse crosshair
+                player.angle = Math.atan2(mouseAimY - player.y, mouseAimX - player.x);
+
+                // If NOT using WASD keys, ship smoothly strafes vertically while staying in defensive standoff zone
+                if (!isUsingKeys) {
+                    // Maintain at least 70px distance from crosshair, clamped to left 30% of screen
+                    const targetX = Math.min(width * 0.28, Math.max(player.radius + 12, mouseAimX - 80));
+                    player.x += (targetX - player.x) * 0.08;
+                    player.y += (mouseAimY - player.y) * 0.08;
+                }
             }
         } else {
-            // Autonomous Patrol Mode
+            // Autonomous Patrol Mode (Pure Demo Showcase)
             const target = drones[0];
             if (target) {
                 const targetAngle = Math.atan2(target.y - player.y, target.x - player.x);
                 player.angle += (targetAngle - player.angle) * 0.08;
-                player.y += Math.sin(now * 0.002) * 1.2;
+                player.y += (target.y - player.y) * 0.04;
 
                 // Auto-fire at target when aligned
-                if (Math.abs(targetAngle - player.angle) < 0.2 && Math.random() < 0.06) {
+                if (Math.abs(targetAngle - player.angle) < 0.25 && Math.random() < 0.05) {
                     fireLaser();
                 }
             } else {
-                player.angle = Math.sin(now * 0.001) * 0.3;
-                player.y = height * 0.5 + Math.sin(now * 0.002) * 20;
+                player.angle = Math.sin(now * 0.001) * 0.25;
+                player.y += (height * 0.5 + Math.sin(now * 0.002) * 20 - player.y) * 0.04;
             }
         }
 
-        // Keep player in bounds
-        player.x = Math.max(player.radius + 5, Math.min(width - player.radius - 5, player.x));
-        player.y = Math.max(player.radius + 5, Math.min(height - player.radius - 5, player.y));
+        // Keep player strictly in bounds
+        player.x = Math.max(player.radius + 6, Math.min(width - player.radius - 6, player.x));
+        player.y = Math.max(player.radius + 6, Math.min(height - player.radius - 6, player.y));
 
         // Update Lasers
         for (let i = lasers.length - 1; i >= 0; i--) {
@@ -285,16 +313,20 @@ export function initBentoMiniGame() {
             for (let j = drones.length - 1; j >= 0; j--) {
                 const d = drones[j];
                 const dist = Math.hypot(l.x - d.x, l.y - d.y);
-                if (dist < d.radius + 4) {
+                if (dist < d.radius + 5) {
                     d.hp--;
                     l.life = 0;
                     if (d.hp <= 0) {
                         spawnExplosion(d.x, d.y, d.color);
                         drones.splice(j, 1);
-                        score += 150;
-                        if (score > highScore) {
-                            highScore = score;
-                            localStorage.setItem('dquad_game_high', highScore.toString());
+
+                        // ONLY award score during manual player control!
+                        if (isManual) {
+                            score += 150;
+                            if (score > highScore) {
+                                highScore = score;
+                                localStorage.setItem('dquad_game_high', highScore.toString());
+                            }
                         }
                     }
                     break;
@@ -462,11 +494,74 @@ export function initBentoMiniGame() {
         ctx.restore();
         ctx.shadowBlur = 0;
 
+        // In-Game Crosshair (Only when hovering inside canvas)
+        if (isMouseOver && isManual) {
+            // Check if hovering near a drone
+            let isTargetLocked = false;
+            for (let d of drones) {
+                if (Math.hypot(mouseAimX - d.x, mouseAimY - d.y) < d.radius + 12) {
+                    isTargetLocked = true;
+                    break;
+                }
+            }
+
+            const crosshairColor = isTargetLocked ? '#f43f5e' : '#38bdf8';
+
+            // Dotted laser trajectory line from ship to reticle
+            ctx.save();
+            ctx.setLineDash([3, 4]);
+            ctx.strokeStyle = isTargetLocked ? 'rgba(244, 63, 94, 0.45)' : 'rgba(56, 189, 248, 0.25)';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(player.x, player.y);
+            ctx.lineTo(mouseAimX, mouseAimY);
+            ctx.stroke();
+            ctx.restore();
+
+            // Precision Crosshair Ring
+            ctx.save();
+            ctx.strokeStyle = crosshairColor;
+            ctx.lineWidth = 1.5;
+            ctx.shadowBlur = 8;
+            ctx.shadowColor = crosshairColor;
+
+            ctx.beginPath();
+            ctx.arc(mouseAimX, mouseAimY, isTargetLocked ? 11 : 8, 0, Math.PI * 2);
+            ctx.stroke();
+
+            // Reticle tick marks
+            const tickDist = isTargetLocked ? 15 : 12;
+            const tickLen = 4;
+            ctx.beginPath();
+            ctx.moveTo(mouseAimX, mouseAimY - tickDist);
+            ctx.lineTo(mouseAimX, mouseAimY - tickDist - tickLen);
+            ctx.moveTo(mouseAimX, mouseAimY + tickDist);
+            ctx.lineTo(mouseAimX, mouseAimY + tickDist + tickLen);
+            ctx.moveTo(mouseAimX - tickDist, mouseAimY);
+            ctx.lineTo(mouseAimX - tickDist - tickLen, mouseAimY);
+            ctx.moveTo(mouseAimX + tickDist, mouseAimY);
+            ctx.lineTo(mouseAimX + tickDist + tickLen, mouseAimY);
+            ctx.stroke();
+
+            // Center target pip
+            ctx.fillStyle = crosshairColor;
+            ctx.beginPath();
+            ctx.arc(mouseAimX, mouseAimY, 1.5, 0, Math.PI * 2);
+            ctx.fill();
+
+            if (isTargetLocked) {
+                ctx.font = '8px "JetBrains Mono", monospace';
+                ctx.fillStyle = '#f43f5e';
+                ctx.fillText('LOCKED', mouseAimX + 16, mouseAimY + 3);
+            }
+            ctx.restore();
+        }
+
         // Top HUD Overlay
         ctx.fillStyle = '#9ca3af';
         ctx.font = '9px "JetBrains Mono", monospace';
         ctx.fillText(`SCORE: ${score.toString().padStart(4, '0')}`, 14, 18);
-        ctx.fillText(`HIGH: ${highScore.toString().padStart(4, '0')}`, 100, 18);
+        ctx.fillText(`HIGH: ${highScore.toString().padStart(4, '0')}`, 95, 18);
 
         ctx.fillStyle = isManual ? '#34d399' : '#38bdf8';
         const statusText = isManual ? '● MANUAL OVERRIDE' : '○ AUTONOMOUS PATROL';

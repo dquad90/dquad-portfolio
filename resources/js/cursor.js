@@ -81,9 +81,21 @@ export function initMagneticCursor() {
     const interactiveSelector = 'button, a, input, textarea, .holo-card, .bento-card, .sector-link, [data-magnetic]';
 
     document.addEventListener('mouseover', (e) => {
+        // If hovering inside the playable mini-game, hide site cursor so game's laser reticle takes over
+        if (e.target && (e.target.id === 'bento-game-canvas' || e.target.closest('#bento-game-canvas'))) {
+            isHoveringInteractive = false;
+            magneticTargetX = null;
+            magneticTargetY = null;
+            ring.style.opacity = '0';
+            dot.style.opacity = '0';
+            return;
+        }
+
         const target = e.target.closest(interactiveSelector);
-        if (target) {
+        if (target && !e.target.closest('#bento-game-canvas')) {
             isHoveringInteractive = true;
+            ring.style.opacity = '1';
+            dot.style.opacity = '1';
             const rect = target.getBoundingClientRect();
             // Magnetize only for smaller buttons/chips (< 280px width)
             if (rect.width < 280 && rect.height < 100) {
@@ -97,6 +109,12 @@ export function initMagneticCursor() {
     });
 
     document.addEventListener('mouseout', (e) => {
+        if (e.target && (e.target.id === 'bento-game-canvas' || e.target.closest('#bento-game-canvas'))) {
+            if (isVisible) {
+                ring.style.opacity = '1';
+                dot.style.opacity = '1';
+            }
+        }
         const target = e.target.closest(interactiveSelector);
         if (target) {
             isHoveringInteractive = false;

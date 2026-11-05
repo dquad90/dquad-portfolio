@@ -371,40 +371,41 @@
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 
                     <!-- Bento 1: Game Development -->
-                    <div class="md:col-span-2 bento-card hairline-beam hairline-speed-mid hairline-spotlight rounded-3xl p-8 sm:p-10 flex flex-col justify-between">
+                    <div class="md:col-span-2 bento-card hairline-beam hairline-speed-mid hairline-spotlight rounded-3xl p-6 sm:p-8 flex flex-col justify-between">
                         <div class="bento-glow"></div>
                         <div class="relative z-10">
-                            <div class="flex items-center justify-between mb-8">
-                                <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-violet-600/30 to-fuchsia-600/30 border border-white/10 flex items-center justify-center">
-                                    <svg class="w-6 h-6 text-fuchsia-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            <div class="flex items-center justify-between mb-5">
+                                <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-violet-600/30 to-fuchsia-600/30 border border-white/10 flex items-center justify-center">
+                                    <svg class="w-5 h-5 text-fuchsia-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                                 </div>
                                 <span class="text-xs font-mono-code px-3 py-1 rounded-full bg-white/5 border border-white/10 text-gray-400 uppercase">
                                     01 // Core Specialty
                                 </span>
                             </div>
 
-                            <h3 class="text-2xl sm:text-3xl font-bold text-white mb-3 tracking-tight">Game Engineering</h3>
-                            <p class="text-gray-400 text-base leading-relaxed max-w-xl font-light mb-6">
+                            <h3 class="text-2xl sm:text-3xl font-bold text-white mb-2 tracking-tight">Game Engineering</h3>
+                            <p class="text-gray-400 text-sm sm:text-base leading-relaxed max-w-xl font-light mb-4">
                                 Architecting 2D/3D gameplay mechanics, real-time physics engines, and cross-platform interactive loops. From lightweight HTML5 games to native desktop builds.
                             </p>
                         </div>
 
                         <!-- Live Playable Canvas Micro-Game -->
-                        <div class="relative z-10 my-3 rounded-2xl overflow-hidden border border-white/10 bg-[#08080f]/90 shadow-inner group/game">
+                        <div class="relative z-10 my-2 rounded-2xl overflow-hidden border border-white/10 bg-[#08080f]/90 shadow-inner group/game">
                             <!-- Telemetry bar -->
-                            <div class="flex items-center justify-between px-3.5 py-2 border-b border-white/10 bg-black/50 text-[10px] font-mono-code">
+                            <div class="flex items-center justify-between px-3.5 py-2 border-b border-white/10 bg-black/60 text-[10px] font-mono-code">
                                 <div class="flex items-center gap-2">
                                     <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping"></span>
-                                    <span class="text-cyan-400 font-semibold tracking-wider uppercase">DQUAD VECTOR INTERCEPTOR // PLAYABLE 60FPS</span>
+                                    <span class="text-cyan-400 font-semibold tracking-wider uppercase">DQUAD VECTOR INTERCEPTOR // 60FPS</span>
                                 </div>
-                                <div class="text-gray-400 hidden sm:flex items-center gap-2">
-                                    <span class="text-[9px] px-1.5 py-0.5 rounded bg-white/5 border border-white/10">CLICK / WASD / GAMEPAD</span>
+                                <div class="text-gray-400 flex items-center gap-2">
+                                    <span class="text-[9px] px-1.5 py-0.5 rounded bg-white/5 border border-white/10 hidden sm:inline">CLICK / WASD / GAMEPAD</span>
+                                    <button id="bento-game-reset-btn" class="text-[9px] px-2 py-0.5 rounded bg-fuchsia-500/15 hover:bg-fuchsia-500/30 text-fuchsia-300 border border-fuchsia-500/30 transition-colors uppercase cursor-pointer" title="Reset Score">RESET</button>
                                 </div>
                             </div>
-                            <canvas id="bento-game-canvas" class="w-full h-44 sm:h-52 block cursor-crosshair"></canvas>
+                            <canvas id="bento-game-canvas" class="w-full h-44 sm:h-48 block cursor-crosshair"></canvas>
                         </div>
 
-                        <div class="relative z-10 flex flex-wrap gap-2.5 pt-4 border-t border-white/5">
+                        <div class="relative z-10 flex flex-wrap gap-2 pt-3 border-t border-white/5">
                             <span class="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-xs font-semibold text-white">Unity 6 Engine</span>
                             <span class="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-xs font-semibold text-white">Godot 4</span>
                             <span class="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-xs font-semibold text-white">HTML5 WebGL / Canvas</span>
