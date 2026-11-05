@@ -207,17 +207,23 @@
                             <span class="absolute bottom-2.5 left-2.5 w-3 h-3 border-b border-l border-cyan-400/80 rounded-bl-sm pointer-events-none transition-colors group-hover:border-cyan-300 z-10"></span>
                             <span class="absolute bottom-2.5 right-2.5 w-3 h-3 border-b border-r border-cyan-400/80 rounded-br-sm pointer-events-none transition-colors group-hover:border-cyan-300 z-10"></span>
 
-                            <!-- Telemetry HUD Badge -->
-                            <div class="absolute top-3 left-4 flex items-center gap-2 pointer-events-none z-10">
-                                <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping"></span>
-                                <span class="text-[10px] font-mono-code uppercase tracking-wider text-cyan-400 font-semibold">VIEWPORT // 3D-PHYSICS</span>
+                            <!-- Telemetry HUD Badge & Live Input Feed -->
+                            <div class="absolute top-3 left-4 flex flex-col gap-1 pointer-events-none z-10">
+                                <div class="flex items-center gap-2">
+                                    <span id="controller-ping-dot" class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping"></span>
+                                    <span id="controller-telemetry-text" class="text-[10px] font-mono-code uppercase tracking-wider text-cyan-400 font-semibold transition-colors duration-200">VIEWPORT // READY</span>
+                                </div>
+                                <div id="controller-input-chip" class="opacity-0 translate-y-1 inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-fuchsia-500/15 border border-fuchsia-500/30 text-[9px] font-mono-code text-fuchsia-300 transition-all duration-200">
+                                    <span class="w-1 h-1 rounded-full bg-fuchsia-400"></span>
+                                    <span id="controller-input-label">NO INPUT</span>
+                                </div>
                             </div>
 
                             <canvas id="controller-3d-canvas" class="w-full h-full"></canvas>
 
                             <div class="absolute bottom-2.5 right-4 text-[10px] font-mono-code text-gray-500 bg-black/50 px-2 py-0.5 rounded border border-white/5 opacity-70 group-hover:opacity-100 group-hover:text-fuchsia-300 transition-all pointer-events-none flex items-center gap-1.5 z-10">
                                 <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                                DRAG TO ROTATE ✦
+                                CLICK BUTTONS / DRAG ✦
                             </div>
                         </div>
                     </div>

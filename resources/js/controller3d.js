@@ -2,19 +2,64 @@ import * as THREE from 'three';
 
 /**
  * EXACT 3D Designer Controller & Holographic Halo Disc
- * Matches the reference image media_1793733251544_372a819d.png:
- * - Midnight purple-indigo chunky ergonomic chassis
+ * Feature Set:
+ * - Matte midnight purple-indigo chunky ergonomic chassis
  * - Left sunken circular well with puffy pastel white 4-way cross D-Pad
  * - Right sunken circular well with 4 candy action buttons (Lime, Yellow, Coral, Cyan)
  * - Lower angled chin with dual white mushroom thumbsticks
  * - Top white accent bracket with signature coiled purple cable loop
- * - Hollow glowing holographic halo disc that wraps around the controller without clipping
- * - Front-facing showcase angle with smooth idle sway & full 360° drag interactivity
+ * - Hollow glowing holographic halo disc wrapping around the controller
+ * - INTERACTIVE CLICKABLE BUTTONS: Click candy buttons, D-pad, sticks or bumpers to visibly press them
+ * - LIVE HUD TELEMETRY FEED: Updates viewport status & input chip on every press
+ * - Full 360° drag rotation + showcase idle sway
+ * - Gamepad API integration for physical gamepads
  */
 export function initBentoController() {
     const container = document.getElementById('controller-3d-container');
     const canvas = document.getElementById('controller-3d-canvas');
     if (!container || !canvas) return;
+
+    // HUD Telemetry Elements
+    const telemetryText = document.getElementById('controller-telemetry-text');
+    const inputChip = document.getElementById('controller-input-chip');
+    const inputLabel = document.getElementById('controller-input-label');
+    const pingDot = document.getElementById('controller-ping-dot');
+
+    let resetTelemetryTimeout = null;
+
+    function triggerInputFeedback(label, isHardware = false) {
+        if (telemetryText) {
+            telemetryText.textContent = isHardware ? 'HARDWARE // ACTIVE' : 'INPUT // DETECTED';
+            telemetryText.classList.remove('text-cyan-400');
+            telemetryText.classList.add('text-emerald-400');
+        }
+        if (pingDot) {
+            pingDot.classList.remove('bg-cyan-400');
+            pingDot.classList.add('bg-emerald-400');
+        }
+        if (inputChip && inputLabel) {
+            inputLabel.textContent = label;
+            inputChip.classList.remove('opacity-0', 'translate-y-1');
+            inputChip.classList.add('opacity-100', 'translate-y-0');
+        }
+
+        clearTimeout(resetTelemetryTimeout);
+        resetTelemetryTimeout = setTimeout(() => {
+            if (telemetryText) {
+                telemetryText.textContent = 'VIEWPORT // READY';
+                telemetryText.classList.remove('text-emerald-400');
+                telemetryText.classList.add('text-cyan-400');
+            }
+            if (pingDot) {
+                pingDot.classList.remove('bg-emerald-400');
+                pingDot.classList.add('bg-cyan-400');
+            }
+            if (inputChip) {
+                inputChip.classList.remove('opacity-100', 'translate-y-0');
+                inputChip.classList.add('opacity-0', 'translate-y-1');
+            }
+        }, 1800);
+    }
 
     // 1. Scene, Camera, Renderer
     const scene = new THREE.Scene();
@@ -23,7 +68,6 @@ export function initBentoController() {
     const height = container.clientHeight || 240;
 
     const camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 100);
-    // Camera positioned at eye level looking straight at the controller front
     camera.position.set(0, 0.4, 5.6);
     camera.lookAt(0, 0.1, 0);
 
@@ -36,26 +80,22 @@ export function initBentoController() {
     renderer.setSize(width, height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-    // 2. Multi-Directional Studio Lighting (No pitch black shadows)
+    // 2. Studio Lighting
     const ambientLight = new THREE.AmbientLight(0xffffff, 1.4);
     scene.add(ambientLight);
 
-    // Top-Left Key Light (Matches reference image specular sheen)
     const keyLight = new THREE.DirectionalLight(0xffffff, 2.4);
     keyLight.position.set(-5, 7, 6);
     scene.add(keyLight);
 
-    // Front-Right Soft Fill Light
     const fillLight = new THREE.DirectionalLight(0xa5b4fc, 1.2);
     fillLight.position.set(5, 3, 5);
     scene.add(fillLight);
 
-    // Underbelly Uplight (Illuminates handles and disc from below)
     const upLight = new THREE.PointLight(0x38bdf8, 6, 15);
     upLight.position.set(0, -3, 3);
     scene.add(upLight);
 
-    // Back Light (Soft rim lighting if dragged around)
     const backLight = new THREE.DirectionalLight(0x818cf8, 1.2);
     backLight.position.set(0, 3, -6);
     scene.add(backLight);
@@ -65,19 +105,16 @@ export function initBentoController() {
     scene.add(rootGroup);
 
     // -------------------------------------------------------------
-    // 3. THE HOLLOW HOLOGRAPHIC HALO DISC (Elevated & Non-Clipping)
+    // 3. THE HOLLOW HOLOGRAPHIC HALO DISC
     // -------------------------------------------------------------
-    // Placed at y = -0.32, wrapping around the controller like a glowing sci-fi pedestal
     const discGroup = new THREE.Group();
     discGroup.position.set(0, -0.32, 0);
-    discGroup.rotation.x = 0.32; // Tilted towards viewer
+    discGroup.rotation.x = 0.32;
     rootGroup.add(discGroup);
 
-    // Holographic Translucent Ring (HOLLOW CENTER: radius 1.55 to 2.45)
-    // The controller handles pass freely through the center hole!
     const ringGeo = new THREE.RingGeometry(1.55, 2.45, 64);
     const ringMat = new THREE.MeshPhysicalMaterial({
-        color: 0x8b5cf6, // Violet-blue
+        color: 0x8b5cf6,
         emissive: 0x6366f1,
         emissiveIntensity: 0.6,
         roughness: 0.1,
@@ -92,7 +129,6 @@ export function initBentoController() {
     ringPlane.rotation.x = Math.PI / 2;
     discGroup.add(ringPlane);
 
-    // Outer Glowing Neon Fuchsia / Violet Rim
     const outerRimGeo = new THREE.TorusGeometry(2.45, 0.035, 16, 64);
     const outerRimMat = new THREE.MeshBasicMaterial({
         color: 0xec4899,
@@ -103,7 +139,6 @@ export function initBentoController() {
     outerRim.rotation.x = Math.PI / 2;
     discGroup.add(outerRim);
 
-    // Middle Radiant Cyan Laser Track
     const midRimGeo = new THREE.TorusGeometry(2.0, 0.024, 16, 64);
     const midRimMat = new THREE.MeshBasicMaterial({
         color: 0x06b6d4,
@@ -114,7 +149,6 @@ export function initBentoController() {
     midRim.rotation.x = Math.PI / 2;
     discGroup.add(midRim);
 
-    // Inner Hole Glowing Cyan Rim (Frames the controller handles)
     const innerRimGeo = new THREE.TorusGeometry(1.55, 0.03, 16, 64);
     const innerRimMat = new THREE.MeshBasicMaterial({
         color: 0x38bdf8,
@@ -125,7 +159,6 @@ export function initBentoController() {
     innerRim.rotation.x = Math.PI / 2;
     discGroup.add(innerRim);
 
-    // Radial Holographic Energy Spokes
     const spokeMat = new THREE.MeshBasicMaterial({
         color: 0xc084fc,
         transparent: true,
@@ -145,32 +178,31 @@ export function initBentoController() {
     controllerGroup.position.set(0, 0.05, 0);
     rootGroup.add(controllerGroup);
 
-    // --- Materials Matching Reference Image ---
-    // Deep Midnight Purple-Indigo Chassis (Smooth satin clay finish)
+    // Interactive clickable meshes for raycasting
+    const interactiveMeshes = [];
+
+    // Materials Matching Reference Image
     const purpleChassisMat = new THREE.MeshPhysicalMaterial({
-        color: 0x242042, // Rich dark purple-indigo
+        color: 0x242042,
         roughness: 0.3,
         metalness: 0.2,
         clearcoat: 0.7,
         clearcoatRoughness: 0.2
     });
 
-    // Dark Sunken Well Floor (Interior cavity)
     const wellFloorMat = new THREE.MeshStandardMaterial({
         color: 0x141129,
         roughness: 0.5,
         metalness: 0.1
     });
 
-    // Pastel Baby-Blue / Off-White for D-Pad
     const dpadMat = new THREE.MeshPhysicalMaterial({
-        color: 0xdbeafe, // Soft sky white
+        color: 0xdbeafe,
         roughness: 0.18,
         metalness: 0.05,
         clearcoat: 0.85
     });
 
-    // Pearl White for Thumbstick Caps & Top Bracket
     const pearlWhiteMat = new THREE.MeshPhysicalMaterial({
         color: 0xf8fafc,
         roughness: 0.12,
@@ -179,17 +211,15 @@ export function initBentoController() {
         clearcoatRoughness: 0.1
     });
 
-    // Candy Action Buttons (Exact colors from reference)
-    const btnLimeMat = new THREE.MeshPhysicalMaterial({ color: 0xbef264, roughness: 0.15, clearcoat: 0.95 });   // North (Lime)
-    const btnYellowMat = new THREE.MeshPhysicalMaterial({ color: 0xfacc15, roughness: 0.15, clearcoat: 0.95 }); // West (Golden)
-    const btnCoralMat = new THREE.MeshPhysicalMaterial({ color: 0xf97316, roughness: 0.15, clearcoat: 0.95 });  // East (Coral)
-    const btnCyanMat = new THREE.MeshPhysicalMaterial({ color: 0x06b6d4, roughness: 0.15, clearcoat: 0.95 });   // South (Cyan)
+    const btnLimeMat = new THREE.MeshPhysicalMaterial({ color: 0xbef264, roughness: 0.15, clearcoat: 0.95 });
+    const btnYellowMat = new THREE.MeshPhysicalMaterial({ color: 0xfacc15, roughness: 0.15, clearcoat: 0.95 });
+    const btnCoralMat = new THREE.MeshPhysicalMaterial({ color: 0xf97316, roughness: 0.15, clearcoat: 0.95 });
+    const btnCyanMat = new THREE.MeshPhysicalMaterial({ color: 0x06b6d4, roughness: 0.15, clearcoat: 0.95 });
 
     // 4A. Central Body Bridge
     const mainBody = new THREE.Mesh(new THREE.BoxGeometry(1.75, 1.2, 0.62), purpleChassisMat);
     controllerGroup.add(mainBody);
 
-    // Top Curved Chamfer Bridge
     const topBridge = new THREE.Mesh(new THREE.CylinderGeometry(0.87, 0.87, 0.62, 32, 1, false, 0, Math.PI), purpleChassisMat);
     topBridge.rotation.z = Math.PI / 2;
     topBridge.rotation.y = Math.PI / 2;
@@ -211,7 +241,6 @@ export function initBentoController() {
     rightGrip.rotation.x = 0.14;
     controllerGroup.add(rightGrip);
 
-    // Bulbous Handle Bottom Tips
     const podGeo = new THREE.SphereGeometry(0.45, 24, 24);
     const leftPod = new THREE.Mesh(podGeo, purpleChassisMat);
     leftPod.position.set(-1.38, -1.05, 0.1);
@@ -221,7 +250,7 @@ export function initBentoController() {
     rightPod.position.set(1.38, -1.05, 0.1);
     controllerGroup.add(rightPod);
 
-    // 4C. Left Sunken Well & Bevelled Rim (for D-Pad)
+    // 4C. Left Sunken Well & Bevelled Rim
     const leftRim = new THREE.Mesh(new THREE.TorusGeometry(0.66, 0.07, 16, 48), purpleChassisMat);
     leftRim.position.set(-0.66, 0.35, 0.31);
     controllerGroup.add(leftRim);
@@ -231,19 +260,24 @@ export function initBentoController() {
     leftWell.position.set(-0.66, 0.35, 0.27);
     controllerGroup.add(leftWell);
 
-    // White Puffy 3D Cross D-Pad
+    // Clickable Puffy 3D Cross D-Pad
     const dpadGroup = new THREE.Group();
     dpadGroup.position.set(-0.66, 0.35, 0.35);
 
     const dpadArmH = new THREE.Mesh(new THREE.CapsuleGeometry(0.13, 0.48, 16, 16), dpadMat);
     dpadArmH.rotation.z = Math.PI / 2;
+    dpadArmH.userData = { id: 'DPAD_LR', label: 'D-PAD [LEFT / RIGHT]', origZ: 0, group: dpadGroup };
     dpadGroup.add(dpadArmH);
+    interactiveMeshes.push(dpadArmH);
 
     const dpadArmV = new THREE.Mesh(new THREE.CapsuleGeometry(0.13, 0.48, 16, 16), dpadMat);
+    dpadArmV.userData = { id: 'DPAD_UD', label: 'D-PAD [UP / DOWN]', origZ: 0, group: dpadGroup };
     dpadGroup.add(dpadArmV);
+    interactiveMeshes.push(dpadArmV);
+
     controllerGroup.add(dpadGroup);
 
-    // 4D. Right Sunken Well & Bevelled Rim (for Action Buttons)
+    // 4D. Right Sunken Well & Bevelled Rim
     const rightRim = new THREE.Mesh(new THREE.TorusGeometry(0.66, 0.07, 16, 48), purpleChassisMat);
     rightRim.position.set(0.66, 0.35, 0.31);
     controllerGroup.add(rightRim);
@@ -253,68 +287,70 @@ export function initBentoController() {
     rightWell.position.set(0.66, 0.35, 0.27);
     controllerGroup.add(rightWell);
 
-    // 4 Spherical Candy Action Buttons
+    // 4 Clickable Spherical Candy Action Buttons
     const candyGroup = new THREE.Group();
     candyGroup.position.set(0.66, 0.35, 0.35);
 
     const btnRadius = 0.11;
     const btnConfigs = [
-        { x: 0, y: 0.21, mat: btnLimeMat },     // North: Lime
-        { x: -0.21, y: 0, mat: btnYellowMat },  // West: Yellow
-        { x: 0.21, y: 0, mat: btnCoralMat },    // East: Coral
-        { x: 0, y: -0.21, mat: btnCyanMat }     // South: Cyan
+        { x: 0, y: 0.21, mat: btnLimeMat, id: 'BTN_Y_LIME', label: 'ACTION [Y / LIME]' },
+        { x: -0.21, y: 0, mat: btnYellowMat, id: 'BTN_X_GOLD', label: 'ACTION [X / GOLD]' },
+        { x: 0.21, y: 0, mat: btnCoralMat, id: 'BTN_B_CORAL', label: 'ACTION [B / CORAL]' },
+        { x: 0, y: -0.21, mat: btnCyanMat, id: 'BTN_A_CYAN', label: 'ACTION [A / CYAN]' }
     ];
 
+    const candyMeshes = [];
     btnConfigs.forEach((cfg) => {
         const btn = new THREE.Mesh(new THREE.SphereGeometry(btnRadius, 24, 24), cfg.mat);
         btn.position.set(cfg.x, cfg.y, 0.05);
         btn.scale.z = 0.8;
+        btn.userData = { id: cfg.id, label: cfg.label, origZ: 0.05, type: 'candy' };
         candyGroup.add(btn);
+        interactiveMeshes.push(btn);
+        candyMeshes.push(btn);
     });
     controllerGroup.add(candyGroup);
 
-    // 4E. Lower Chin with Dual White Mushroom Thumbsticks
+    // 4E. Lower Chin with Dual Clickable White Mushroom Thumbsticks
     const chin = new THREE.Mesh(new THREE.BoxGeometry(1.15, 0.48, 0.32), purpleChassisMat);
     chin.position.set(0, -0.3, 0.26);
     chin.rotation.x = 0.22;
     controllerGroup.add(chin);
 
-    function createThumbstick(x, y) {
+    function createThumbstick(x, y, labelId, labelText) {
         const stickSub = new THREE.Group();
         stickSub.position.set(x, y, 0.36);
 
-        // Angled Base Collar
         const collar = new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.36, 0.16, 32), purpleChassisMat);
         collar.rotation.x = Math.PI / 2 + 0.22;
         stickSub.add(collar);
 
-        // Inner Stem
         const stem = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.09, 0.2, 16), wellFloorMat);
         stem.rotation.x = Math.PI / 2 + 0.22;
         stem.position.set(0, -0.02, 0.1);
         stickSub.add(stem);
 
-        // White Mushroom Cap
         const cap = new THREE.Mesh(new THREE.SphereGeometry(0.24, 32, 32), pearlWhiteMat);
         cap.position.set(0, -0.03, 0.22);
         cap.scale.z = 0.72;
+        cap.userData = { id: labelId, label: labelText, stickGroup: stickSub, origZ: 0.22, type: 'stick' };
         stickSub.add(cap);
+        interactiveMeshes.push(cap);
 
-        return stickSub;
+        return { group: stickSub, cap: cap };
     }
 
-    const leftStick = createThumbstick(-0.36, -0.24);
-    controllerGroup.add(leftStick);
+    const leftStickObj = createThumbstick(-0.36, -0.24, 'STICK_L', 'L-STICK [MOVE / NAV]');
+    controllerGroup.add(leftStickObj.group);
 
-    const rightStick = createThumbstick(0.36, -0.24);
-    controllerGroup.add(rightStick);
+    const rightStickObj = createThumbstick(0.36, -0.24, 'STICK_R', 'R-STICK [LOOK / AIM]');
+    controllerGroup.add(rightStickObj.group);
 
     // 4F. Top White Accent Bracket & Coiled Purple Cable Loop
     const whiteBracket = new THREE.Mesh(new THREE.BoxGeometry(0.82, 0.13, 0.45), pearlWhiteMat);
     whiteBracket.position.set(0, 0.78, 0);
     controllerGroup.add(whiteBracket);
 
-    // Coiled Purple Cable Loop standing atop the controller
     const cableLoop = new THREE.Mesh(new THREE.TorusGeometry(0.3, 0.075, 16, 48), purpleChassisMat);
     cableLoop.position.set(0, 1.08, -0.04);
     cableLoop.rotation.x = 0.2;
@@ -324,22 +360,25 @@ export function initBentoController() {
     plugStem.position.set(0, 0.88, -0.02);
     controllerGroup.add(plugStem);
 
-    // 4G. Shoulder Bumpers (Top L1 / R1)
+    // 4G. Shoulder Bumpers (Clickable L1 / R1)
     const bumperGeo = new THREE.BoxGeometry(0.68, 0.16, 0.32);
     const leftBumper = new THREE.Mesh(bumperGeo, purpleChassisMat);
     leftBumper.position.set(-0.88, 0.7, -0.05);
     leftBumper.rotation.z = -0.16;
+    leftBumper.userData = { id: 'BUMPER_L1', label: 'BUMPER [L1 / FIRE]', origZ: -0.05, type: 'bumper' };
+    interactiveMeshes.push(leftBumper);
     controllerGroup.add(leftBumper);
 
     const rightBumper = new THREE.Mesh(bumperGeo, purpleChassisMat);
     rightBumper.position.set(0.88, 0.7, -0.05);
     rightBumper.rotation.z = 0.16;
+    rightBumper.userData = { id: 'BUMPER_R1', label: 'BUMPER [R1 / SPECIAL]', origZ: -0.05, type: 'bumper' };
+    interactiveMeshes.push(rightBumper);
     controllerGroup.add(rightBumper);
 
     // -------------------------------------------------------------
-    // 5. INITIAL SHOWCASE ORIENTATION (Matches Reference Image Exactly)
+    // 5. INITIAL SHOWCASE ORIENTATION
     // -------------------------------------------------------------
-    // Front face prominently displays D-pad, candy buttons, and top loop!
     const HERO_ROT_X = 0.22;
     const HERO_ROT_Y = -0.42;
 
@@ -348,25 +387,82 @@ export function initBentoController() {
     rootGroup.rotation.z = -0.04;
 
     // -------------------------------------------------------------
-    // 6. Interactive Drag & Showcase Sway Controls
+    // 6. RAYCASTING & BUTTON PRESS PHYSICS
+    // -------------------------------------------------------------
+    const raycaster = new THREE.Raycaster();
+    const mouseVec = new THREE.Vector2();
+
+    function pressMesh(mesh) {
+        if (!mesh || !mesh.userData) return;
+        const u = mesh.userData;
+
+        // Visual press deflection
+        if (u.type === 'candy') {
+            mesh.position.z = u.origZ - 0.06;
+            setTimeout(() => { mesh.position.z = u.origZ; }, 160);
+        } else if (u.type === 'dpad') {
+            u.group.position.z = 0.30;
+            setTimeout(() => { u.group.position.z = 0.35; }, 160);
+        } else if (u.type === 'stick') {
+            u.stickGroup.rotation.x += 0.2;
+            mesh.position.z = u.origZ - 0.05;
+            setTimeout(() => {
+                u.stickGroup.rotation.x -= 0.2;
+                mesh.position.z = u.origZ;
+            }, 180);
+        } else if (u.type === 'bumper') {
+            mesh.position.y -= 0.05;
+            setTimeout(() => { mesh.position.y += 0.05; }, 160);
+        }
+
+        // Trigger telemetry feedback
+        triggerInputFeedback(u.label);
+    }
+
+    // -------------------------------------------------------------
+    // 7. Interactive Drag & Click Controls
     // -------------------------------------------------------------
     let isDragging = false;
     let prevMouseX = 0;
     let prevMouseY = 0;
+    let startDownX = 0;
+    let startDownY = 0;
     let targetRotY = HERO_ROT_Y;
     let targetRotX = HERO_ROT_X;
 
-    container.addEventListener('mousedown', (e) => {
+    function getCanvasCoordinates(e) {
+        const rect = canvas.getBoundingClientRect();
+        return {
+            x: ((e.clientX - rect.left) / rect.width) * 2 - 1,
+            y: -((e.clientY - rect.top) / rect.height) * 2 + 1
+        };
+    }
+
+    container.addEventListener('pointerdown', (e) => {
         isDragging = true;
-        prevMouseX = e.clientX;
-        prevMouseY = e.clientY;
+        prevMouseX = startDownX = e.clientX;
+        prevMouseY = startDownY = e.clientY;
     });
 
-    window.addEventListener('mouseup', () => {
+    window.addEventListener('pointerup', (e) => {
+        if (!isDragging) return;
         isDragging = false;
+
+        // Check if movement was minimal (Click event!)
+        const dist = Math.hypot(e.clientX - startDownX, e.clientY - startDownY);
+        if (dist < 6) {
+            const coords = getCanvasCoordinates(e);
+            mouseVec.set(coords.x, coords.y);
+            raycaster.setFromCamera(mouseVec, camera);
+            const hits = raycaster.intersectObjects(interactiveMeshes, false);
+            if (hits.length > 0) {
+                pressMesh(hits[0].object);
+            }
+        }
     });
 
-    window.addEventListener('mousemove', (e) => {
+    container.addEventListener('pointermove', (e) => {
+        // Drag rotation
         if (isDragging) {
             const deltaX = e.clientX - prevMouseX;
             const deltaY = e.clientY - prevMouseY;
@@ -377,19 +473,40 @@ export function initBentoController() {
 
             prevMouseX = e.clientX;
             prevMouseY = e.clientY;
+        } else {
+            // Hover cursor detection
+            const coords = getCanvasCoordinates(e);
+            mouseVec.set(coords.x, coords.y);
+            raycaster.setFromCamera(mouseVec, camera);
+            const hits = raycaster.intersectObjects(interactiveMeshes, false);
+            container.style.cursor = hits.length > 0 ? 'pointer' : 'grab';
         }
     });
 
+    // Touch support for mobile devices
     container.addEventListener('touchstart', (e) => {
         if (e.touches.length === 1) {
             isDragging = true;
-            prevMouseX = e.touches[0].clientX;
-            prevMouseY = e.touches[0].clientY;
+            prevMouseX = startDownX = e.touches[0].clientX;
+            prevMouseY = startDownY = e.touches[0].clientY;
         }
     }, { passive: true });
 
-    window.addEventListener('touchend', () => {
+    window.addEventListener('touchend', (e) => {
         isDragging = false;
+        if (e.changedTouches && e.changedTouches[0]) {
+            const touch = e.changedTouches[0];
+            const dist = Math.hypot(touch.clientX - startDownX, touch.clientY - startDownY);
+            if (dist < 8) {
+                const coords = getCanvasCoordinates(touch);
+                mouseVec.set(coords.x, coords.y);
+                raycaster.setFromCamera(mouseVec, camera);
+                const hits = raycaster.intersectObjects(interactiveMeshes, false);
+                if (hits.length > 0) {
+                    pressMesh(hits[0].object);
+                }
+            }
+        }
     });
 
     window.addEventListener('touchmove', (e) => {
@@ -424,7 +541,39 @@ export function initBentoController() {
     observer.observe(container);
 
     // -------------------------------------------------------------
-    // 7. Animation Render Loop (Hero Showcase Sway)
+    // 8. PHYSICAL GAMEPAD API POLLING (Bonus Pro Feature)
+    // -------------------------------------------------------------
+    let lastGamepadInput = 0;
+    function pollPhysicalGamepad() {
+        const gamepads = navigator.getGamepads ? navigator.getGamepads() : [];
+        if (!gamepads || !gamepads[0]) return;
+        const gp = gamepads[0];
+        if (gp) {
+            // Deflect 3D left stick based on physical stick
+            if (Math.abs(gp.axes[0]) > 0.12 || Math.abs(gp.axes[1]) > 0.12) {
+                leftStickObj.group.rotation.y = gp.axes[0] * 0.45;
+                leftStickObj.group.rotation.x = (Math.PI / 2 + 0.22) + gp.axes[1] * 0.45;
+                const now = performance.now();
+                if (now - lastGamepadInput > 300) {
+                    triggerInputFeedback(`JOYSTICK [${gp.axes[0].toFixed(1)}, ${gp.axes[1].toFixed(1)}]`, true);
+                    lastGamepadInput = now;
+                }
+            }
+            // Check button presses
+            if (gp.buttons && gp.buttons[0] && gp.buttons[0].pressed) {
+                pressMesh(candyMeshes[3]); // South (A/Cyan)
+            } else if (gp.buttons && gp.buttons[1] && gp.buttons[1].pressed) {
+                pressMesh(candyMeshes[2]); // East (B/Coral)
+            } else if (gp.buttons && gp.buttons[2] && gp.buttons[2].pressed) {
+                pressMesh(candyMeshes[1]); // West (X/Gold)
+            } else if (gp.buttons && gp.buttons[3] && gp.buttons[3].pressed) {
+                pressMesh(candyMeshes[0]); // North (Y/Lime)
+            }
+        }
+    }
+
+    // -------------------------------------------------------------
+    // 9. Animation Render Loop (Hero Showcase Sway & Physics)
     // -------------------------------------------------------------
     function animate(now) {
         requestAnimationFrame(animate);
@@ -432,8 +581,10 @@ export function initBentoController() {
 
         const elapsedTime = now * 0.001;
 
-        // When user is not dragging:
-        // Gentle Showcase Sway keeping the front face ALWAYS in prime view!
+        // Poll connected hardware gamepads if available
+        pollPhysicalGamepad();
+
+        // Idle showcase sway when not dragging
         if (!isDragging) {
             const swayY = HERO_ROT_Y + Math.sin(elapsedTime * 1.2) * 0.28;
             const swayX = HERO_ROT_X + Math.cos(elapsedTime * 1.5) * 0.08;
@@ -445,19 +596,16 @@ export function initBentoController() {
         rootGroup.rotation.y += (targetRotY - rootGroup.rotation.y) * 0.08;
         rootGroup.rotation.x += (targetRotX - rootGroup.rotation.x) * 0.08;
 
-        // The holographic halo disc spins continuously around its own center
+        // Disc rotates continuously
         discGroup.rotation.y += 0.022;
 
         // Floating hover physics on the controller
         controllerGroup.position.y = 0.05 + Math.sin(elapsedTime * 2.2) * 0.06;
         controllerGroup.rotation.z = Math.sin(elapsedTime * 1.6) * 0.025;
 
-        // Subtle alive twitch on thumbsticks
-        leftStick.rotation.x = Math.sin(elapsedTime * 3) * 0.08;
-        leftStick.rotation.y = Math.cos(elapsedTime * 2.5) * 0.08;
-
-        rightStick.rotation.x = Math.cos(elapsedTime * 2.7) * 0.06;
-        rightStick.rotation.y = Math.sin(elapsedTime * 3.1) * 0.06;
+        // Subtle alive twitch on thumbsticks when idle
+        leftStickObj.cap.rotation.x = Math.sin(elapsedTime * 3) * 0.06;
+        rightStickObj.cap.rotation.y = Math.cos(elapsedTime * 2.8) * 0.06;
 
         renderer.render(scene, camera);
     }
