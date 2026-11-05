@@ -415,8 +415,11 @@ export function initBentoController() {
             setTimeout(() => { mesh.position.y += 0.05; }, 160);
         }
 
-        // Trigger telemetry feedback
+        // Trigger telemetry feedback & tactile audio
         triggerInputFeedback(u.label);
+        if (window.DQUAD_AUDIO) {
+            window.DQUAD_AUDIO.playControllerButton(u.label);
+        }
     }
 
     // -------------------------------------------------------------

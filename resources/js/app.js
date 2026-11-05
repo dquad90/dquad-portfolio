@@ -1,15 +1,21 @@
 import 'flowbite';
 import { initAmbientBackground } from './ambient';
 import { initBentoController } from './controller3d';
+import { initAudioUI } from './audio';
 
 document.addEventListener('DOMContentLoaded', () => {
     // -----------------------------------------------------------
-    // 1. Initialize High-End Ambient Studio Lighting Canvas
+    // 1. Initialize Tactile Sci-Fi Audio Synthesizer
+    // -----------------------------------------------------------
+    initAudioUI();
+
+    // -----------------------------------------------------------
+    // 2. Initialize High-End Ambient Studio Lighting Canvas
     // -----------------------------------------------------------
     initAmbientBackground();
 
     // -----------------------------------------------------------
-    // 2. Initialize 3D Rotating Disc & Game Controller
+    // 3. Initialize 3D Rotating Disc & Game Controller
     // -----------------------------------------------------------
     initBentoController();
 
