@@ -69,6 +69,12 @@ export function initMagneticCursor() {
         ring.style.opacity = '0';
     });
 
+    document.body.addEventListener('mouseenter', () => {
+        isVisible = true;
+        dot.style.opacity = '1';
+        ring.style.opacity = '1';
+    });
+
     window.addEventListener('mousedown', () => {
         isMouseDown = true;
     });

@@ -234,6 +234,13 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Hide default OS cursor on devices with fine pointer (mouse/trackpad) for pure custom reticle clarity */
+@media (pointer: fine) {
+  *, *::before, *::after {
+    cursor: none !important;
+  }
+}
+
 body {
   background: #070709;
   color: #ededed;
