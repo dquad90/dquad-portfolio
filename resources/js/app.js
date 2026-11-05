@@ -2,6 +2,8 @@ import 'flowbite';
 import { initAmbientBackground } from './ambient';
 import { initBentoController } from './controller3d';
 import { initAudioUI } from './audio';
+import { initMagneticCursor } from './cursor';
+import { initBentoMiniGame } from './minigame';
 
 document.addEventListener('DOMContentLoaded', () => {
     // -----------------------------------------------------------
@@ -10,14 +12,24 @@ document.addEventListener('DOMContentLoaded', () => {
     initAudioUI();
 
     // -----------------------------------------------------------
-    // 2. Initialize High-End Ambient Studio Lighting Canvas
+    // 2. Initialize Precision Magnetic Crosshair Cursor
+    // -----------------------------------------------------------
+    initMagneticCursor();
+
+    // -----------------------------------------------------------
+    // 3. Initialize High-End Ambient Studio Lighting Canvas
     // -----------------------------------------------------------
     initAmbientBackground();
 
     // -----------------------------------------------------------
-    // 3. Initialize 3D Rotating Disc & Game Controller
+    // 4. Initialize 3D Rotating Disc & Game Controller
     // -----------------------------------------------------------
     initBentoController();
+
+    // -----------------------------------------------------------
+    // 5. Initialize Playable Bento Canvas Mini-Game (Vector Interceptor)
+    // -----------------------------------------------------------
+    initBentoMiniGame();
 
     // -----------------------------------------------------------
     // 2. 3D Holographic Player Card (Hero Micro-Physics & 3D Flip)

@@ -384,9 +384,24 @@
                             </div>
 
                             <h3 class="text-2xl sm:text-3xl font-bold text-white mb-3 tracking-tight">Game Engineering</h3>
-                            <p class="text-gray-400 text-base leading-relaxed max-w-xl font-light mb-8">
+                            <p class="text-gray-400 text-base leading-relaxed max-w-xl font-light mb-6">
                                 Architecting 2D/3D gameplay mechanics, real-time physics engines, and cross-platform interactive loops. From lightweight HTML5 games to native desktop builds.
                             </p>
+                        </div>
+
+                        <!-- Live Playable Canvas Micro-Game -->
+                        <div class="relative z-10 my-3 rounded-2xl overflow-hidden border border-white/10 bg-[#08080f]/90 shadow-inner group/game">
+                            <!-- Telemetry bar -->
+                            <div class="flex items-center justify-between px-3.5 py-2 border-b border-white/10 bg-black/50 text-[10px] font-mono-code">
+                                <div class="flex items-center gap-2">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping"></span>
+                                    <span class="text-cyan-400 font-semibold tracking-wider uppercase">DQUAD VECTOR INTERCEPTOR // PLAYABLE 60FPS</span>
+                                </div>
+                                <div class="text-gray-400 hidden sm:flex items-center gap-2">
+                                    <span class="text-[9px] px-1.5 py-0.5 rounded bg-white/5 border border-white/10">CLICK / WASD / GAMEPAD</span>
+                                </div>
+                            </div>
+                            <canvas id="bento-game-canvas" class="w-full h-44 sm:h-52 block cursor-crosshair"></canvas>
                         </div>
 
                         <div class="relative z-10 flex flex-wrap gap-2.5 pt-4 border-t border-white/5">
