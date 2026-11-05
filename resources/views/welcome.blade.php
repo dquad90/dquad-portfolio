@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>DQUAD — Darun Naim Sindid | 3D Animated Portfolio</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -626,18 +627,18 @@
                         <canvas id="transmission-particle-canvas" class="absolute -inset-10 w-[calc(100%+80px)] h-[calc(100%+80px)] pointer-events-none z-30"></canvas>
 
                         <div>
-                            <label class="block text-xs font-mono-code text-gray-400 uppercase tracking-wider mb-2">Your Email</label>
-                            <input id="transmission-email" type="email" placeholder="player@domain.com" required class="w-full px-4 py-3.5 rounded-xl bg-white/[0.03] border border-white/10 focus:border-fuchsia-500 focus:ring-1 focus:ring-fuchsia-500 text-white placeholder:text-gray-600 transition-all outline-none text-sm disabled:opacity-50 disabled:cursor-not-allowed">
+                            <label class="block text-xs font-mono-code text-gray-400 uppercase tracking-wider mb-2">Your Email / Comms Channel</label>
+                            <input id="transmission-email" type="email" placeholder="client@domain.com" required class="w-full px-4 py-3.5 rounded-xl bg-white/[0.03] border border-white/10 focus:border-purple-500/80 focus:ring-1 focus:ring-purple-500/80 text-white placeholder:text-gray-600 transition-all outline-none text-sm disabled:opacity-50 disabled:cursor-not-allowed">
                         </div>
 
                         <div>
                             <label class="block text-xs font-mono-code text-gray-400 uppercase tracking-wider mb-2">Mission Briefing</label>
-                            <textarea id="transmission-briefing" rows="4" placeholder="Describe your game idea, web development requirements, or app concept..." required class="w-full px-4 py-3.5 rounded-xl bg-white/[0.03] border border-white/10 focus:border-fuchsia-500 focus:ring-1 focus:ring-fuchsia-500 text-white placeholder:text-gray-600 transition-all outline-none text-sm resize-none disabled:opacity-50 disabled:cursor-not-allowed"></textarea>
+                            <textarea id="transmission-briefing" rows="4" placeholder="Describe your game idea, web development requirements, or app concept..." required class="w-full px-4 py-3.5 rounded-xl bg-white/[0.03] border border-white/10 focus:border-purple-500/80 focus:ring-1 focus:ring-purple-500/80 text-white placeholder:text-gray-600 transition-all outline-none text-sm resize-none disabled:opacity-50 disabled:cursor-not-allowed"></textarea>
                         </div>
 
                         <!-- Cybernetic Transmission Telemetry HUD Box -->
-                        <div id="transmission-telemetry-hud" class="hidden rounded-xl border border-white/10 bg-black/70 p-3.5 font-mono-code text-[11px] space-y-1.5 shadow-inner">
-                            <div class="flex items-center justify-between pb-1.5 border-b border-white/10 text-[9px] uppercase tracking-wider text-gray-400">
+                        <div id="transmission-telemetry-hud" class="hidden rounded-xl border border-white/10 bg-[#07070d]/90 backdrop-blur-xl p-4 font-mono-code text-[11px] space-y-2 shadow-2xl">
+                            <div class="flex items-center justify-between pb-2 border-b border-white/10 text-[9px] uppercase tracking-wider text-gray-400">
                                 <span class="flex items-center gap-1.5">
                                     <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping"></span>
                                     <span>ENCRYPTED DISPATCH // DHAKA GATEWAY</span>
@@ -649,9 +650,62 @@
                             </div>
                         </div>
 
-                        <button id="transmission-submit-btn" type="submit" class="w-full py-4 rounded-xl bg-white text-black font-bold text-sm hover:bg-gray-200 transition-all shadow-xl cursor-pointer flex items-center justify-center gap-2">
-                            <span id="transmission-btn-label">Deploy Transmission</span>
+                        <!-- Sleek Obsidian Transmission Button -->
+                        <button id="transmission-submit-btn" type="submit" class="relative group w-full py-4 px-6 rounded-xl bg-[#0f0d1a] hover:bg-[#161326] border border-purple-500/40 hover:border-purple-400/80 text-white font-semibold text-sm transition-all duration-300 shadow-[0_8px_30px_-8px_rgba(168,85,247,0.4)] flex items-center justify-center gap-2.5 cursor-pointer overflow-hidden">
+                            <!-- Top specular accent line -->
+                            <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-purple-400/60 to-transparent"></div>
+                            <!-- Subtle ambient hover gradient -->
+                            <div class="absolute -inset-px rounded-xl bg-gradient-to-r from-purple-600/10 via-fuchsia-600/10 to-cyan-500/10 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
+                            
+                            <span id="transmission-btn-label" class="relative z-10 flex items-center gap-2">
+                                <svg class="w-4 h-4 text-purple-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                                </svg>
+                                <span>Deploy Transmission</span>
+                            </span>
                         </button>
+
+                        <!-- Direct Comms & Guaranteed Mail Dispatch Actions (Revealed upon transmission) -->
+                        <div id="transmission-mail-actions" class="hidden space-y-3 pt-1">
+                            <div class="p-4 rounded-xl border border-white/10 bg-[#0a0a12]/90 backdrop-blur-xl space-y-3 shadow-2xl">
+                                <div class="flex items-center justify-between text-[11px] font-mono-code pb-2 border-b border-white/10">
+                                    <span class="text-gray-300 flex items-center gap-2">
+                                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                                        <span>RECIPIENT:</span> <strong class="text-white">dquadofficialgg@gmail.com</strong>
+                                    </span>
+                                    <span class="text-emerald-400 text-[10px] font-semibold uppercase tracking-wider bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded">DIRECT ROUTED</span>
+                                </div>
+
+                                <p class="text-[11px] text-gray-400 font-sans">
+                                    Choose your preferred dispatch method to ensure immediate inbox delivery:
+                                </p>
+
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
+                                    <a id="transmission-gmail-link" href="#" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center gap-2 py-2.5 px-3 rounded-lg bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 text-red-200 hover:text-white transition-all font-mono-code font-medium">
+                                        <svg class="w-4 h-4 text-red-400" viewBox="0 0 24 24" fill="currentColor">
+                                            <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                                        </svg>
+                                        <span>Open Web Gmail ↗</span>
+                                    </a>
+                                    <a id="transmission-mailto-link" href="#" class="flex items-center justify-center gap-2 py-2.5 px-3 rounded-lg bg-purple-500/10 hover:bg-purple-500/20 border border-purple-500/30 text-purple-200 hover:text-white transition-all font-mono-code font-medium">
+                                        <svg class="w-4 h-4 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                                        </svg>
+                                        <span>Default Mail App ↗</span>
+                                    </a>
+                                </div>
+
+                                <div class="flex items-center justify-between pt-1 border-t border-white/5 text-[11px] text-gray-400 font-mono-code">
+                                    <button id="transmission-copy-btn" type="button" class="hover:text-cyan-400 transition-colors flex items-center gap-1.5 cursor-pointer">
+                                        <svg class="w-3.5 h-3.5 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                                        <span id="transmission-copy-label">Copy Briefing</span>
+                                    </button>
+                                    <button id="transmission-reset-link" type="button" class="hover:text-white transition-colors cursor-pointer text-gray-500 hover:text-gray-300">
+                                        ↻ Transmit Another Mission
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </form>
                 </div>
             </div>
