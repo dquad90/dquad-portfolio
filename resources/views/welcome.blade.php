@@ -414,23 +414,67 @@
                     </div>
 
                     <!-- Bento 2: Web Architecture -->
-                    <div class="bento-card hairline-beam hairline-speed-slow hairline-spotlight rounded-3xl p-8 flex flex-col justify-between">
+                    <div class="bento-card hairline-beam hairline-speed-slow hairline-spotlight rounded-3xl p-6 sm:p-8 flex flex-col justify-between">
                         <div class="bento-glow"></div>
                         <div class="relative z-10">
-                            <div class="flex items-center justify-between mb-8">
-                                <div class="w-12 h-12 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center">
-                                    <svg class="w-6 h-6 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+                            <div class="flex items-center justify-between mb-5">
+                                <div class="w-11 h-11 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center">
+                                    <svg class="w-5 h-5 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
                                 </div>
-                                <span class="text-xs font-mono-code text-gray-500">02 // Backend</span>
+                                <span class="text-xs font-mono-code text-cyan-400 uppercase tracking-wider font-semibold">02 // Backend</span>
                             </div>
 
-                            <h3 class="text-2xl font-bold text-white mb-3 tracking-tight">Web Architecture</h3>
-                            <p class="text-gray-400 text-sm leading-relaxed font-light mb-6">
+                            <h3 class="text-2xl font-bold text-white mb-2 tracking-tight">Web Architecture</h3>
+                            <p class="text-gray-400 text-sm leading-relaxed font-light mb-4">
                                 Full-lifecycle PHP & Laravel web systems with clean MVC patterns, robust RESTful APIs, Tailwind styling, and reactive UI.
                             </p>
                         </div>
 
-                        <div class="relative z-10 flex flex-wrap gap-2 pt-4 border-t border-white/5">
+                        <!-- Interactive Live API / Artisan Terminal Simulator -->
+                        <div class="relative z-10 my-2 rounded-2xl overflow-hidden border border-white/10 bg-[#08080f] shadow-inner font-mono-code text-[11px]" id="api-terminal-simulator">
+                            <!-- Terminal Header Bar -->
+                            <div class="flex items-center justify-between px-3 py-1.5 border-b border-white/10 bg-black/60">
+                                <div class="flex items-center gap-1.5">
+                                    <span class="w-2 h-2 rounded-full bg-rose-500/80"></span>
+                                    <span class="w-2 h-2 rounded-full bg-amber-500/80"></span>
+                                    <span class="w-2 h-2 rounded-full bg-emerald-500/80"></span>
+                                    <span class="text-[9px] text-gray-400 ml-2">api.dquad.dev // laravel-13</span>
+                                </div>
+                                <div class="flex items-center gap-1 text-[9px] text-emerald-400">
+                                    <span class="w-1 h-1 rounded-full bg-emerald-400 animate-ping"></span>
+                                    <span>LIVE</span>
+                                </div>
+                            </div>
+
+                            <!-- Route Selector Tabs -->
+                            <div class="flex items-center gap-1 p-1.5 bg-black/40 border-b border-white/5 overflow-x-auto text-[10px]">
+                                <button type="button" data-route="health" class="api-tab px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 font-semibold transition-all cursor-pointer">
+                                    GET /health
+                                </button>
+                                <button type="button" data-route="architecture" class="api-tab px-2 py-0.5 rounded bg-white/[0.03] text-gray-400 hover:text-white border border-transparent hover:border-white/10 transition-all cursor-pointer">
+                                    GET /stack
+                                </button>
+                                <button type="button" data-route="dispatch" class="api-tab px-2 py-0.5 rounded bg-white/[0.03] text-gray-400 hover:text-white border border-transparent hover:border-white/10 transition-all cursor-pointer">
+                                    POST /queue
+                                </button>
+                            </div>
+
+                            <!-- Terminal Console Output Body -->
+                            <div class="p-3 text-[10px] sm:text-[11px] leading-relaxed text-gray-300 min-h-[110px] flex flex-col justify-between" id="api-terminal-output">
+                                <div id="api-response-body">
+                                    <!-- Dynamic JSON rendered here -->
+                                </div>
+                                <div class="flex items-center justify-between pt-2 mt-2 border-t border-white/5 text-[9px] text-gray-500">
+                                    <span id="api-response-meta">HTTP/2 200 OK • 12ms • Redis Cache</span>
+                                    <button type="button" class="text-cyan-400 hover:text-cyan-300 transition-colors cursor-pointer flex items-center gap-1" id="api-run-again-btn" title="Simulate Latency & Fetch">
+                                        <span>RE-TEST</span>
+                                        <svg class="w-2.5 h-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="relative z-10 flex flex-wrap gap-2 pt-3 border-t border-white/5">
                             <span class="px-3 py-1.5 rounded-lg bg-white/5 text-xs text-gray-300 font-mono-code">PHP 8.4</span>
                             <span class="px-3 py-1.5 rounded-lg bg-white/5 text-xs text-gray-300 font-mono-code">Laravel 13</span>
                             <span class="px-3 py-1.5 rounded-lg bg-white/5 text-xs text-gray-300 font-mono-code">Tailwind v4</span>

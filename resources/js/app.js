@@ -4,6 +4,7 @@ import { initBentoController } from './controller3d';
 import { initAudioUI } from './audio';
 import { initMagneticCursor } from './cursor';
 import { initBentoMiniGame } from './minigame';
+import { initApiTerminal } from './api-terminal';
 
 document.addEventListener('DOMContentLoaded', () => {
     // -----------------------------------------------------------
@@ -30,6 +31,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // 5. Initialize Playable Bento Canvas Mini-Game (Vector Interceptor)
     // -----------------------------------------------------------
     initBentoMiniGame();
+
+    // -----------------------------------------------------------
+    // 6. Initialize Interactive Laravel API Simulator
+    // -----------------------------------------------------------
+    initApiTerminal();
 
     // -----------------------------------------------------------
     // 2. 3D Holographic Player Card (Hero Micro-Physics & 3D Flip)
