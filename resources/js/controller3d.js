@@ -318,33 +318,40 @@ export function initBentoController() {
     controllerGroup.add(chin);
 
     function createThumbstick(x, y, labelId, labelText) {
-        const stickSub = new THREE.Group();
-        stickSub.position.set(x, y, 0.36);
+        const baseGroup = new THREE.Group();
+        baseGroup.position.set(x, y, 0.36);
 
+        // Fixed collar bevel ring on the controller chassis
         const collar = new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.36, 0.16, 32), purpleChassisMat);
         collar.rotation.x = Math.PI / 2 + 0.22;
-        stickSub.add(collar);
+        baseGroup.add(collar);
+
+        // Deflectable stick pivot (stem + cap)
+        const pivotGroup = new THREE.Group();
+        pivotGroup.position.set(0, -0.02, 0.08);
 
         const stem = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.09, 0.2, 16), wellFloorMat);
         stem.rotation.x = Math.PI / 2 + 0.22;
-        stem.position.set(0, -0.02, 0.1);
-        stickSub.add(stem);
+        stem.position.set(0, 0, 0.02);
+        pivotGroup.add(stem);
 
         const cap = new THREE.Mesh(new THREE.SphereGeometry(0.24, 32, 32), pearlWhiteMat);
-        cap.position.set(0, -0.03, 0.22);
+        cap.position.set(0, -0.01, 0.14);
         cap.scale.z = 0.72;
-        cap.userData = { id: labelId, label: labelText, stickGroup: stickSub, origZ: 0.22, type: 'stick' };
-        stickSub.add(cap);
+        cap.userData = { id: labelId, label: labelText, pivotGroup: pivotGroup, origZ: 0.14, type: 'stick' };
+        pivotGroup.add(cap);
         interactiveMeshes.push(cap);
 
-        return { group: stickSub, cap: cap };
+        baseGroup.add(pivotGroup);
+
+        return { baseGroup: baseGroup, pivotGroup: pivotGroup, cap: cap };
     }
 
     const leftStickObj = createThumbstick(-0.36, -0.24, 'STICK_L', 'L-STICK [MOVE / NAV]');
-    controllerGroup.add(leftStickObj.group);
+    controllerGroup.add(leftStickObj.baseGroup);
 
     const rightStickObj = createThumbstick(0.36, -0.24, 'STICK_R', 'R-STICK [LOOK / AIM]');
-    controllerGroup.add(rightStickObj.group);
+    controllerGroup.add(rightStickObj.baseGroup);
 
     // 4F. Top White Accent Bracket & Coiled Purple Cable Loop
     const whiteBracket = new THREE.Mesh(new THREE.BoxGeometry(0.82, 0.13, 0.45), pearlWhiteMat);
@@ -395,24 +402,36 @@ export function initBentoController() {
     function pressMesh(mesh) {
         if (!mesh || !mesh.userData) return;
         const u = mesh.userData;
+        if (u.isPressed) return; // Prevent concurrent trigger glitching
+        u.isPressed = true;
 
         // Visual press deflection
         if (u.type === 'candy') {
             mesh.position.z = u.origZ - 0.06;
-            setTimeout(() => { mesh.position.z = u.origZ; }, 160);
+            setTimeout(() => {
+                mesh.position.z = u.origZ;
+                u.isPressed = false;
+            }, 140);
         } else if (u.type === 'dpad') {
             u.group.position.z = 0.30;
-            setTimeout(() => { u.group.position.z = 0.35; }, 160);
-        } else if (u.type === 'stick') {
-            u.stickGroup.rotation.x += 0.2;
-            mesh.position.z = u.origZ - 0.05;
             setTimeout(() => {
-                u.stickGroup.rotation.x -= 0.2;
+                u.group.position.z = 0.35;
+                u.isPressed = false;
+            }, 140);
+        } else if (u.type === 'stick') {
+            mesh.position.z = u.origZ - 0.04;
+            setTimeout(() => {
                 mesh.position.z = u.origZ;
-            }, 180);
+                u.isPressed = false;
+            }, 140);
         } else if (u.type === 'bumper') {
             mesh.position.y -= 0.05;
-            setTimeout(() => { mesh.position.y += 0.05; }, 160);
+            setTimeout(() => {
+                mesh.position.y += 0.05;
+                u.isPressed = false;
+            }, 140);
+        } else {
+            u.isPressed = false;
         }
 
         // Trigger telemetry feedback & tactile audio
@@ -544,35 +563,118 @@ export function initBentoController() {
     observer.observe(container);
 
     // -------------------------------------------------------------
-    // 8. PHYSICAL GAMEPAD API POLLING (Bonus Pro Feature)
+    // 8. PHYSICAL GAMEPAD API POLLING (Edge-triggered & Deadzone-filtered)
     // -------------------------------------------------------------
+    const prevGpButtons = new Map();
     let lastGamepadInput = 0;
+    let targetStickLX = 0;
+    let targetStickLY = 0;
+    let targetStickRX = 0;
+    let targetStickRY = 0;
+    let hasPhysicalGamepad = false;
+
     function pollPhysicalGamepad() {
         const gamepads = navigator.getGamepads ? navigator.getGamepads() : [];
-        if (!gamepads || !gamepads[0]) return;
-        const gp = gamepads[0];
-        if (gp) {
-            // Deflect 3D left stick based on physical stick
-            if (Math.abs(gp.axes[0]) > 0.12 || Math.abs(gp.axes[1]) > 0.12) {
-                leftStickObj.group.rotation.y = gp.axes[0] * 0.45;
-                leftStickObj.group.rotation.x = (Math.PI / 2 + 0.22) + gp.axes[1] * 0.45;
-                const now = performance.now();
-                if (now - lastGamepadInput > 300) {
-                    triggerInputFeedback(`JOYSTICK [${gp.axes[0].toFixed(1)}, ${gp.axes[1].toFixed(1)}]`, true);
-                    lastGamepadInput = now;
-                }
-            }
-            // Check button presses
-            if (gp.buttons && gp.buttons[0] && gp.buttons[0].pressed) {
-                pressMesh(candyMeshes[3]); // South (A/Cyan)
-            } else if (gp.buttons && gp.buttons[1] && gp.buttons[1].pressed) {
-                pressMesh(candyMeshes[2]); // East (B/Coral)
-            } else if (gp.buttons && gp.buttons[2] && gp.buttons[2].pressed) {
-                pressMesh(candyMeshes[1]); // West (X/Gold)
-            } else if (gp.buttons && gp.buttons[3] && gp.buttons[3].pressed) {
-                pressMesh(candyMeshes[0]); // North (Y/Lime)
+        if (!gamepads) return;
+
+        let activeGp = null;
+        for (let i = 0; i < gamepads.length; i++) {
+            if (gamepads[i] && gamepads[i].connected) {
+                activeGp = gamepads[i];
+                break;
             }
         }
+
+        if (!activeGp) {
+            if (hasPhysicalGamepad) {
+                hasPhysicalGamepad = false;
+                targetStickLX = 0;
+                targetStickLY = 0;
+                targetStickRX = 0;
+                targetStickRY = 0;
+            }
+            return;
+        }
+        hasPhysicalGamepad = true;
+
+        const DEADZONE = 0.22; // Completely filters out analog stick drift (e.g. [-0.1, 0.1])
+
+        // Left Analog Stick (Axes 0, 1)
+        const ax0 = activeGp.axes[0] || 0;
+        const ax1 = activeGp.axes[1] || 0;
+        const magL = Math.hypot(ax0, ax1);
+
+        if (magL > DEADZONE) {
+            targetStickLY = ax0 * 0.32;
+            targetStickLX = -ax1 * 0.32;
+
+            const now = performance.now();
+            if (now - lastGamepadInput > 350) {
+                const sX = (ax0 > 0 ? '+' : '') + ax0.toFixed(1);
+                const sY = (ax1 > 0 ? '+' : '') + ax1.toFixed(1);
+                triggerInputFeedback(`L-STICK [${sX}, ${sY}]`, true);
+                lastGamepadInput = now;
+            }
+        } else {
+            targetStickLX = 0;
+            targetStickLY = 0;
+        }
+
+        // Right Analog Stick (Axes 2, 3)
+        const ax2 = activeGp.axes[2] || 0;
+        const ax3 = activeGp.axes[3] || 0;
+        const magR = Math.hypot(ax2, ax3);
+
+        if (magR > DEADZONE) {
+            targetStickRY = ax2 * 0.32;
+            targetStickRX = -ax3 * 0.32;
+
+            // Also allow right stick to smoothly orbit/inspect the 3D model in real time!
+            targetRotY += ax2 * 0.035;
+            targetRotX = Math.max(-0.5, Math.min(0.65, targetRotX + ax3 * 0.025));
+
+            const now = performance.now();
+            if (now - lastGamepadInput > 350) {
+                const sX = (ax2 > 0 ? '+' : '') + ax2.toFixed(1);
+                const sY = (ax3 > 0 ? '+' : '') + ax3.toFixed(1);
+                triggerInputFeedback(`R-STICK [${sX}, ${sY}]`, true);
+                lastGamepadInput = now;
+            }
+        } else {
+            targetStickRX = 0;
+            targetStickRY = 0;
+        }
+
+        // Edge-triggered Buttons (Prevents continuous 60FPS hammering)
+        const buttonList = [
+            { btn: activeGp.buttons[0], mesh: candyMeshes[3] }, // South (A / Cyan)
+            { btn: activeGp.buttons[1], mesh: candyMeshes[2] }, // East (B / Coral)
+            { btn: activeGp.buttons[2], mesh: candyMeshes[1] }, // West (X / Gold)
+            { btn: activeGp.buttons[3], mesh: candyMeshes[0] }, // North (Y / Lime)
+            { btn: activeGp.buttons[4], mesh: leftBumper },     // L1 Bumper
+            { btn: activeGp.buttons[5], mesh: rightBumper },    // R1 Bumper
+            { btn: activeGp.buttons[6], mesh: leftBumper },     // L2 Trigger
+            { btn: activeGp.buttons[7], mesh: rightBumper },    // R2 Trigger
+            { btn: activeGp.buttons[10], mesh: leftStickObj.cap }, // L3 Stick Click
+            { btn: activeGp.buttons[11], mesh: rightStickObj.cap }, // R3 Stick Click
+            { btn: activeGp.buttons[12], mesh: dpadArmV },     // D-Pad Up
+            { btn: activeGp.buttons[13], mesh: dpadArmV },     // D-Pad Down
+            { btn: activeGp.buttons[14], mesh: dpadArmH },     // D-Pad Left
+            { btn: activeGp.buttons[15], mesh: dpadArmH },     // D-Pad Right
+        ];
+
+        buttonList.forEach((entry, idx) => {
+            if (!entry.btn) return;
+            const isPressed = typeof entry.btn === 'object' ? (entry.btn.pressed || entry.btn.value > 0.5) : (entry.btn > 0.5);
+            const wasPressed = prevGpButtons.get(idx) || false;
+
+            if (isPressed && !wasPressed) {
+                if (entry.mesh) {
+                    pressMesh(entry.mesh);
+                }
+            }
+            prevGpButtons.set(idx, isPressed);
+        });
     }
 
     // -------------------------------------------------------------
@@ -587,15 +689,16 @@ export function initBentoController() {
         // Poll connected hardware gamepads if available
         pollPhysicalGamepad();
 
-        // Idle showcase sway when not dragging
-        if (!isDragging) {
+        // Idle showcase sway when not dragging and right stick is not actively aiming
+        const rightStickActive = Math.abs(targetStickRX) > 0.05 || Math.abs(targetStickRY) > 0.05;
+        if (!isDragging && !rightStickActive) {
             const swayY = HERO_ROT_Y + Math.sin(elapsedTime * 1.2) * 0.28;
             const swayX = HERO_ROT_X + Math.cos(elapsedTime * 1.5) * 0.08;
-            targetRotY = swayY;
-            targetRotX = swayX;
+            targetRotY += (swayY - targetRotY) * 0.02;
+            targetRotX += (swayX - targetRotX) * 0.02;
         }
 
-        // Smooth spring damping
+        // Smooth spring damping for 3D model orientation
         rootGroup.rotation.y += (targetRotY - rootGroup.rotation.y) * 0.08;
         rootGroup.rotation.x += (targetRotX - rootGroup.rotation.x) * 0.08;
 
@@ -606,9 +709,20 @@ export function initBentoController() {
         controllerGroup.position.y = 0.05 + Math.sin(elapsedTime * 2.2) * 0.06;
         controllerGroup.rotation.z = Math.sin(elapsedTime * 1.6) * 0.025;
 
-        // Subtle alive twitch on thumbsticks when idle
-        leftStickObj.cap.rotation.x = Math.sin(elapsedTime * 3) * 0.06;
-        rightStickObj.cap.rotation.y = Math.cos(elapsedTime * 2.8) * 0.06;
+        // Smoothly lerp physical thumbstick deflections (always snaps back to center when released)
+        leftStickObj.pivotGroup.rotation.x += (targetStickLX - leftStickObj.pivotGroup.rotation.x) * 0.18;
+        leftStickObj.pivotGroup.rotation.y += (targetStickLY - leftStickObj.pivotGroup.rotation.y) * 0.18;
+
+        rightStickObj.pivotGroup.rotation.x += (targetStickRX - rightStickObj.pivotGroup.rotation.x) * 0.18;
+        rightStickObj.pivotGroup.rotation.y += (targetStickRY - rightStickObj.pivotGroup.rotation.y) * 0.18;
+
+        // Subtle alive twitch only on the top cap when stick is idle
+        if (Math.abs(targetStickLX) < 0.01 && Math.abs(targetStickLY) < 0.01) {
+            leftStickObj.cap.rotation.x = Math.sin(elapsedTime * 3) * 0.05;
+        }
+        if (Math.abs(targetStickRX) < 0.01 && Math.abs(targetStickRY) < 0.01) {
+            rightStickObj.cap.rotation.y = Math.cos(elapsedTime * 2.8) * 0.05;
+        }
 
         renderer.render(scene, camera);
     }
