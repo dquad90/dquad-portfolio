@@ -106,73 +106,198 @@
                         </div>
                     </div>
 
-                    <!-- Right: Interactive 3D Holographic Foil Card -->
+                    <!-- Right: Interactive 3D Holographic Foil Card (Click to Flip 180°) -->
                     <div class="lg:col-span-5 flex justify-center lg:justify-end">
-                        <div class="holo-container w-full max-w-sm cursor-pointer select-none">
-                            <div class="holo-card p-6 sm:p-7 rounded-3xl border border-white/20 bg-gradient-to-b from-[#181822] to-[#0c0c12] shadow-[0_25px_60px_-15px_rgba(0,0,0,0.9)] overflow-hidden">
-                                <div class="holo-glare"></div>
-                                <div class="holo-foil"></div>
+                        <div class="holo-container w-full max-w-sm cursor-pointer select-none" id="holo-card-container">
+                            <div class="holo-card">
+                                <!-- FRONT FACE (Diamond Tier Player Pass) -->
+                                <div class="holo-face holo-front p-6 sm:p-7 rounded-3xl border border-white/20 bg-gradient-to-b from-[#181822] to-[#0c0c12] shadow-[0_25px_60px_-15px_rgba(0,0,0,0.9)] overflow-hidden">
+                                    <div class="holo-glare"></div>
+                                    <div class="holo-foil"></div>
 
-                                <div class="relative z-10 flex items-center justify-between pb-4 border-b border-white/10">
-                                    <div class="flex items-center gap-2">
-                                        <div class="w-7 h-5 rounded bg-gradient-to-r from-amber-400 to-amber-200 border border-amber-300 flex items-center justify-center">
-                                            <div class="w-4 h-2.5 border-y border-amber-800/40"></div>
+                                    <div class="relative z-10 flex items-center justify-between pb-4 border-b border-white/10">
+                                        <div class="flex items-center gap-2">
+                                            <div class="w-7 h-5 rounded bg-gradient-to-r from-amber-400 to-amber-200 border border-amber-300 flex items-center justify-center">
+                                                <div class="w-4 h-2.5 border-y border-amber-800/40"></div>
+                                            </div>
+                                            <span class="font-mono-code text-[11px] text-gray-400 uppercase tracking-widest font-semibold">DQUAD-090</span>
                                         </div>
-                                        <span class="font-mono-code text-[11px] text-gray-400 uppercase tracking-widest font-semibold">DQUAD-090</span>
+                                        <span class="text-[10px] font-mono-code px-2 py-0.5 rounded bg-fuchsia-500/20 text-fuchsia-300 border border-fuchsia-500/30 uppercase font-bold tracking-wider">
+                                            Diamond Tier
+                                        </span>
                                     </div>
-                                    <span class="text-[10px] font-mono-code px-2 py-0.5 rounded bg-fuchsia-500/20 text-fuchsia-300 border border-fuchsia-500/30 uppercase font-bold tracking-wider">
-                                        Diamond Tier
-                                    </span>
+
+                                    <div class="relative z-10 py-7 text-center space-y-3">
+                                        <div class="relative mx-auto w-24 h-24 rounded-2xl bg-gradient-to-tr from-fuchsia-600 to-violet-600 p-[2px] shadow-xl">
+                                            <div class="w-full h-full bg-[#0a0a0f] rounded-2xl flex items-center justify-center overflow-hidden">
+                                                <span class="text-4xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-tr from-white via-violet-200 to-fuchsia-400">
+                                                    DQ
+                                                </span>
+                                            </div>
+                                            <div class="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-emerald-500 border-2 border-[#0c0c12] flex items-center justify-center">
+                                                <svg class="w-2.5 h-2.5 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <h3 class="text-2xl font-bold tracking-tight text-white">DARUN NAIM SINDID</h3>
+                                            <p class="text-xs font-mono-code text-gray-400 tracking-wider">CLASS: FULL-STACK & GAME DEV</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="relative z-10 grid grid-cols-2 gap-2.5 p-3 rounded-2xl bg-black/40 border border-white/5 text-xs font-mono-code mb-5">
+                                        <div class="p-2 rounded-xl bg-white/[0.02]">
+                                            <span class="text-[10px] text-gray-500 uppercase block">Game Engines</span>
+                                            <span class="text-white font-bold">Unity 6 / Godot 4</span>
+                                        </div>
+                                        <div class="p-2 rounded-xl bg-white/[0.02]">
+                                            <span class="text-[10px] text-gray-500 uppercase block">Web Stack</span>
+                                            <span class="text-cyan-400 font-bold">Laravel 13 / PHP</span>
+                                        </div>
+                                        <div class="p-2 rounded-xl bg-white/[0.02]">
+                                            <span class="text-[10px] text-gray-500 uppercase block">Mobile Native</span>
+                                            <span class="text-fuchsia-400 font-bold">Android Studio</span>
+                                        </div>
+                                        <div class="p-2 rounded-xl bg-white/[0.02]">
+                                            <span class="text-[10px] text-gray-500 uppercase block">Network Status</span>
+                                            <span class="text-emerald-400 font-bold">ONLINE [12ms]</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="relative z-10 flex items-center justify-between pt-3 border-t border-white/10 text-[10px] font-mono-code text-gray-500">
+                                        <div class="flex items-center gap-1.5">
+                                            <div class="flex gap-0.5 h-4 items-center">
+                                                <div class="w-0.5 h-full bg-gray-400"></div>
+                                                <div class="w-1 h-full bg-gray-400"></div>
+                                                <div class="w-0.5 h-full bg-gray-400"></div>
+                                                <div class="w-1.5 h-full bg-gray-400"></div>
+                                            </div>
+                                            <span>778-DQUAD-BD</span>
+                                        </div>
+                                        <span class="text-fuchsia-400 hover:text-fuchsia-300 font-semibold flex items-center gap-1 transition-colors">
+                                            <span>CLICK TO FLIP</span>
+                                            <svg class="w-3 h-3 animate-spin" style="animation-duration: 4s;" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                                        </span>
+                                    </div>
                                 </div>
 
-                                <div class="relative z-10 py-7 text-center space-y-3">
-                                    <div class="relative mx-auto w-24 h-24 rounded-2xl bg-gradient-to-tr from-fuchsia-600 to-violet-600 p-[2px] shadow-xl">
-                                        <div class="w-full h-full bg-[#0a0a0f] rounded-2xl flex items-center justify-center overflow-hidden">
-                                            <span class="text-4xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-tr from-white via-violet-200 to-fuchsia-400">
-                                                DQ
-                                            </span>
+                                <!-- BACK FACE (Developer RPG Radar & Direct Comms) -->
+                                <div class="holo-face holo-back p-6 sm:p-7 rounded-3xl border border-white/20 bg-gradient-to-b from-[#181822] via-[#0f0f18] to-[#08080c] shadow-[0_25px_60px_-15px_rgba(0,0,0,0.9)] overflow-hidden flex flex-col justify-between">
+                                    <div class="holo-glare"></div>
+                                    <div class="holo-foil"></div>
+
+                                    <!-- Top Header -->
+                                    <div class="relative z-10 flex items-center justify-between pb-3 border-b border-white/10">
+                                        <div class="flex items-center gap-2">
+                                            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                                            <span class="font-mono-code text-[11px] text-cyan-400 uppercase tracking-widest font-semibold">ATTRIBUTES // RADAR</span>
                                         </div>
-                                        <div class="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-emerald-500 border-2 border-[#0c0c12] flex items-center justify-center">
-                                            <svg class="w-2.5 h-2.5 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+                                        <span class="text-[10px] font-mono-code px-2 py-0.5 rounded bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 uppercase font-bold tracking-wider">
+                                            LVL 99 ARCHITECT
+                                        </span>
+                                    </div>
+
+                                    <!-- Center: SVG Radar Chart & Metrics -->
+                                    <div class="relative z-10 py-3 flex items-center justify-between gap-4">
+                                        <!-- SVG Radar Polygon -->
+                                        <div class="w-28 h-28 flex-shrink-0 relative flex items-center justify-center">
+                                            <svg viewBox="0 0 120 120" class="w-full h-full drop-shadow-[0_0_12px_rgba(168,85,247,0.35)]">
+                                                <defs>
+                                                    <linearGradient id="radarGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                                        <stop offset="0%" stop-color="#ec4899" stop-opacity="0.6"/>
+                                                        <stop offset="100%" stop-color="#06b6d4" stop-opacity="0.4"/>
+                                                    </linearGradient>
+                                                </defs>
+                                                <!-- Outer Pentagon -->
+                                                <polygon points="60,15 102.8,46.1 86.4,96.4 33.6,96.4 17.2,46.1" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+                                                <!-- Inner 50% Pentagon -->
+                                                <polygon points="60,37.5 81.4,53 73.2,78.2 46.8,78.2 38.6,53" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1" stroke-dasharray="2,2"/>
+                                                <!-- Axis lines from center (60,60) -->
+                                                <line x1="60" y1="60" x2="60" y2="15" stroke="rgba(255,255,255,0.1)" stroke-width="0.8"/>
+                                                <line x1="60" y1="60" x2="102.8" y2="46.1" stroke="rgba(255,255,255,0.1)" stroke-width="0.8"/>
+                                                <line x1="60" y1="60" x2="86.4" y2="96.4" stroke="rgba(255,255,255,0.1)" stroke-width="0.8"/>
+                                                <line x1="60" y1="60" x2="33.6" y2="96.4" stroke="rgba(255,255,255,0.1)" stroke-width="0.8"/>
+                                                <line x1="60" y1="60" x2="17.2" y2="46.1" stroke="rgba(255,255,255,0.1)" stroke-width="0.8"/>
+                                                <!-- Data Polygon (98, 99, 97, 96, 92) -->
+                                                <polygon points="60,15.9 102.4,46.2 85.7,95.3 34.6,95.0 20.6,47.2" fill="url(#radarGrad)" stroke="#c084fc" stroke-width="1.8"/>
+                                                <!-- Data Nodes -->
+                                                <circle cx="60" cy="15.9" r="2.5" fill="#38bdf8"/>
+                                                <circle cx="102.4" cy="46.2" r="2.5" fill="#f472b6"/>
+                                                <circle cx="85.7" cy="95.3" r="2.5" fill="#a78bfa"/>
+                                                <circle cx="34.6" cy="95.0" r="2.5" fill="#34d399"/>
+                                                <circle cx="20.6" cy="47.2" r="2.5" fill="#fbbf24"/>
+                                            </svg>
+                                        </div>
+
+                                        <!-- Attributes Level Bars -->
+                                        <div class="flex-1 space-y-1.5 font-mono-code text-[10px]">
+                                            <div>
+                                                <div class="flex justify-between text-gray-400 mb-0.5">
+                                                    <span>GAME ENG</span>
+                                                    <span class="text-cyan-400 font-bold">98</span>
+                                                </div>
+                                                <div class="w-full h-1 bg-white/10 rounded-full overflow-hidden">
+                                                    <div class="w-[98%] h-full bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full"></div>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <div class="flex justify-between text-gray-400 mb-0.5">
+                                                    <span>FULL-STACK</span>
+                                                    <span class="text-fuchsia-400 font-bold">96</span>
+                                                </div>
+                                                <div class="w-full h-1 bg-white/10 rounded-full overflow-hidden">
+                                                    <div class="w-[96%] h-full bg-gradient-to-r from-fuchsia-500 to-pink-500 rounded-full"></div>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <div class="flex justify-between text-gray-400 mb-0.5">
+                                                    <span>NATIVE ANDROID</span>
+                                                    <span class="text-emerald-400 font-bold">92</span>
+                                                </div>
+                                                <div class="w-full h-1 bg-white/10 rounded-full overflow-hidden">
+                                                    <div class="w-[92%] h-full bg-gradient-to-r from-emerald-500 to-teal-400 rounded-full"></div>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <div class="flex justify-between text-gray-400 mb-0.5">
+                                                    <span>VELOCITY</span>
+                                                    <span class="text-amber-400 font-bold">99</span>
+                                                </div>
+                                                <div class="w-full h-1 bg-white/10 rounded-full overflow-hidden">
+                                                    <div class="w-[99%] h-full bg-gradient-to-r from-amber-500 to-orange-400 rounded-full"></div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
 
-                                    <div>
-                                        <h3 class="text-2xl font-bold tracking-tight text-white">DARUN NAIM SINDID</h3>
-                                        <p class="text-xs font-mono-code text-gray-400 tracking-wider">CLASS: FULL-STACK & GAME DEV</p>
+                                    <!-- Comms Channels (Direct Clickable Links) -->
+                                    <div class="relative z-10 grid grid-cols-2 gap-2 p-2.5 rounded-xl bg-black/40 border border-white/5 font-mono-code text-[11px] mb-3">
+                                        <a href="tel:01888574160" class="flex items-center gap-1.5 px-2 py-1.5 rounded-lg bg-white/[0.03] hover:bg-white/[0.08] text-gray-300 hover:text-cyan-300 border border-white/5 transition-colors">
+                                            <svg class="w-3 h-3 text-cyan-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                                            <span class="truncate">01888574160</span>
+                                        </a>
+                                        <a href="mailto:dquadofficialgg@gmail.com" class="flex items-center gap-1.5 px-2 py-1.5 rounded-lg bg-white/[0.03] hover:bg-white/[0.08] text-gray-300 hover:text-fuchsia-300 border border-white/5 transition-colors">
+                                            <svg class="w-3 h-3 text-fuchsia-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                                            <span class="truncate">Email Me</span>
+                                        </a>
+                                        <a href="https://github.com/dquad90" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1.5 px-2 py-1.5 rounded-lg bg-white/[0.03] hover:bg-white/[0.08] text-gray-300 hover:text-white border border-white/5 transition-colors">
+                                            <svg class="w-3 h-3 text-gray-400 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+                                            <span class="truncate">github/dquad90</span>
+                                        </a>
+                                        <a href="https://www.youtube.com/@dquaddq" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1.5 px-2 py-1.5 rounded-lg bg-white/[0.03] hover:bg-white/[0.08] text-gray-300 hover:text-rose-400 border border-white/5 transition-colors">
+                                            <svg class="w-3 h-3 text-rose-500 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                                            <span class="truncate">@dquaddq</span>
+                                        </a>
                                     </div>
-                                </div>
 
-                                <div class="relative z-10 grid grid-cols-2 gap-2.5 p-3 rounded-2xl bg-black/40 border border-white/5 text-xs font-mono-code mb-5">
-                                    <div class="p-2 rounded-xl bg-white/[0.02]">
-                                        <span class="text-[10px] text-gray-500 uppercase block">Game Engines</span>
-                                        <span class="text-white font-bold">Unity 6 / Godot 4</span>
+                                    <!-- Bottom Footer -->
+                                    <div class="relative z-10 flex items-center justify-between pt-3 border-t border-white/10 text-[10px] font-mono-code text-gray-500">
+                                        <span class="text-gray-400">SHA-256: 9D4A...7F01</span>
+                                        <span class="text-cyan-400 hover:text-cyan-300 font-semibold flex items-center gap-1 transition-colors">
+                                            <span>RETURN FRONT</span>
+                                            <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"/></svg>
+                                        </span>
                                     </div>
-                                    <div class="p-2 rounded-xl bg-white/[0.02]">
-                                        <span class="text-[10px] text-gray-500 uppercase block">Web Stack</span>
-                                        <span class="text-cyan-400 font-bold">Laravel 13 / PHP</span>
-                                    </div>
-                                    <div class="p-2 rounded-xl bg-white/[0.02]">
-                                        <span class="text-[10px] text-gray-500 uppercase block">Mobile Native</span>
-                                        <span class="text-fuchsia-400 font-bold">Android Studio</span>
-                                    </div>
-                                    <div class="p-2 rounded-xl bg-white/[0.02]">
-                                        <span class="text-[10px] text-gray-500 uppercase block">Network Status</span>
-                                        <span class="text-emerald-400 font-bold">ONLINE [12ms]</span>
-                                    </div>
-                                </div>
-
-                                <div class="relative z-10 flex items-center justify-between pt-3 border-t border-white/10 text-[10px] font-mono-code text-gray-500">
-                                    <div class="flex items-center gap-1.5">
-                                        <div class="flex gap-0.5 h-4 items-center">
-                                            <div class="w-0.5 h-full bg-gray-400"></div>
-                                            <div class="w-1 h-full bg-gray-400"></div>
-                                            <div class="w-0.5 h-full bg-gray-400"></div>
-                                            <div class="w-1.5 h-full bg-gray-400"></div>
-                                        </div>
-                                        <span>778-DQUAD-BD</span>
-                                    </div>
-                                    <span class="text-gray-400">HOVER TO TILT 3D ✦</span>
                                 </div>
                             </div>
                         </div>

@@ -145,17 +145,36 @@
     opacity: 1;
   }
 
-  /* 3D Holographic Foil Card */
+  /* 3D Holographic Foil Card & Flip Engine */
   .holo-container {
-    perspective: 1200px;
+    perspective: 1400px;
     transform-style: preserve-3d;
   }
   .holo-card {
     position: relative;
+    width: 100%;
     transform-style: preserve-3d;
-    transition: transform 0.12s ease-out;
+    transition: transform 0.65s cubic-bezier(0.2, 0.8, 0.2, 1);
     will-change: transform;
     border-radius: 1.5rem;
+  }
+  .holo-card.is-tilting {
+    transition: transform 0.08s ease-out;
+  }
+  .holo-face {
+    width: 100%;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    border-radius: inherit;
+  }
+  .holo-front {
+    transform: rotateY(0deg);
+    position: relative;
+  }
+  .holo-back {
+    position: absolute;
+    inset: 0;
+    transform: rotateY(180deg);
   }
   .holo-glare {
     position: absolute;

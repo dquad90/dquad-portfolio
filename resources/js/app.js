@@ -14,14 +14,37 @@ document.addEventListener('DOMContentLoaded', () => {
     initBentoController();
 
     // -----------------------------------------------------------
-    // 2. 3D Holographic Player Card (Hero Micro-Physics)
+    // 2. 3D Holographic Player Card (Hero Micro-Physics & 3D Flip)
     // -----------------------------------------------------------
     const holoContainer = document.querySelector('.holo-container');
     const holoCard = document.querySelector('.holo-card');
 
     if (holoContainer && holoCard) {
+        let isFlipped = false;
+        let isHovered = false;
+        let tiltRotX = 0;
+        let tiltRotY = 0;
+
+        function applyTransform(smoothTransition = false) {
+            if (smoothTransition) {
+                holoCard.classList.remove('is-tilting');
+            } else {
+                holoCard.classList.add('is-tilting');
+            }
+
+            const baseRotY = isFlipped ? 180 : 0;
+            // Inverted relative tilt when rotated 180deg so mouse tracking feels intuitive on both sides
+            const effectiveTiltY = isFlipped ? -tiltRotY : tiltRotY;
+            const finalRotY = baseRotY + effectiveTiltY;
+            const finalRotX = tiltRotX;
+            const scale = isHovered ? 1.025 : 1.0;
+
+            holoCard.style.transform = `perspective(1200px) rotateX(${finalRotX.toFixed(2)}deg) rotateY(${finalRotY.toFixed(2)}deg) scale3d(${scale}, ${scale}, ${scale})`;
+        }
+
         holoContainer.addEventListener('mousemove', (e) => {
-            const rect = holoCard.getBoundingClientRect();
+            isHovered = true;
+            const rect = holoContainer.getBoundingClientRect();
             const x = e.clientX - rect.left;
             const y = e.clientY - rect.top;
 
@@ -31,20 +54,41 @@ document.addEventListener('DOMContentLoaded', () => {
             const normX = (x / rect.width) * 2 - 1;
             const normY = (y / rect.height) * 2 - 1;
 
-            // Refined, smooth 3D tilt angles
-            const rotX = -normY * 10;
-            const rotY = normX * 10;
+            tiltRotX = -normY * 9;
+            tiltRotY = normX * 9;
 
-            holoCard.style.transform = `perspective(1000px) rotateX(${rotX.toFixed(2)}deg) rotateY(${rotY.toFixed(2)}deg) scale3d(1.02, 1.02, 1.02)`;
-            holoCard.style.setProperty('--holo-x', `${px.toFixed(1)}%`);
-            holoCard.style.setProperty('--holo-y', `${py.toFixed(1)}%`);
-            holoCard.style.setProperty('--holo-bg-pos', `${(px * 1.5).toFixed(1)}% ${(py * 1.5).toFixed(1)}%`);
-            holoCard.style.setProperty('--holo-opacity', '1');
+            applyTransform(false);
+
+            holoCard.querySelectorAll('.holo-glare, .holo-foil').forEach(el => {
+                el.style.setProperty('--holo-x', `${px.toFixed(1)}%`);
+                el.style.setProperty('--holo-y', `${py.toFixed(1)}%`);
+                el.style.setProperty('--holo-bg-pos', `${(px * 1.5).toFixed(1)}% ${(py * 1.5).toFixed(1)}%`);
+                el.style.setProperty('--holo-opacity', '1');
+            });
         });
 
         holoContainer.addEventListener('mouseleave', () => {
-            holoCard.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
-            holoCard.style.setProperty('--holo-opacity', '0');
+            isHovered = false;
+            tiltRotX = 0;
+            tiltRotY = 0;
+            applyTransform(true);
+
+            holoCard.querySelectorAll('.holo-glare, .holo-foil').forEach(el => {
+                el.style.setProperty('--holo-opacity', '0');
+            });
+        });
+
+        holoContainer.addEventListener('click', (e) => {
+            // If user clicked a direct external link on the back card (phone, mail, github), follow it
+            if (e.target.closest('a')) return;
+
+            isFlipped = !isFlipped;
+            applyTransform(true);
+
+            // Tactile Sci-Fi Audio Synthesizer Hook
+            if (window.DQUAD_AUDIO) {
+                window.DQUAD_AUDIO.playCardFlip();
+            }
         });
     }
 
