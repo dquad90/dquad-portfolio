@@ -197,10 +197,23 @@
 
                     <!-- 3D Rotating Holographic Disc & Gaming Controller -->
                     <div class="flex items-center justify-center lg:justify-end">
-                        <div id="controller-3d-container" class="relative w-[340px] sm:w-[390px] h-[240px] flex items-center justify-center cursor-grab active:cursor-grabbing select-none group">
+                        <div id="controller-3d-container" class="relative w-[340px] sm:w-[390px] h-[240px] rounded-3xl border border-white/10 glass-modern hairline-beam hairline-speed-fast hairline-spotlight flex items-center justify-center cursor-grab active:cursor-grabbing select-none group shadow-2xl overflow-hidden">
+                            <!-- HUD Corner Crosshairs -->
+                            <span class="absolute top-2.5 left-2.5 w-3 h-3 border-t border-l border-cyan-400/80 rounded-tl-sm pointer-events-none transition-colors group-hover:border-cyan-300 z-10"></span>
+                            <span class="absolute top-2.5 right-2.5 w-3 h-3 border-t border-r border-cyan-400/80 rounded-tr-sm pointer-events-none transition-colors group-hover:border-cyan-300 z-10"></span>
+                            <span class="absolute bottom-2.5 left-2.5 w-3 h-3 border-b border-l border-cyan-400/80 rounded-bl-sm pointer-events-none transition-colors group-hover:border-cyan-300 z-10"></span>
+                            <span class="absolute bottom-2.5 right-2.5 w-3 h-3 border-b border-r border-cyan-400/80 rounded-br-sm pointer-events-none transition-colors group-hover:border-cyan-300 z-10"></span>
+
+                            <!-- Telemetry HUD Badge -->
+                            <div class="absolute top-3 left-4 flex items-center gap-2 pointer-events-none z-10">
+                                <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping"></span>
+                                <span class="text-[10px] font-mono-code uppercase tracking-wider text-cyan-400 font-semibold">VIEWPORT // 3D-PHYSICS</span>
+                            </div>
+
                             <canvas id="controller-3d-canvas" class="w-full h-full"></canvas>
-                            <div class="absolute bottom-1 right-2 text-[10px] font-mono-code text-gray-500/70 group-hover:text-fuchsia-400 transition-colors pointer-events-none flex items-center gap-1.5">
-                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+
+                            <div class="absolute bottom-2.5 right-4 text-[10px] font-mono-code text-gray-500 bg-black/50 px-2 py-0.5 rounded border border-white/5 opacity-70 group-hover:opacity-100 group-hover:text-fuchsia-300 transition-all pointer-events-none flex items-center gap-1.5 z-10">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
                                 DRAG TO ROTATE ✦
                             </div>
                         </div>
@@ -211,7 +224,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 
                     <!-- Bento 1: Game Development -->
-                    <div class="md:col-span-2 bento-card rounded-3xl p-8 sm:p-10 flex flex-col justify-between">
+                    <div class="md:col-span-2 bento-card hairline-beam hairline-speed-mid hairline-spotlight rounded-3xl p-8 sm:p-10 flex flex-col justify-between">
                         <div class="bento-glow"></div>
                         <div class="relative z-10">
                             <div class="flex items-center justify-between mb-8">
@@ -238,7 +251,7 @@
                     </div>
 
                     <!-- Bento 2: Web Architecture -->
-                    <div class="bento-card rounded-3xl p-8 flex flex-col justify-between">
+                    <div class="bento-card hairline-beam hairline-speed-slow hairline-spotlight rounded-3xl p-8 flex flex-col justify-between">
                         <div class="bento-glow"></div>
                         <div class="relative z-10">
                             <div class="flex items-center justify-between mb-8">
@@ -262,7 +275,7 @@
                     </div>
 
                     <!-- Bento 3: Android Studio -->
-                    <div class="bento-card rounded-3xl p-8 flex flex-col justify-between">
+                    <div class="bento-card hairline-beam hairline-speed-fast hairline-spotlight rounded-3xl p-8 flex flex-col justify-between">
                         <div class="bento-glow"></div>
                         <div class="relative z-10">
                             <div class="flex items-center justify-between mb-8">
@@ -286,7 +299,7 @@
                     </div>
 
                     <!-- Bento 4: Live Telemetry -->
-                    <div class="md:col-span-2 bento-card rounded-3xl p-8 sm:p-10 flex flex-col justify-between">
+                    <div class="md:col-span-2 bento-card hairline-beam hairline-speed-mid hairline-spotlight rounded-3xl p-8 sm:p-10 flex flex-col justify-between">
                         <div class="bento-glow"></div>
                         <div class="relative z-10">
                             <div class="flex items-center justify-between mb-6">

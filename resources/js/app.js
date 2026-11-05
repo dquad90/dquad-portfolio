@@ -49,10 +49,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // -----------------------------------------------------------
-    // 3. Bento Grid Interactive Cursor Spotlight & Tactile Hover
+    // 3. Bento Grid & Controller Interactive Hairline Spotlight
     // -----------------------------------------------------------
-    const bentoCards = document.querySelectorAll('.bento-card');
-    bentoCards.forEach(card => {
+    const spotlightCards = document.querySelectorAll('.bento-card, .hairline-spotlight');
+    spotlightCards.forEach(card => {
         card.addEventListener('mousemove', (e) => {
             const rect = card.getBoundingClientRect();
             const x = e.clientX - rect.left;
