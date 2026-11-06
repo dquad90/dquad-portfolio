@@ -1,19 +1,24 @@
 import * as THREE from 'three';
 
 /**
- * EXACT 3D Designer Controller & Holographic Halo Disc
- * Feature Set:
- * - Matte midnight purple-indigo chunky ergonomic chassis
- * - Left sunken circular well with puffy pastel white 4-way cross D-Pad
- * - Right sunken circular well with 4 candy action buttons (Lime, Yellow, Coral, Cyan)
- * - Lower angled chin with dual white mushroom thumbsticks
- * - Top white accent bracket with signature coiled purple cable loop
- * - Hollow glowing holographic halo disc wrapping around the controller
- * - INTERACTIVE CLICKABLE BUTTONS: Click candy buttons, D-pad, sticks or bumpers to visibly press them
- * - LIVE HUD TELEMETRY FEED: Updates viewport status & input chip on every press
- * - Full 360° drag rotation + showcase idle sway
- * - Gamepad API integration for physical gamepads
+ * AUTHENTIC 3D XBOX SERIES X|S WIRELESS CONTROLLER (ROBOT BLACK)
+ * 
+ * Accurately engineered to match the official Xbox Wireless Controller reference:
+ * - Seamless ergonomic unibody chassis with curved contouring & satin Robot Black finish
+ * - Iconic asymmetrical analog stick layout (Upper-Left & Lower-Right) with concave knurled rubber pads
+ * - Authentic 8-way faceted metallic gunmetal hybrid D-Pad dish (Lower-Left)
+ * - Authentic 4 diamond face buttons with Xbox colors:
+ *     * A: Vibrant Green (#22c55e)
+ *     * B: Crimson Red (#ef4444)
+ *     * X: Sky Blue (#38bdf8)
+ *     * Y: Golden Yellow (#facc15)
+ * - Glowing white illuminated Xbox Jewel / Guide Button (Top-Center)
+ * - Auxiliary buttons: View (⧉), Share (↑), Menu (☰)
+ * - Ergonomic shoulder bumpers (LB / RB) & curved triggers (LT / RT)
+ * - Raycast interactive buttons: Click/tap to press with physical deflection & audio
+ * - Full Gamepad API hardware integration & 360° drag rotation
  */
+
 export function initBentoController() {
     const container = document.getElementById('controller-3d-container');
     const canvas = document.getElementById('controller-3d-canvas');
@@ -29,7 +34,7 @@ export function initBentoController() {
 
     function triggerInputFeedback(label, isHardware = false) {
         if (telemetryText) {
-            telemetryText.textContent = isHardware ? 'HARDWARE // ACTIVE' : 'INPUT // DETECTED';
+            telemetryText.textContent = isHardware ? 'XBOX // HARDWARE ACTIVE' : 'XBOX // INPUT DETECTED';
             telemetryText.classList.remove('text-cyan-400');
             telemetryText.classList.add('text-emerald-400');
         }
@@ -61,15 +66,18 @@ export function initBentoController() {
         }, 1800);
     }
 
+    // -------------------------------------------------------------
     // 1. Scene, Camera, Renderer
+    // -------------------------------------------------------------
     const scene = new THREE.Scene();
 
-    const width = container.clientWidth || 360;
+    const width = container.clientWidth || 380;
     const height = container.clientHeight || 240;
 
-    const camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 100);
-    camera.position.set(0, 0.4, 5.6);
-    camera.lookAt(0, 0.1, 0);
+    const camera = new THREE.PerspectiveCamera(38, width / height, 0.1, 100);
+    // Face-on camera positioning with perfect framing
+    camera.position.set(0, 0.05, 4.6);
+    camera.lookAt(0, 0.0, 0);
 
     const renderer = new THREE.WebGLRenderer({
         canvas: canvas,
@@ -79,322 +87,615 @@ export function initBentoController() {
     });
     renderer.setSize(width, height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.35;
 
-    // 2. Studio Lighting
-    const ambientLight = new THREE.AmbientLight(0xffffff, 1.4);
+    // -------------------------------------------------------------
+    // 2. High-End Studio Lighting (Satin Robot Black Ergonomics)
+    // -------------------------------------------------------------
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1.8);
     scene.add(ambientLight);
 
-    const keyLight = new THREE.DirectionalLight(0xffffff, 2.4);
-    keyLight.position.set(-5, 7, 6);
+    // Key Light (Crisp front-top-left directional light)
+    const keyLight = new THREE.DirectionalLight(0xffffff, 3.8);
+    keyLight.position.set(-3.5, 5, 6);
     scene.add(keyLight);
 
-    const fillLight = new THREE.DirectionalLight(0xa5b4fc, 1.2);
-    fillLight.position.set(5, 3, 5);
-    scene.add(fillLight);
+    // Front Center Fill Light (Directly illuminates buttons & controller face)
+    const frontFill = new THREE.DirectionalLight(0xf8fafc, 3.0);
+    frontFill.position.set(2.5, 2.0, 6.0);
+    scene.add(frontFill);
 
-    const upLight = new THREE.PointLight(0x38bdf8, 6, 15);
-    upLight.position.set(0, -3, 3);
-    scene.add(upLight);
+    // Top Rim Light (Defines shoulder curves & bumpers)
+    const topRim = new THREE.DirectionalLight(0x38bdf8, 2.8);
+    topRim.position.set(0, 6, -2);
+    scene.add(topRim);
 
-    const backLight = new THREE.DirectionalLight(0x818cf8, 1.2);
-    backLight.position.set(0, 3, -6);
-    scene.add(backLight);
+    // Bottom Ambient Bounce Light
+    const floorBounce = new THREE.PointLight(0xa855f7, 4.5, 12);
+    floorBounce.position.set(0, -3.5, 3.0);
+    scene.add(floorBounce);
 
     // Master Root Group
     const rootGroup = new THREE.Group();
     scene.add(rootGroup);
 
+    // Interactive clickable meshes for raycasting
+    const interactiveMeshes = [];
+
     // -------------------------------------------------------------
-    // 3. THE HOLLOW HOLOGRAPHIC HALO DISC
+    // 3. Subtle Cybernetic Gimbal Ring (Futuristic accent)
     // -------------------------------------------------------------
     const discGroup = new THREE.Group();
-    discGroup.position.set(0, -0.32, 0);
-    discGroup.rotation.x = 0.32;
+    discGroup.position.set(0, -0.30, -0.30);
+    discGroup.rotation.x = 0.35;
     rootGroup.add(discGroup);
 
-    const ringGeo = new THREE.RingGeometry(1.55, 2.45, 64);
-    const ringMat = new THREE.MeshPhysicalMaterial({
-        color: 0x8b5cf6,
-        emissive: 0x6366f1,
-        emissiveIntensity: 0.6,
-        roughness: 0.1,
-        metalness: 0.2,
-        transparent: true,
-        opacity: 0.45,
-        side: THREE.DoubleSide,
-        blending: THREE.AdditiveBlending,
-        depthWrite: false
-    });
-    const ringPlane = new THREE.Mesh(ringGeo, ringMat);
-    ringPlane.rotation.x = Math.PI / 2;
-    discGroup.add(ringPlane);
-
-    const outerRimGeo = new THREE.TorusGeometry(2.45, 0.035, 16, 64);
+    const outerRimGeo = new THREE.TorusGeometry(2.35, 0.02, 16, 64);
     const outerRimMat = new THREE.MeshBasicMaterial({
-        color: 0xec4899,
+        color: 0xa855f7,
         transparent: true,
-        opacity: 0.95
+        opacity: 0.45
     });
     const outerRim = new THREE.Mesh(outerRimGeo, outerRimMat);
     outerRim.rotation.x = Math.PI / 2;
     discGroup.add(outerRim);
 
-    const midRimGeo = new THREE.TorusGeometry(2.0, 0.024, 16, 64);
-    const midRimMat = new THREE.MeshBasicMaterial({
-        color: 0x06b6d4,
-        transparent: true,
-        opacity: 0.9
-    });
-    const midRim = new THREE.Mesh(midRimGeo, midRimMat);
-    midRim.rotation.x = Math.PI / 2;
-    discGroup.add(midRim);
-
-    const innerRimGeo = new THREE.TorusGeometry(1.55, 0.03, 16, 64);
+    const innerRimGeo = new THREE.TorusGeometry(1.85, 0.016, 16, 64);
     const innerRimMat = new THREE.MeshBasicMaterial({
         color: 0x38bdf8,
         transparent: true,
-        opacity: 0.95
+        opacity: 0.55
     });
     const innerRim = new THREE.Mesh(innerRimGeo, innerRimMat);
     innerRim.rotation.x = Math.PI / 2;
     discGroup.add(innerRim);
 
-    const spokeMat = new THREE.MeshBasicMaterial({
-        color: 0xc084fc,
-        transparent: true,
-        opacity: 0.5
-    });
-    for (let i = 0; i < 4; i++) {
-        const spokeGeo = new THREE.BoxGeometry(4.7, 0.015, 0.03);
-        const spoke = new THREE.Mesh(spokeGeo, spokeMat);
-        spoke.rotation.y = (i * Math.PI) / 4;
-        discGroup.add(spoke);
+    // -------------------------------------------------------------
+    // 4. HIGH-RESOLUTION CANVAS TEXTURE GENERATORS
+    // -------------------------------------------------------------
+    
+    // 4A. ABXY Button Face Texture
+    function createButtonTexture(letter, colorHex) {
+        const can = document.createElement('canvas');
+        can.width = 256;
+        can.height = 256;
+        const ctx = can.getContext('2d');
+
+        // Dark obsidian domed button body
+        const grad = ctx.createRadialGradient(85, 75, 10, 128, 128, 120);
+        grad.addColorStop(0, '#363640');
+        grad.addColorStop(0.5, '#1a1a20');
+        grad.addColorStop(1, '#0c0c10');
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.arc(128, 128, 120, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Subtle specular perimeter ring
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.25)';
+        ctx.lineWidth = 6;
+        ctx.beginPath();
+        ctx.arc(128, 128, 114, 0, Math.PI * 2);
+        ctx.stroke();
+
+        // High-contrast bold letter
+        ctx.fillStyle = colorHex;
+        ctx.font = '900 152px "Jost", "Helvetica Neue", Arial, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.shadowColor = colorHex;
+        ctx.shadowBlur = 18;
+        ctx.fillText(letter, 128, 134);
+
+        const tex = new THREE.CanvasTexture(can);
+        tex.anisotropy = 4;
+        return tex;
+    }
+
+    // 4B. Illuminated Xbox Jewel / Guide Button Texture
+    function createXboxJewelTexture() {
+        const can = document.createElement('canvas');
+        can.width = 256;
+        can.height = 256;
+        const ctx = can.getContext('2d');
+
+        // Dark perimeter bezel
+        ctx.fillStyle = '#08080a';
+        ctx.beginPath();
+        ctx.arc(128, 128, 124, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Chrome ring
+        ctx.strokeStyle = '#94a3b8';
+        ctx.lineWidth = 5;
+        ctx.beginPath();
+        ctx.arc(128, 128, 116, 0, Math.PI * 2);
+        ctx.stroke();
+
+        // Glowing white Xbox sphere emblem
+        const jewelGrad = ctx.createRadialGradient(100, 90, 15, 128, 128, 105);
+        jewelGrad.addColorStop(0, '#ffffff');
+        jewelGrad.addColorStop(0.85, '#f8fafc');
+        jewelGrad.addColorStop(1, '#e2e8f0');
+        ctx.fillStyle = jewelGrad;
+        ctx.beginPath();
+        ctx.arc(128, 128, 102, 0, Math.PI * 2);
+        ctx.fill();
+
+        // The iconic stylized black "X" cutout
+        ctx.fillStyle = '#0a0a0e';
+        ctx.beginPath();
+        // Top cut
+        ctx.moveTo(104, 26);
+        ctx.quadraticCurveTo(128, 108, 128, 128);
+        ctx.quadraticCurveTo(128, 108, 152, 26);
+        ctx.lineTo(104, 26);
+        ctx.fill();
+
+        // Bottom cut
+        ctx.beginPath();
+        ctx.moveTo(92, 230);
+        ctx.quadraticCurveTo(128, 148, 128, 128);
+        ctx.quadraticCurveTo(128, 148, 164, 230);
+        ctx.lineTo(92, 230);
+        ctx.fill();
+
+        // Left curved wing cut
+        ctx.beginPath();
+        ctx.moveTo(26, 128);
+        ctx.quadraticCurveTo(98, 128, 128, 128);
+        ctx.quadraticCurveTo(86, 74, 48, 52);
+        ctx.quadraticCurveTo(28, 86, 26, 128);
+        ctx.fill();
+
+        // Right curved wing cut
+        ctx.beginPath();
+        ctx.moveTo(230, 128);
+        ctx.quadraticCurveTo(158, 128, 128, 128);
+        ctx.quadraticCurveTo(170, 74, 208, 52);
+        ctx.quadraticCurveTo(228, 86, 230, 128);
+        ctx.fill();
+
+        const tex = new THREE.CanvasTexture(can);
+        tex.anisotropy = 4;
+        return tex;
+    }
+
+    // 4C. View Button Texture (Two overlapping windows)
+    function createViewIconTexture() {
+        const can = document.createElement('canvas');
+        can.width = 128;
+        can.height = 128;
+        const ctx = can.getContext('2d');
+        ctx.fillStyle = '#18181e';
+        ctx.beginPath();
+        ctx.arc(64, 64, 60, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.strokeStyle = '#e2e8f0';
+        ctx.lineWidth = 5;
+        ctx.strokeRect(34, 34, 42, 34);
+        ctx.fillStyle = '#18181e';
+        ctx.fillRect(52, 52, 42, 34);
+        ctx.strokeRect(52, 52, 42, 34);
+
+        const tex = new THREE.CanvasTexture(can);
+        tex.anisotropy = 4;
+        return tex;
+    }
+
+    // 4D. Menu Button Texture (Three horizontal hamburger lines)
+    function createMenuIconTexture() {
+        const can = document.createElement('canvas');
+        can.width = 128;
+        can.height = 128;
+        const ctx = can.getContext('2d');
+        ctx.fillStyle = '#18181e';
+        ctx.beginPath();
+        ctx.arc(64, 64, 60, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.strokeStyle = '#e2e8f0';
+        ctx.lineWidth = 6;
+        ctx.lineCap = 'round';
+        ctx.beginPath();
+        ctx.moveTo(38, 46); ctx.lineTo(90, 46);
+        ctx.moveTo(38, 64); ctx.lineTo(90, 64);
+        ctx.moveTo(38, 82); ctx.lineTo(90, 82);
+        ctx.stroke();
+
+        const tex = new THREE.CanvasTexture(can);
+        tex.anisotropy = 4;
+        return tex;
+    }
+
+    // 4E. Share Button Texture (Rounded capsule with upload arrow)
+    function createShareIconTexture() {
+        const can = document.createElement('canvas');
+        can.width = 128;
+        can.height = 128;
+        const ctx = can.getContext('2d');
+        ctx.fillStyle = '#16161c';
+        ctx.beginPath();
+        ctx.arc(64, 64, 58, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.strokeStyle = '#e2e8f0';
+        ctx.lineWidth = 5;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+
+        // Up arrow
+        ctx.beginPath();
+        ctx.moveTo(64, 36); ctx.lineTo(64, 76);
+        ctx.moveTo(46, 54); ctx.lineTo(64, 36); ctx.lineTo(82, 54);
+        // Base tray
+        ctx.moveTo(42, 84); ctx.lineTo(42, 92); ctx.lineTo(86, 92); ctx.lineTo(86, 84);
+        ctx.stroke();
+
+        const tex = new THREE.CanvasTexture(can);
+        tex.anisotropy = 4;
+        return tex;
     }
 
     // -------------------------------------------------------------
-    // 4. THE 3D DESIGNER GAMING CONTROLLER
+    // 5. PBR MATERIALS MATCHING XBOX SERIES ROBOT BLACK
     // -------------------------------------------------------------
-    const controllerGroup = new THREE.Group();
-    controllerGroup.position.set(0, 0.05, 0);
-    rootGroup.add(controllerGroup);
-
-    // Interactive clickable meshes for raycasting
-    const interactiveMeshes = [];
-
-    // Materials Matching Reference Image
-    const purpleChassisMat = new THREE.MeshPhysicalMaterial({
-        color: 0x242042,
-        roughness: 0.3,
-        metalness: 0.2,
-        clearcoat: 0.7,
-        clearcoatRoughness: 0.2
+    
+    // Main Satin Carbon Black Body Plastic
+    const xboxChassisMat = new THREE.MeshPhysicalMaterial({
+        color: 0x18181c,
+        roughness: 0.44,
+        metalness: 0.08,
+        clearcoat: 0.35,
+        clearcoatRoughness: 0.32,
+        reflectivity: 0.5
     });
 
-    const wellFloorMat = new THREE.MeshStandardMaterial({
-        color: 0x141129,
+    // Darker underbelly & rear grip texture
+    const xboxRearGripMat = new THREE.MeshStandardMaterial({
+        color: 0x111114,
+        roughness: 0.75,
+        metalness: 0.04
+    });
+
+    // Recessed Stick/D-pad wells
+    const xboxWellMat = new THREE.MeshStandardMaterial({
+        color: 0x0a0a0e,
         roughness: 0.5,
         metalness: 0.1
     });
 
-    const dpadMat = new THREE.MeshPhysicalMaterial({
-        color: 0xdbeafe,
-        roughness: 0.18,
-        metalness: 0.05,
-        clearcoat: 0.85
+    // Thumbstick rubber grip material
+    const stickRubberMat = new THREE.MeshStandardMaterial({
+        color: 0x1a1a20,
+        roughness: 0.8,
+        metalness: 0.04
     });
 
-    const pearlWhiteMat = new THREE.MeshPhysicalMaterial({
-        color: 0xf8fafc,
-        roughness: 0.12,
-        metalness: 0.05,
-        clearcoat: 0.95,
-        clearcoatRoughness: 0.1
+    // Thumbstick stem (smooth dark plastic)
+    const stickStemMat = new THREE.MeshStandardMaterial({
+        color: 0x101014,
+        roughness: 0.22,
+        metalness: 0.18
     });
 
-    const btnLimeMat = new THREE.MeshPhysicalMaterial({ color: 0xbef264, roughness: 0.15, clearcoat: 0.95 });
-    const btnYellowMat = new THREE.MeshPhysicalMaterial({ color: 0xfacc15, roughness: 0.15, clearcoat: 0.95 });
-    const btnCoralMat = new THREE.MeshPhysicalMaterial({ color: 0xf97316, roughness: 0.15, clearcoat: 0.95 });
-    const btnCyanMat = new THREE.MeshPhysicalMaterial({ color: 0x06b6d4, roughness: 0.15, clearcoat: 0.95 });
+    // Hybrid D-Pad metallic gunmetal dish
+    const dpadFacetedMat = new THREE.MeshPhysicalMaterial({
+        color: 0x363642,
+        roughness: 0.22,
+        metalness: 0.68,
+        clearcoat: 0.6,
+        clearcoatRoughness: 0.16
+    });
 
-    // 4A. Central Body Bridge
-    const mainBody = new THREE.Mesh(new THREE.BoxGeometry(1.75, 1.2, 0.62), purpleChassisMat);
-    controllerGroup.add(mainBody);
+    // Shoulder bumpers (LB / RB)
+    const bumperMat = new THREE.MeshPhysicalMaterial({
+        color: 0x1c1c22,
+        roughness: 0.32,
+        metalness: 0.14,
+        clearcoat: 0.4
+    });
 
-    const topBridge = new THREE.Mesh(new THREE.CylinderGeometry(0.87, 0.87, 0.62, 32, 1, false, 0, Math.PI), purpleChassisMat);
-    topBridge.rotation.z = Math.PI / 2;
-    topBridge.rotation.y = Math.PI / 2;
-    topBridge.position.y = 0.6;
-    controllerGroup.add(topBridge);
+    // -------------------------------------------------------------
+    // 6. SCULPTED 3D XBOX SERIES UNIBODY CHASSIS
+    // -------------------------------------------------------------
+    const controllerGroup = new THREE.Group();
+    // Centered with optimal scale for viewport
+    controllerGroup.scale.set(0.85, 0.85, 0.85);
+    controllerGroup.position.set(0, 0.04, 0);
+    rootGroup.add(controllerGroup);
 
-    // 4B. Chunky Curved Handles
-    const gripGeo = new THREE.CylinderGeometry(0.35, 0.45, 1.55, 32);
+    // 6A. Authentic Xbox Unibody Shape (Extruded & Beveled)
+    const xboxShape = new THREE.Shape();
+    xboxShape.moveTo(0, -0.42);
+    // Left inner arch
+    xboxShape.bezierCurveTo(-0.35, -0.46, -0.75, -0.85, -1.05, -1.25);
+    // Left grip bottom rounded tip
+    xboxShape.bezierCurveTo(-1.22, -1.48, -1.48, -1.42, -1.52, -1.18);
+    // Left grip outer flare
+    xboxShape.bezierCurveTo(-1.56, -0.82, -1.44, -0.15, -1.30, 0.35);
+    // Left shoulder transition
+    xboxShape.bezierCurveTo(-1.20, 0.65, -0.98, 0.86, -0.60, 0.92);
+    // Top center peak (housing Xbox button & bumpers)
+    xboxShape.bezierCurveTo(-0.32, 0.96, -0.15, 0.98, 0, 1.0);
+    // Right top peak to shoulder
+    xboxShape.bezierCurveTo(0.15, 0.98, 0.32, 0.96, 0.60, 0.92);
+    // Right shoulder transition
+    xboxShape.bezierCurveTo(0.98, 0.86, 1.20, 0.65, 1.30, 0.35);
+    // Right grip outer flare
+    xboxShape.bezierCurveTo(1.44, -0.15, 1.56, -0.82, 1.52, -1.18);
+    // Right grip bottom rounded tip
+    xboxShape.bezierCurveTo(1.48, -1.42, 1.22, -1.48, 1.05, -1.25);
+    // Right lower inner arch back to chin
+    xboxShape.bezierCurveTo(0.75, -0.85, 0.35, -0.46, 0, -0.42);
 
-    const leftGrip = new THREE.Mesh(gripGeo, purpleChassisMat);
-    leftGrip.position.set(-1.15, -0.42, 0.05);
-    leftGrip.rotation.z = -0.38;
-    leftGrip.rotation.x = 0.14;
-    controllerGroup.add(leftGrip);
+    const extrudeSettings = {
+        steps: 2,
+        depth: 0.28,
+        bevelEnabled: true,
+        bevelThickness: 0.20,
+        bevelSize: 0.16,
+        bevelSegments: 16,
+        curveSegments: 36
+    };
 
-    const rightGrip = new THREE.Mesh(gripGeo, purpleChassisMat);
-    rightGrip.position.set(1.15, -0.42, 0.05);
-    rightGrip.rotation.z = 0.38;
-    rightGrip.rotation.x = 0.14;
-    controllerGroup.add(rightGrip);
+    const chassisGeom = new THREE.ExtrudeGeometry(xboxShape, extrudeSettings);
+    chassisGeom.center();
+    const unibodyChassis = new THREE.Mesh(chassisGeom, xboxChassisMat);
+    controllerGroup.add(unibodyChassis);
 
-    const podGeo = new THREE.SphereGeometry(0.45, 24, 24);
-    const leftPod = new THREE.Mesh(podGeo, purpleChassisMat);
-    leftPod.position.set(-1.38, -1.05, 0.1);
-    controllerGroup.add(leftPod);
+    // Front face sits at z ≈ +0.34
+    const FACE_Z = 0.35;
 
-    const rightPod = new THREE.Mesh(podGeo, purpleChassisMat);
-    rightPod.position.set(1.38, -1.05, 0.1);
-    controllerGroup.add(rightPod);
+    // Ergonomic Rear Palm Swells on Handles
+    const rearSwellGeo = new THREE.SphereGeometry(0.46, 24, 24);
+    const leftSwell = new THREE.Mesh(rearSwellGeo, xboxRearGripMat);
+    leftSwell.position.set(-1.24, -0.92, -0.18);
+    leftSwell.scale.set(0.85, 1.4, 0.65);
+    controllerGroup.add(leftSwell);
 
-    // 4C. Left Sunken Well & Bevelled Rim
-    const leftRim = new THREE.Mesh(new THREE.TorusGeometry(0.66, 0.07, 16, 48), purpleChassisMat);
-    leftRim.position.set(-0.66, 0.35, 0.31);
-    controllerGroup.add(leftRim);
+    const rightSwell = new THREE.Mesh(rearSwellGeo, xboxRearGripMat);
+    rightSwell.position.set(1.24, -0.92, -0.18);
+    rightSwell.scale.set(0.85, 1.4, 0.65);
+    controllerGroup.add(rightSwell);
 
-    const leftWell = new THREE.Mesh(new THREE.CylinderGeometry(0.62, 0.62, 0.1, 32), wellFloorMat);
-    leftWell.rotation.x = Math.PI / 2;
-    leftWell.position.set(-0.66, 0.35, 0.27);
-    controllerGroup.add(leftWell);
+    // 6B. Thumbstick Factory Function
+    function createXboxThumbstick(x, y, labelId, labelText) {
+        const baseGroup = new THREE.Group();
+        baseGroup.position.set(x, y, FACE_Z);
 
-    // Clickable Puffy 3D Cross D-Pad
+        // Sunken circular collar in chassis
+        const collar = new THREE.Mesh(new THREE.CylinderGeometry(0.33, 0.39, 0.12, 32), xboxWellMat);
+        collar.rotation.x = Math.PI / 2;
+        baseGroup.add(collar);
+
+        // Deflectable stick pivot group (stem + concave cap)
+        const pivotGroup = new THREE.Group();
+        pivotGroup.position.set(0, 0, 0.08);
+
+        // Stem
+        const stem = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.09, 0.22, 16), stickStemMat);
+        stem.rotation.x = Math.PI / 2;
+        pivotGroup.add(stem);
+
+        // Cap Group
+        const capGroup = new THREE.Group();
+        capGroup.position.set(0, 0, 0.14);
+
+        // Concave thumbpad bowl
+        const padBowl = new THREE.Mesh(new THREE.SphereGeometry(0.24, 32, 16, 0, Math.PI * 2, Math.PI / 2, Math.PI / 2), stickRubberMat);
+        padBowl.scale.z = 0.30;
+        capGroup.add(padBowl);
+
+        // Knurled textured outer rim ring
+        const outerRimRing = new THREE.Mesh(new THREE.TorusGeometry(0.21, 0.034, 16, 40), stickRubberMat);
+        capGroup.add(outerRimRing);
+
+        // Inner center dimple
+        const centerDimple = new THREE.Mesh(new THREE.SphereGeometry(0.09, 16, 16), stickRubberMat);
+        centerDimple.position.z = -0.04;
+        capGroup.add(centerDimple);
+
+        // Hit detector mesh for click events
+        const hitSphere = new THREE.Mesh(new THREE.SphereGeometry(0.26, 16, 16), new THREE.MeshBasicMaterial({ visible: false }));
+        hitSphere.userData = { id: labelId, label: labelText, pivotGroup: pivotGroup, capGroup: capGroup, origZ: 0.14, type: 'stick' };
+        capGroup.add(hitSphere);
+        interactiveMeshes.push(hitSphere);
+
+        pivotGroup.add(capGroup);
+        baseGroup.add(pivotGroup);
+
+        return { baseGroup, pivotGroup, capGroup, hitSphere };
+    }
+
+    // Left Stick (Asymmetrical: UPPER-LEFT)
+    const leftStickObj = createXboxThumbstick(-0.66, 0.40, 'STICK_L', 'XBOX // L-THUMBSTICK');
+    controllerGroup.add(leftStickObj.baseGroup);
+
+    // Right Stick (Asymmetrical: LOWER-RIGHT)
+    const rightStickObj = createXboxThumbstick(0.38, -0.16, 'STICK_R', 'XBOX // R-THUMBSTICK');
+    controllerGroup.add(rightStickObj.baseGroup);
+
+    // 6C. Authentic Xbox Series Faceted Hybrid D-Pad (Lower-Left)
     const dpadGroup = new THREE.Group();
-    dpadGroup.position.set(-0.66, 0.35, 0.35);
+    dpadGroup.position.set(-0.38, -0.16, FACE_Z);
 
-    const dpadArmH = new THREE.Mesh(new THREE.CapsuleGeometry(0.13, 0.48, 16, 16), dpadMat);
-    dpadArmH.rotation.z = Math.PI / 2;
-    dpadArmH.userData = { id: 'DPAD_LR', label: 'D-PAD [LEFT / RIGHT]', origZ: 0, group: dpadGroup };
-    dpadGroup.add(dpadArmH);
-    interactiveMeshes.push(dpadArmH);
+    // Sunken D-Pad Well
+    const dpadWell = new THREE.Mesh(new THREE.CylinderGeometry(0.42, 0.46, 0.10, 32), xboxWellMat);
+    dpadWell.rotation.x = Math.PI / 2;
+    dpadGroup.add(dpadWell);
 
-    const dpadArmV = new THREE.Mesh(new THREE.CapsuleGeometry(0.13, 0.48, 16, 16), dpadMat);
-    dpadArmV.userData = { id: 'DPAD_UD', label: 'D-PAD [UP / DOWN]', origZ: 0, group: dpadGroup };
-    dpadGroup.add(dpadArmV);
-    interactiveMeshes.push(dpadArmV);
+    // Faceted Hybrid Metallic Dish
+    const dishMesh = new THREE.Mesh(new THREE.SphereGeometry(0.38, 32, 16, 0, Math.PI * 2, Math.PI / 2, Math.PI / 2), dpadFacetedMat);
+    dishMesh.scale.z = 0.22;
+    dishMesh.rotation.x = Math.PI;
+    dishMesh.position.z = 0.06;
+    dpadGroup.add(dishMesh);
+
+    // Raised Cross Facets (Up, Down, Left, Right)
+    const crossArmH = new THREE.Mesh(new THREE.BoxGeometry(0.66, 0.2, 0.08), dpadFacetedMat);
+    crossArmH.position.z = 0.09;
+    crossArmH.userData = { id: 'DPAD_LR', label: 'XBOX // D-PAD [LEFT / RIGHT]', type: 'dpad', group: dpadGroup };
+    dpadGroup.add(crossArmH);
+    interactiveMeshes.push(crossArmH);
+
+    const crossArmV = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.66, 0.08), dpadFacetedMat);
+    crossArmV.position.z = 0.09;
+    crossArmV.userData = { id: 'DPAD_UD', label: 'XBOX // D-PAD [UP / DOWN]', type: 'dpad', group: dpadGroup };
+    dpadGroup.add(crossArmV);
+    interactiveMeshes.push(crossArmV);
+
+    // Center faceted depression
+    const dpadCenter = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.14, 0.06, 16), dpadFacetedMat);
+    dpadCenter.rotation.x = Math.PI / 2;
+    dpadCenter.position.z = 0.08;
+    dpadGroup.add(dpadCenter);
 
     controllerGroup.add(dpadGroup);
 
-    // 4D. Right Sunken Well & Bevelled Rim
-    const rightRim = new THREE.Mesh(new THREE.TorusGeometry(0.66, 0.07, 16, 48), purpleChassisMat);
-    rightRim.position.set(0.66, 0.35, 0.31);
-    controllerGroup.add(rightRim);
+    // 6D. Authentic Xbox 4 Face Buttons (ABXY Diamond, Upper-Right)
+    const abxyGroup = new THREE.Group();
+    abxyGroup.position.set(0.66, 0.42, FACE_Z);
 
-    const rightWell = new THREE.Mesh(new THREE.CylinderGeometry(0.62, 0.62, 0.1, 32), wellFloorMat);
-    rightWell.rotation.x = Math.PI / 2;
-    rightWell.position.set(0.66, 0.35, 0.27);
-    controllerGroup.add(rightWell);
-
-    // 4 Clickable Spherical Candy Action Buttons
-    const candyGroup = new THREE.Group();
-    candyGroup.position.set(0.66, 0.35, 0.35);
-
-    const btnRadius = 0.11;
+    const btnRadius = 0.12;
+    const btnDepth = 0.08;
     const btnConfigs = [
-        { x: 0, y: 0.21, mat: btnLimeMat, id: 'BTN_Y_LIME', label: 'ACTION [Y / LIME]' },
-        { x: -0.21, y: 0, mat: btnYellowMat, id: 'BTN_X_GOLD', label: 'ACTION [X / GOLD]' },
-        { x: 0.21, y: 0, mat: btnCoralMat, id: 'BTN_B_CORAL', label: 'ACTION [B / CORAL]' },
-        { x: 0, y: -0.21, mat: btnCyanMat, id: 'BTN_A_CYAN', label: 'ACTION [A / CYAN]' }
+        { letter: 'Y', color: '#facc15', x: 0, y: 0.24, id: 'BTN_Y', label: 'XBOX // BUTTON [Y / YELLOW]' },
+        { letter: 'X', color: '#38bdf8', x: -0.24, y: 0, id: 'BTN_X', label: 'XBOX // BUTTON [X / BLUE]' },
+        { letter: 'B', color: '#ef4444', x: 0.24, y: 0, id: 'BTN_B', label: 'XBOX // BUTTON [B / RED]' },
+        { letter: 'A', color: '#22c55e', x: 0, y: -0.24, id: 'BTN_A', label: 'XBOX // BUTTON [A / GREEN]' },
     ];
 
-    const candyMeshes = [];
+    const abxyMeshes = [];
     btnConfigs.forEach((cfg) => {
-        const btn = new THREE.Mesh(new THREE.SphereGeometry(btnRadius, 24, 24), cfg.mat);
-        btn.position.set(cfg.x, cfg.y, 0.05);
-        btn.scale.z = 0.8;
-        btn.userData = { id: cfg.id, label: cfg.label, origZ: 0.05, type: 'candy' };
-        candyGroup.add(btn);
-        interactiveMeshes.push(btn);
-        candyMeshes.push(btn);
+        const tex = createButtonTexture(cfg.letter, cfg.color);
+        const btnFaceMat = new THREE.MeshPhysicalMaterial({
+            map: tex,
+            roughness: 0.16,
+            metalness: 0.06,
+            clearcoat: 0.90,
+            clearcoatRoughness: 0.10
+        });
+        const btnSideMat = new THREE.MeshStandardMaterial({ color: 0x141418, roughness: 0.3 });
+
+        const btnGeom = new THREE.CylinderGeometry(btnRadius, btnRadius, btnDepth, 32);
+        const materials = [btnSideMat, btnFaceMat, btnSideMat];
+
+        const btnMesh = new THREE.Mesh(btnGeom, materials);
+        btnMesh.rotation.x = Math.PI / 2;
+        btnMesh.position.set(cfg.x, cfg.y, 0.04);
+        btnMesh.userData = { id: cfg.id, label: cfg.label, origZ: 0.04, type: 'face_btn', letter: cfg.letter };
+        
+        abxyGroup.add(btnMesh);
+        interactiveMeshes.push(btnMesh);
+        abxyMeshes.push(btnMesh);
     });
-    controllerGroup.add(candyGroup);
 
-    // 4E. Lower Chin with Dual Clickable White Mushroom Thumbsticks
-    const chin = new THREE.Mesh(new THREE.BoxGeometry(1.15, 0.48, 0.32), purpleChassisMat);
-    chin.position.set(0, -0.3, 0.26);
-    chin.rotation.x = 0.22;
-    controllerGroup.add(chin);
+    controllerGroup.add(abxyGroup);
 
-    function createThumbstick(x, y, labelId, labelText) {
-        const baseGroup = new THREE.Group();
-        baseGroup.position.set(x, y, 0.36);
+    // 6E. Illuminated Xbox Jewel / Guide Button (Top-Center)
+    const xboxJewelTex = createXboxJewelTexture();
+    const jewelFaceMat = new THREE.MeshPhysicalMaterial({
+        map: xboxJewelTex,
+        roughness: 0.10,
+        metalness: 0.06,
+        emissive: 0xffffff,
+        emissiveMap: xboxJewelTex,
+        emissiveIntensity: 0.95,
+        clearcoat: 0.98,
+        clearcoatRoughness: 0.08
+    });
 
-        // Fixed collar bevel ring on the controller chassis
-        const collar = new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.36, 0.16, 32), purpleChassisMat);
-        collar.rotation.x = Math.PI / 2 + 0.22;
-        baseGroup.add(collar);
+    const jewelGeom = new THREE.CylinderGeometry(0.20, 0.20, 0.07, 32);
+    const jewelMesh = new THREE.Mesh(jewelGeom, [stickStemMat, jewelFaceMat, stickStemMat]);
+    jewelMesh.rotation.x = Math.PI / 2;
+    jewelMesh.position.set(0, 0.68, FACE_Z);
+    jewelMesh.userData = { id: 'BTN_XBOX_GUIDE', label: 'XBOX GUIDE // HOME', origZ: FACE_Z, type: 'jewel' };
+    controllerGroup.add(jewelMesh);
+    interactiveMeshes.push(jewelMesh);
 
-        // Deflectable stick pivot (stem + cap)
-        const pivotGroup = new THREE.Group();
-        pivotGroup.position.set(0, -0.02, 0.08);
+    // 6F. Auxiliary Navigation Buttons (View, Share, Menu)
+    const auxRadius = 0.075;
+    const auxDepth = 0.05;
+    const auxGeom = new THREE.CylinderGeometry(auxRadius, auxRadius, auxDepth, 24);
 
-        const stem = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.09, 0.2, 16), wellFloorMat);
-        stem.rotation.x = Math.PI / 2 + 0.22;
-        stem.position.set(0, 0, 0.02);
-        pivotGroup.add(stem);
+    // View Button (Left of center)
+    const viewTex = createViewIconTexture();
+    const viewMat = new THREE.MeshStandardMaterial({ map: viewTex, roughness: 0.25 });
+    const viewBtn = new THREE.Mesh(auxGeom, [stickStemMat, viewMat, stickStemMat]);
+    viewBtn.rotation.x = Math.PI / 2;
+    viewBtn.position.set(-0.25, 0.38, FACE_Z);
+    viewBtn.userData = { id: 'BTN_VIEW', label: 'XBOX // VIEW [⧉]', origZ: FACE_Z, type: 'aux' };
+    controllerGroup.add(viewBtn);
+    interactiveMeshes.push(viewBtn);
 
-        const cap = new THREE.Mesh(new THREE.SphereGeometry(0.24, 32, 32), pearlWhiteMat);
-        cap.position.set(0, -0.01, 0.14);
-        cap.scale.z = 0.72;
-        cap.userData = { id: labelId, label: labelText, pivotGroup: pivotGroup, origZ: 0.14, type: 'stick' };
-        pivotGroup.add(cap);
-        interactiveMeshes.push(cap);
+    // Menu Button (Right of center)
+    const menuTex = createMenuIconTexture();
+    const menuMat = new THREE.MeshStandardMaterial({ map: menuTex, roughness: 0.25 });
+    const menuBtn = new THREE.Mesh(auxGeom, [stickStemMat, menuMat, stickStemMat]);
+    menuBtn.rotation.x = Math.PI / 2;
+    menuBtn.position.set(0.25, 0.38, FACE_Z);
+    menuBtn.userData = { id: 'BTN_MENU', label: 'XBOX // MENU [☰]', origZ: FACE_Z, type: 'aux' };
+    controllerGroup.add(menuBtn);
+    interactiveMeshes.push(menuBtn);
 
-        baseGroup.add(pivotGroup);
+    // Share Button (Centered below Xbox logo)
+    const shareTex = createShareIconTexture();
+    const shareMat = new THREE.MeshStandardMaterial({ map: shareTex, roughness: 0.25 });
+    const shareBtn = new THREE.Mesh(new THREE.CylinderGeometry(0.065, 0.065, auxDepth, 24), [stickStemMat, shareMat, stickStemMat]);
+    shareBtn.rotation.x = Math.PI / 2;
+    shareBtn.position.set(0, 0.22, FACE_Z);
+    shareBtn.userData = { id: 'BTN_SHARE', label: 'XBOX // SHARE [↑]', origZ: FACE_Z, type: 'aux' };
+    controllerGroup.add(shareBtn);
+    interactiveMeshes.push(shareBtn);
 
-        return { baseGroup: baseGroup, pivotGroup: pivotGroup, cap: cap };
-    }
+    // 6G. Shoulder Bumpers (LB & RB) & Triggers (LT & RT)
+    const bumperGeo = new THREE.BoxGeometry(0.70, 0.15, 0.32);
 
-    const leftStickObj = createThumbstick(-0.36, -0.24, 'STICK_L', 'L-STICK [MOVE / NAV]');
-    controllerGroup.add(leftStickObj.baseGroup);
-
-    const rightStickObj = createThumbstick(0.36, -0.24, 'STICK_R', 'R-STICK [LOOK / AIM]');
-    controllerGroup.add(rightStickObj.baseGroup);
-
-    // 4F. Top White Accent Bracket & Coiled Purple Cable Loop
-    const whiteBracket = new THREE.Mesh(new THREE.BoxGeometry(0.82, 0.13, 0.45), pearlWhiteMat);
-    whiteBracket.position.set(0, 0.78, 0);
-    controllerGroup.add(whiteBracket);
-
-    const cableLoop = new THREE.Mesh(new THREE.TorusGeometry(0.3, 0.075, 16, 48), purpleChassisMat);
-    cableLoop.position.set(0, 1.08, -0.04);
-    cableLoop.rotation.x = 0.2;
-    controllerGroup.add(cableLoop);
-
-    const plugStem = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.09, 0.18, 16), purpleChassisMat);
-    plugStem.position.set(0, 0.88, -0.02);
-    controllerGroup.add(plugStem);
-
-    // 4G. Shoulder Bumpers (Clickable L1 / R1)
-    const bumperGeo = new THREE.BoxGeometry(0.68, 0.16, 0.32);
-    const leftBumper = new THREE.Mesh(bumperGeo, purpleChassisMat);
-    leftBumper.position.set(-0.88, 0.7, -0.05);
+    const leftBumper = new THREE.Mesh(bumperGeo, bumperMat);
+    leftBumper.position.set(-0.70, 1.08, 0.08);
     leftBumper.rotation.z = -0.16;
-    leftBumper.userData = { id: 'BUMPER_L1', label: 'BUMPER [L1 / FIRE]', origZ: -0.05, type: 'bumper' };
+    leftBumper.rotation.x = 0.14;
+    leftBumper.userData = { id: 'BUMPER_LB', label: 'XBOX // BUMPER [LB]', origZ: 0.08, type: 'bumper' };
     interactiveMeshes.push(leftBumper);
     controllerGroup.add(leftBumper);
 
-    const rightBumper = new THREE.Mesh(bumperGeo, purpleChassisMat);
-    rightBumper.position.set(0.88, 0.7, -0.05);
+    const rightBumper = new THREE.Mesh(bumperGeo, bumperMat);
+    rightBumper.position.set(0.70, 1.08, 0.08);
     rightBumper.rotation.z = 0.16;
-    rightBumper.userData = { id: 'BUMPER_R1', label: 'BUMPER [R1 / SPECIAL]', origZ: -0.05, type: 'bumper' };
+    rightBumper.rotation.x = 0.14;
+    rightBumper.userData = { id: 'BUMPER_RB', label: 'XBOX // BUMPER [RB]', origZ: 0.08, type: 'bumper' };
     interactiveMeshes.push(rightBumper);
     controllerGroup.add(rightBumper);
 
+    // Triggers (LT & RT behind bumpers)
+    const triggerGeo = new THREE.BoxGeometry(0.48, 0.26, 0.30);
+    const leftTrigger = new THREE.Mesh(triggerGeo, bumperMat);
+    leftTrigger.position.set(-0.76, 1.14, -0.18);
+    leftTrigger.rotation.x = -0.24;
+    leftTrigger.rotation.z = -0.16;
+    controllerGroup.add(leftTrigger);
+
+    const rightTrigger = new THREE.Mesh(triggerGeo, bumperMat);
+    rightTrigger.position.set(0.76, 1.14, -0.18);
+    rightTrigger.rotation.x = -0.24;
+    rightTrigger.rotation.z = 0.16;
+    controllerGroup.add(rightTrigger);
+
     // -------------------------------------------------------------
-    // 5. INITIAL SHOWCASE ORIENTATION
+    // 7. SHOWCASE ORIENTATION (Facing Forward with Subtle 3D Angle)
     // -------------------------------------------------------------
-    const HERO_ROT_X = 0.22;
-    const HERO_ROT_Y = -0.42;
+    const HERO_ROT_X = 0.04;
+    const HERO_ROT_Y = -0.12;
 
     rootGroup.rotation.x = HERO_ROT_X;
     rootGroup.rotation.y = HERO_ROT_Y;
-    rootGroup.rotation.z = -0.04;
+    rootGroup.rotation.z = -0.01;
 
     // -------------------------------------------------------------
-    // 6. RAYCASTING & BUTTON PRESS PHYSICS
+    // 8. RAYCASTING & BUTTON PRESS PHYSICS
     // -------------------------------------------------------------
     const raycaster = new THREE.Raycaster();
     const mouseVec = new THREE.Vector2();
@@ -402,62 +703,59 @@ export function initBentoController() {
     function pressMesh(mesh, hit = null) {
         if (!mesh || !mesh.userData) return;
         const u = mesh.userData;
-        if (u.isPressed) return; // Prevent concurrent trigger glitching
+        if (u.isPressed) return;
         u.isPressed = true;
 
-        // Visual press deflection
-        if (u.type === 'candy') {
-            mesh.position.z = u.origZ - 0.06;
-            setTimeout(() => {
-                mesh.position.z = u.origZ;
-                u.isPressed = false;
-            }, 140);
-        } else if (u.type === 'dpad') {
-            u.group.position.z = 0.30;
-            setTimeout(() => {
-                u.group.position.z = 0.35;
-                u.isPressed = false;
-            }, 140);
-        } else if (u.type === 'stick') {
+        if (u.type === 'face_btn' || u.type === 'aux' || u.type === 'jewel') {
             mesh.position.z = u.origZ - 0.04;
             setTimeout(() => {
                 mesh.position.z = u.origZ;
                 u.isPressed = false;
-            }, 140);
-        } else if (u.type === 'bumper') {
-            mesh.position.y -= 0.05;
+            }, 130);
+        } else if (u.type === 'dpad') {
+            u.group.position.z = FACE_Z - 0.03;
             setTimeout(() => {
-                mesh.position.y += 0.05;
+                u.group.position.z = FACE_Z;
                 u.isPressed = false;
-            }, 140);
+            }, 130);
+        } else if (u.type === 'stick') {
+            u.capGroup.position.z = u.origZ - 0.04;
+            setTimeout(() => {
+                u.capGroup.position.z = u.origZ;
+                u.isPressed = false;
+            }, 130);
+        } else if (u.type === 'bumper') {
+            mesh.position.y -= 0.04;
+            setTimeout(() => {
+                mesh.position.y += 0.04;
+                u.isPressed = false;
+            }, 130);
         } else {
             u.isPressed = false;
         }
 
-        // Trigger telemetry feedback & tactile audio
         triggerInputFeedback(u.label);
         if (window.DQUAD_AUDIO) {
             window.DQUAD_AUDIO.playControllerButton(u.label);
         }
 
-        // Forward to Konami easter egg tracker if active
         if (window.DQUAD_KONAMI) {
-            if (u.id === 'BTN_B_CORAL') {
+            if (u.id === 'BTN_B') {
                 window.DQUAD_KONAMI.pushInput('b');
-            } else if (u.id === 'BTN_A_CYAN') {
+            } else if (u.id === 'BTN_A') {
                 window.DQUAD_KONAMI.pushInput('a');
             } else if (u.id === 'DPAD_UD') {
-                const dir = (hit && hit.point && hit.point.y > 0.35) ? 'up' : 'down';
+                const dir = (hit && hit.point && hit.point.y > -0.16) ? 'up' : 'down';
                 window.DQUAD_KONAMI.pushInput(dir);
             } else if (u.id === 'DPAD_LR') {
-                const dir = (hit && hit.point && hit.point.x < -0.66) ? 'left' : 'right';
+                const dir = (hit && hit.point && hit.point.x < -0.38) ? 'left' : 'right';
                 window.DQUAD_KONAMI.pushInput(dir);
             }
         }
     }
 
     // -------------------------------------------------------------
-    // 7. Interactive Drag & Click Controls
+    // 9. Interactive Drag & Click Controls
     // -------------------------------------------------------------
     let isDragging = false;
     let prevMouseX = 0;
@@ -485,7 +783,6 @@ export function initBentoController() {
         if (!isDragging) return;
         isDragging = false;
 
-        // Check if movement was minimal (Click event!)
         const dist = Math.hypot(e.clientX - startDownX, e.clientY - startDownY);
         if (dist < 6) {
             const coords = getCanvasCoordinates(e);
@@ -499,19 +796,17 @@ export function initBentoController() {
     });
 
     container.addEventListener('pointermove', (e) => {
-        // Drag rotation
         if (isDragging) {
             const deltaX = e.clientX - prevMouseX;
             const deltaY = e.clientY - prevMouseY;
 
             targetRotY += deltaX * 0.012;
             targetRotX += deltaY * 0.012;
-            targetRotX = Math.max(-0.6, Math.min(0.8, targetRotX));
+            targetRotX = Math.max(-0.6, Math.min(0.65, targetRotX));
 
             prevMouseX = e.clientX;
             prevMouseY = e.clientY;
         } else {
-            // Hover cursor detection
             const coords = getCanvasCoordinates(e);
             mouseVec.set(coords.x, coords.y);
             raycaster.setFromCamera(mouseVec, camera);
@@ -553,7 +848,7 @@ export function initBentoController() {
 
             targetRotY += deltaX * 0.015;
             targetRotX += deltaY * 0.015;
-            targetRotX = Math.max(-0.6, Math.min(0.8, targetRotX));
+            targetRotX = Math.max(-0.6, Math.min(0.65, targetRotX));
 
             prevMouseX = e.touches[0].clientX;
             prevMouseY = e.touches[0].clientY;
@@ -578,7 +873,7 @@ export function initBentoController() {
     observer.observe(container);
 
     // -------------------------------------------------------------
-    // 8. PHYSICAL GAMEPAD API POLLING (Edge-triggered & Deadzone-filtered)
+    // 10. PHYSICAL GAMEPAD API POLLING
     // -------------------------------------------------------------
     const prevGpButtons = new Map();
     let lastGamepadInput = 0;
@@ -603,18 +898,14 @@ export function initBentoController() {
         if (!activeGp) {
             if (hasPhysicalGamepad) {
                 hasPhysicalGamepad = false;
-                targetStickLX = 0;
-                targetStickLY = 0;
-                targetStickRX = 0;
-                targetStickRY = 0;
+                targetStickLX = targetStickLY = targetStickRX = targetStickRY = 0;
             }
             return;
         }
         hasPhysicalGamepad = true;
 
-        const DEADZONE = 0.22; // Completely filters out analog stick drift (e.g. [-0.1, 0.1])
+        const DEADZONE = 0.22;
 
-        // Left Analog Stick (Axes 0, 1)
         const ax0 = activeGp.axes[0] || 0;
         const ax1 = activeGp.axes[1] || 0;
         const magL = Math.hypot(ax0, ax1);
@@ -631,11 +922,9 @@ export function initBentoController() {
                 lastGamepadInput = now;
             }
         } else {
-            targetStickLX = 0;
-            targetStickLY = 0;
+            targetStickLX = targetStickLY = 0;
         }
 
-        // Right Analog Stick (Axes 2, 3)
         const ax2 = activeGp.axes[2] || 0;
         const ax3 = activeGp.axes[3] || 0;
         const magR = Math.hypot(ax2, ax3);
@@ -644,7 +933,6 @@ export function initBentoController() {
             targetStickRY = ax2 * 0.32;
             targetStickRX = -ax3 * 0.32;
 
-            // Also allow right stick to smoothly orbit/inspect the 3D model in real time!
             targetRotY += ax2 * 0.035;
             targetRotX = Math.max(-0.5, Math.min(0.65, targetRotX + ax3 * 0.025));
 
@@ -656,26 +944,27 @@ export function initBentoController() {
                 lastGamepadInput = now;
             }
         } else {
-            targetStickRX = 0;
-            targetStickRY = 0;
+            targetStickRX = targetStickRY = 0;
         }
 
-        // Edge-triggered Buttons (Prevents continuous 60FPS hammering)
         const buttonList = [
-            { btn: activeGp.buttons[0], mesh: candyMeshes[3], konami: 'a' },     // South (A / Cyan)
-            { btn: activeGp.buttons[1], mesh: candyMeshes[2], konami: 'b' },     // East (B / Coral)
-            { btn: activeGp.buttons[2], mesh: candyMeshes[1], konami: null },    // West (X / Gold)
-            { btn: activeGp.buttons[3], mesh: candyMeshes[0], konami: null },    // North (Y / Lime)
-            { btn: activeGp.buttons[4], mesh: leftBumper, konami: null },        // L1 Bumper
-            { btn: activeGp.buttons[5], mesh: rightBumper, konami: null },       // R1 Bumper
-            { btn: activeGp.buttons[6], mesh: leftBumper, konami: null },        // L2 Trigger
-            { btn: activeGp.buttons[7], mesh: rightBumper, konami: null },       // R2 Trigger
-            { btn: activeGp.buttons[10], mesh: leftStickObj.cap, konami: null }, // L3 Stick Click
-            { btn: activeGp.buttons[11], mesh: rightStickObj.cap, konami: null },// R3 Stick Click
-            { btn: activeGp.buttons[12], mesh: dpadArmV, konami: 'up' },         // D-Pad Up
-            { btn: activeGp.buttons[13], mesh: dpadArmV, konami: 'down' },       // D-Pad Down
-            { btn: activeGp.buttons[14], mesh: dpadArmH, konami: 'left' },       // D-Pad Left
-            { btn: activeGp.buttons[15], mesh: dpadArmH, konami: 'right' },      // D-Pad Right
+            { btn: activeGp.buttons[0], mesh: abxyMeshes[3], konami: 'a' },     // A (Green)
+            { btn: activeGp.buttons[1], mesh: abxyMeshes[2], konami: 'b' },     // B (Red)
+            { btn: activeGp.buttons[2], mesh: abxyMeshes[1], konami: null },    // X (Blue)
+            { btn: activeGp.buttons[3], mesh: abxyMeshes[0], konami: null },    // Y (Yellow)
+            { btn: activeGp.buttons[4], mesh: leftBumper, konami: null },        // LB
+            { btn: activeGp.buttons[5], mesh: rightBumper, konami: null },       // RB
+            { btn: activeGp.buttons[6], mesh: leftTrigger, konami: null },       // LT
+            { btn: activeGp.buttons[7], mesh: rightTrigger, konami: null },      // RT
+            { btn: activeGp.buttons[8], mesh: viewBtn, konami: null },           // View
+            { btn: activeGp.buttons[9], mesh: menuBtn, konami: null },           // Menu
+            { btn: activeGp.buttons[10], mesh: leftStickObj.hitSphere, konami: null }, // L3
+            { btn: activeGp.buttons[11], mesh: rightStickObj.hitSphere, konami: null },// R3
+            { btn: activeGp.buttons[12], mesh: crossArmV, konami: 'up' },        // D-Pad Up
+            { btn: activeGp.buttons[13], mesh: crossArmV, konami: 'down' },      // D-Pad Down
+            { btn: activeGp.buttons[14], mesh: crossArmH, konami: 'left' },      // D-Pad Left
+            { btn: activeGp.buttons[15], mesh: crossArmH, konami: 'right' },     // D-Pad Right
+            { btn: activeGp.buttons[16], mesh: jewelMesh, konami: null },        // Xbox Guide Button
         ];
 
         buttonList.forEach((entry, idx) => {
@@ -696,7 +985,7 @@ export function initBentoController() {
     }
 
     // -------------------------------------------------------------
-    // 9. Animation Render Loop (Hero Showcase Sway & Physics)
+    // 11. Animation Loop (Idle Showcase Sway & Spring Physics)
     // -------------------------------------------------------------
     function animate(now) {
         requestAnimationFrame(animate);
@@ -704,43 +993,32 @@ export function initBentoController() {
 
         const elapsedTime = now * 0.001;
 
-        // Poll connected hardware gamepads if available
         pollPhysicalGamepad();
 
-        // Idle showcase sway when not dragging and right stick is not actively aiming
         const rightStickActive = Math.abs(targetStickRX) > 0.05 || Math.abs(targetStickRY) > 0.05;
         if (!isDragging && !rightStickActive) {
-            const swayY = HERO_ROT_Y + Math.sin(elapsedTime * 1.2) * 0.28;
-            const swayX = HERO_ROT_X + Math.cos(elapsedTime * 1.5) * 0.08;
+            const swayY = HERO_ROT_Y + Math.sin(elapsedTime * 1.1) * 0.16;
+            const swayX = HERO_ROT_X + Math.cos(elapsedTime * 1.4) * 0.04;
             targetRotY += (swayY - targetRotY) * 0.02;
             targetRotX += (swayX - targetRotX) * 0.02;
         }
 
-        // Smooth spring damping for 3D model orientation
         rootGroup.rotation.y += (targetRotY - rootGroup.rotation.y) * 0.08;
         rootGroup.rotation.x += (targetRotX - rootGroup.rotation.x) * 0.08;
 
-        // Disc rotates continuously
-        discGroup.rotation.y += 0.022;
+        // Slow futuristic gimbal rotation
+        discGroup.rotation.y += 0.015;
 
-        // Floating hover physics on the controller
-        controllerGroup.position.y = 0.05 + Math.sin(elapsedTime * 2.2) * 0.06;
-        controllerGroup.rotation.z = Math.sin(elapsedTime * 1.6) * 0.025;
+        // Floating hover
+        controllerGroup.position.y = 0.04 + Math.sin(elapsedTime * 2.0) * 0.03;
+        controllerGroup.rotation.z = Math.sin(elapsedTime * 1.5) * 0.012;
 
-        // Smoothly lerp physical thumbstick deflections (always snaps back to center when released)
-        leftStickObj.pivotGroup.rotation.x += (targetStickLX - leftStickObj.pivotGroup.rotation.x) * 0.18;
-        leftStickObj.pivotGroup.rotation.y += (targetStickLY - leftStickObj.pivotGroup.rotation.y) * 0.18;
+        // Stick deflections with snap-back spring physics
+        leftStickObj.pivotGroup.rotation.x += (targetStickLX - leftStickObj.pivotGroup.rotation.x) * 0.2;
+        leftStickObj.pivotGroup.rotation.y += (targetStickLY - leftStickObj.pivotGroup.rotation.y) * 0.2;
 
-        rightStickObj.pivotGroup.rotation.x += (targetStickRX - rightStickObj.pivotGroup.rotation.x) * 0.18;
-        rightStickObj.pivotGroup.rotation.y += (targetStickRY - rightStickObj.pivotGroup.rotation.y) * 0.18;
-
-        // Subtle alive twitch only on the top cap when stick is idle
-        if (Math.abs(targetStickLX) < 0.01 && Math.abs(targetStickLY) < 0.01) {
-            leftStickObj.cap.rotation.x = Math.sin(elapsedTime * 3) * 0.05;
-        }
-        if (Math.abs(targetStickRX) < 0.01 && Math.abs(targetStickRY) < 0.01) {
-            rightStickObj.cap.rotation.y = Math.cos(elapsedTime * 2.8) * 0.05;
-        }
+        rightStickObj.pivotGroup.rotation.x += (targetStickRX - rightStickObj.pivotGroup.rotation.x) * 0.2;
+        rightStickObj.pivotGroup.rotation.y += (targetStickRY - rightStickObj.pivotGroup.rotation.y) * 0.2;
 
         renderer.render(scene, camera);
     }
