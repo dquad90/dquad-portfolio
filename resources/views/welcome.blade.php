@@ -31,10 +31,10 @@
     <canvas id="konami-confetti-canvas" class="fixed inset-0 w-full h-full pointer-events-none z-50"></canvas>
 
     <!-- 10-Second Rainbow Holographic Overdrive Countdown HUD (Top Center) -->
-    <div id="konami-overdrive-hud" class="fixed top-20 left-1/2 -translate-x-1/2 z-50 pointer-events-none opacity-0 transform -translate-y-6 transition-all duration-500">
-        <div class="px-5 py-2 rounded-full bg-[#090812]/95 border border-fuchsia-500/60 shadow-[0_0_35px_rgba(217,70,239,0.5),0_0_15px_rgba(56,189,248,0.4)] backdrop-blur-2xl flex items-center gap-3 text-xs font-mono-code text-white">
+    <div id="konami-overdrive-hud" class="fixed top-20 left-1/2 -translate-x-1/2 z-50 pointer-events-none opacity-0 transform -translate-y-6 transition-all duration-500 max-w-[92vw]">
+        <div class="px-4 sm:px-5 py-2 rounded-full bg-[#090812]/95 border border-fuchsia-500/60 shadow-[0_0_35px_rgba(217,70,239,0.5),0_0_15px_rgba(56,189,248,0.4)] backdrop-blur-2xl flex items-center gap-2.5 sm:gap-3 text-[11px] sm:text-xs font-mono-code text-white">
             <span class="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-ping"></span>
-            <span class="font-extrabold tracking-wider bg-gradient-to-r from-pink-400 via-purple-300 via-cyan-300 to-amber-300 bg-clip-text text-transparent uppercase">
+            <span class="font-extrabold tracking-wider bg-gradient-to-r from-pink-400 via-purple-300 via-cyan-300 to-amber-300 bg-clip-text text-transparent uppercase truncate">
                 Holographic Overdrive Active
             </span>
             <span class="text-white/20">|</span>
@@ -42,8 +42,8 @@
         </div>
     </div>
 
-    <!-- Steam / Xbox Style Achievement Toast Notification (Top Right) -->
-    <div id="konami-achievement-toast" class="fixed top-6 right-6 z-50 pointer-events-none transform translate-y-[-160%] opacity-0 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] max-w-sm w-full sm:w-auto">
+    <!-- Steam / Xbox Style Achievement Toast Notification (Top Right on desktop, centered bounded on mobile) -->
+    <div id="konami-achievement-toast" class="fixed top-4 sm:top-6 inset-x-4 sm:inset-x-auto sm:right-6 z-50 pointer-events-none transform translate-y-[-160%] opacity-0 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] max-w-sm sm:w-auto">
         <div class="relative overflow-hidden rounded-2xl bg-[#0b0a16]/95 backdrop-blur-2xl border border-amber-500/40 p-4 shadow-[0_25px_60px_rgba(0,0,0,0.85),0_0_35px_rgba(245,158,11,0.25)] flex items-center gap-3.5">
             <!-- Top Animated Rainbow Prismatic Beam -->
             <div class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-pink-500 via-purple-500 via-cyan-400 via-emerald-400 to-amber-400 animate-pulse"></div>
@@ -387,8 +387,8 @@
                     </div>
 
                     <!-- 3D Rotating Holographic Disc & Gaming Controller -->
-                    <div class="flex items-center justify-center lg:justify-end">
-                        <div id="controller-3d-container" class="relative w-[340px] sm:w-[390px] h-[240px] rounded-3xl border border-white/10 glass-modern hairline-beam hairline-speed-fast hairline-spotlight flex items-center justify-center cursor-grab active:cursor-grabbing select-none group shadow-2xl overflow-hidden">
+                    <div class="flex items-center justify-center lg:justify-end w-full">
+                        <div id="controller-3d-container" class="relative w-full max-w-[390px] h-[220px] sm:h-[240px] rounded-3xl border border-white/10 glass-modern hairline-beam hairline-speed-fast hairline-spotlight flex items-center justify-center cursor-grab active:cursor-grabbing select-none group shadow-2xl overflow-hidden mx-auto">
                             <!-- HUD Corner Crosshairs -->
                             <span class="absolute top-2.5 left-2.5 w-3 h-3 border-t border-l border-cyan-400/80 rounded-tl-sm pointer-events-none transition-colors group-hover:border-cyan-300 z-10"></span>
                             <span class="absolute top-2.5 right-2.5 w-3 h-3 border-t border-r border-cyan-400/80 rounded-tr-sm pointer-events-none transition-colors group-hover:border-cyan-300 z-10"></span>

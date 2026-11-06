@@ -119,6 +119,28 @@ export function initBentoMiniGame() {
         fireLaser();
     });
 
+    // Mobile touch controls (Tap to aim & fire, drag to steer)
+    canvas.addEventListener('touchstart', (e) => {
+        if (e.touches && e.touches[0]) {
+            const rect = canvas.getBoundingClientRect();
+            mouseAimX = e.touches[0].clientX - rect.left;
+            mouseAimY = e.touches[0].clientY - rect.top;
+            isManual = true;
+            isMouseOver = true;
+            fireLaser();
+        }
+    }, { passive: true });
+
+    canvas.addEventListener('touchmove', (e) => {
+        if (e.touches && e.touches[0]) {
+            const rect = canvas.getBoundingClientRect();
+            mouseAimX = e.touches[0].clientX - rect.left;
+            mouseAimY = e.touches[0].clientY - rect.top;
+            isManual = true;
+            isMouseOver = true;
+        }
+    }, { passive: true });
+
     window.addEventListener('keydown', (e) => {
         if (e.key === 'w' || e.key === 'W' || e.key === 'ArrowUp') keys.w = true;
         if (e.key === 's' || e.key === 'S' || e.key === 'ArrowDown') keys.s = true;
