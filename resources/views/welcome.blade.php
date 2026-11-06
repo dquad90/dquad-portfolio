@@ -145,8 +145,8 @@
                             </h1>
                         </div>
 
-                        <p class="text-lg sm:text-xl text-gray-400 font-light leading-relaxed max-w-xl">
-                            Full-Stack Web Architect, Game Developer, and Android Innovator. Crafting performant digital experiences with competitive gaming precision.
+                        <p class="text-base sm:text-lg text-gray-300 font-normal leading-relaxed max-w-xl">
+                            Full-stack engineer & game developer based in <strong class="text-white font-semibold">Dhaka, Bangladesh</strong>. Hacking on physics in <span class="text-cyan-400 font-medium">Unity & Godot</span>, architecting backends in <span class="text-purple-400 font-medium">Laravel</span>, and clicking heads in <span class="text-white font-medium">CS2, Valorant & Elden Ring</span>.
                         </p>
 
                         <!-- Tech Chips -->
@@ -255,83 +255,45 @@
                                     <div class="relative z-10 flex items-center justify-between pb-3 border-b border-white/10">
                                         <div class="flex items-center gap-2">
                                             <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                                            <span class="font-mono-code text-[11px] text-cyan-400 uppercase tracking-widest font-semibold">ATTRIBUTES // RADAR</span>
+                                            <span class="font-mono-code text-[11px] text-cyan-400 uppercase tracking-widest font-semibold">DEV LOADOUT // SPECS</span>
                                         </div>
                                         <span class="text-[10px] font-mono-code px-2 py-0.5 rounded bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 uppercase font-bold tracking-wider">
-                                            LVL 99 ARCHITECT
+                                            DHAKA, BD [UTC+6]
                                         </span>
                                     </div>
 
-                                    <!-- Center: SVG Radar Chart & Metrics -->
-                                    <div class="relative z-10 py-3 flex items-center justify-between gap-4">
-                                        <!-- SVG Radar Polygon -->
-                                        <div class="w-28 h-28 flex-shrink-0 relative flex items-center justify-center">
-                                            <svg viewBox="0 0 120 120" class="w-full h-full drop-shadow-[0_0_12px_rgba(168,85,247,0.35)]">
-                                                <defs>
-                                                    <linearGradient id="radarGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                                                        <stop offset="0%" stop-color="#ec4899" stop-opacity="0.6"/>
-                                                        <stop offset="100%" stop-color="#06b6d4" stop-opacity="0.4"/>
-                                                    </linearGradient>
-                                                </defs>
-                                                <!-- Outer Pentagon -->
-                                                <polygon points="60,15 102.8,46.1 86.4,96.4 33.6,96.4 17.2,46.1" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
-                                                <!-- Inner 50% Pentagon -->
-                                                <polygon points="60,37.5 81.4,53 73.2,78.2 46.8,78.2 38.6,53" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1" stroke-dasharray="2,2"/>
-                                                <!-- Axis lines from center (60,60) -->
-                                                <line x1="60" y1="60" x2="60" y2="15" stroke="rgba(255,255,255,0.1)" stroke-width="0.8"/>
-                                                <line x1="60" y1="60" x2="102.8" y2="46.1" stroke="rgba(255,255,255,0.1)" stroke-width="0.8"/>
-                                                <line x1="60" y1="60" x2="86.4" y2="96.4" stroke="rgba(255,255,255,0.1)" stroke-width="0.8"/>
-                                                <line x1="60" y1="60" x2="33.6" y2="96.4" stroke="rgba(255,255,255,0.1)" stroke-width="0.8"/>
-                                                <line x1="60" y1="60" x2="17.2" y2="46.1" stroke="rgba(255,255,255,0.1)" stroke-width="0.8"/>
-                                                <!-- Data Polygon (98, 99, 97, 96, 92) -->
-                                                <polygon points="60,15.9 102.4,46.2 85.7,95.3 34.6,95.0 20.6,47.2" fill="url(#radarGrad)" stroke="#c084fc" stroke-width="1.8"/>
-                                                <!-- Data Nodes -->
-                                                <circle cx="60" cy="15.9" r="2.5" fill="#38bdf8"/>
-                                                <circle cx="102.4" cy="46.2" r="2.5" fill="#f472b6"/>
-                                                <circle cx="85.7" cy="95.3" r="2.5" fill="#a78bfa"/>
-                                                <circle cx="34.6" cy="95.0" r="2.5" fill="#34d399"/>
-                                                <circle cx="20.6" cy="47.2" r="2.5" fill="#fbbf24"/>
-                                            </svg>
+                                    <!-- Center: Concrete Tech & Gaming Focus -->
+                                    <div class="relative z-10 py-3 space-y-2 font-mono-code text-[11px]">
+                                        <div class="p-2 rounded-xl bg-white/[0.03] border border-white/5 flex items-center justify-between">
+                                            <div>
+                                                <span class="text-[9px] text-gray-500 uppercase block">Game Engines</span>
+                                                <span class="text-white font-semibold">Unity 6 & Godot 4</span>
+                                            </div>
+                                            <span class="text-[10px] text-cyan-400 font-medium">C# / GDScript</span>
                                         </div>
 
-                                        <!-- Attributes Level Bars -->
-                                        <div class="flex-1 space-y-1.5 font-mono-code text-[10px]">
+                                        <div class="p-2 rounded-xl bg-white/[0.03] border border-white/5 flex items-center justify-between">
                                             <div>
-                                                <div class="flex justify-between text-gray-400 mb-0.5">
-                                                    <span>GAME ENG</span>
-                                                    <span class="text-cyan-400 font-bold">98</span>
-                                                </div>
-                                                <div class="w-full h-1 bg-white/10 rounded-full overflow-hidden">
-                                                    <div class="w-[98%] h-full bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full"></div>
-                                                </div>
+                                                <span class="text-[9px] text-gray-500 uppercase block">Backend Architecture</span>
+                                                <span class="text-white font-semibold">Laravel 13 / PHP 8.4</span>
                                             </div>
+                                            <span class="text-[10px] text-purple-400 font-medium">REST / SQLite</span>
+                                        </div>
+
+                                        <div class="p-2 rounded-xl bg-white/[0.03] border border-white/5 flex items-center justify-between">
                                             <div>
-                                                <div class="flex justify-between text-gray-400 mb-0.5">
-                                                    <span>FULL-STACK</span>
-                                                    <span class="text-fuchsia-400 font-bold">96</span>
-                                                </div>
-                                                <div class="w-full h-1 bg-white/10 rounded-full overflow-hidden">
-                                                    <div class="w-[96%] h-full bg-gradient-to-r from-fuchsia-500 to-pink-500 rounded-full"></div>
-                                                </div>
+                                                <span class="text-[9px] text-gray-500 uppercase block">Mobile Native</span>
+                                                <span class="text-white font-semibold">Android Studio</span>
                                             </div>
+                                            <span class="text-[10px] text-emerald-400 font-medium">Kotlin Native</span>
+                                        </div>
+
+                                        <div class="p-2 rounded-xl bg-white/[0.03] border border-white/5 flex items-center justify-between">
                                             <div>
-                                                <div class="flex justify-between text-gray-400 mb-0.5">
-                                                    <span>NATIVE ANDROID</span>
-                                                    <span class="text-emerald-400 font-bold">92</span>
-                                                </div>
-                                                <div class="w-full h-1 bg-white/10 rounded-full overflow-hidden">
-                                                    <div class="w-[92%] h-full bg-gradient-to-r from-emerald-500 to-teal-400 rounded-full"></div>
-                                                </div>
+                                                <span class="text-[9px] text-gray-500 uppercase block">Competitive Rotation</span>
+                                                <span class="text-amber-300 font-semibold">CS2 • Valorant</span>
                                             </div>
-                                            <div>
-                                                <div class="flex justify-between text-gray-400 mb-0.5">
-                                                    <span>VELOCITY</span>
-                                                    <span class="text-amber-400 font-bold">99</span>
-                                                </div>
-                                                <div class="w-full h-1 bg-white/10 rounded-full overflow-hidden">
-                                                    <div class="w-[99%] h-full bg-gradient-to-r from-amber-500 to-orange-400 rounded-full"></div>
-                                                </div>
-                                            </div>
+                                            <span class="text-[10px] text-rose-400 font-medium">Elden Ring</span>
                                         </div>
                                     </div>
 
@@ -607,16 +569,32 @@
             <div class="max-w-6xl mx-auto">
                 <div class="grid md:grid-cols-2 gap-16 items-center">
                     <div class="space-y-6">
-                        <p class="text-xs font-mono-code uppercase tracking-[0.25em] text-cyan-400 font-semibold">Origin & Philosophy</p>
-                        <h2 class="text-4xl sm:text-5xl font-black tracking-tight text-white leading-none">
-                            BUILT BY GAMERS,<br>ARCHITECTED FOR SCALE<span class="text-cyan-400">.</span>
+                        <p class="text-xs font-mono-code uppercase tracking-[0.25em] text-cyan-400 font-semibold">Behind The Screen</p>
+                        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-white leading-tight">
+                            CODE. CLUTCH.<br>BUILD THINGS THAT FEEL GOOD<span class="text-cyan-400">.</span>
                         </h2>
-                        <p class="text-gray-300 text-lg font-light leading-relaxed">
-                            I'm <strong class="text-white font-semibold">Darun Naim Sindid</strong>, known everywhere in competitive gaming lobbies and developer repositories as <strong class="text-white font-semibold">DQUAD</strong>.
+                        <p class="text-gray-300 text-base sm:text-lg leading-relaxed">
+                            I'm <strong class="text-white font-semibold">Darun Naim Sindid</strong> (in lobbies and repos, everyone knows me as <strong class="text-white font-semibold">DQUAD</strong>) — a developer from Dhaka, Bangladesh who grew up obsessed with how games feel under your fingers and how solid backends run under the hood.
                         </p>
-                        <p class="text-gray-400 text-base font-light leading-relaxed">
-                            I treat writing software with the same relentless focus, reaction speed, and strategy required to win high-stakes multiplayer games. Whether it's crafting gameplay loops in Unity, structuring clean backend models in Laravel, or debugging Android activities in Android Studio, I execute cleanly.
+                        <p class="text-gray-400 text-sm sm:text-base leading-relaxed">
+                            When I'm taking a break from code, you'll catch me holding bombsite in <strong class="text-white">Counter-Strike 2</strong>, queuing ranked in <strong class="text-white">Valorant</strong>, or getting tested by late-game bosses in <strong class="text-white">Elden Ring</strong>. That gamer mentality carries straight into engineering: I obsess over input responsiveness in <strong class="text-cyan-300">Unity 6 & Godot 4</strong>, clean REST APIs in <strong class="text-purple-300">Laravel 13</strong>, and fluid mobile UX in <strong class="text-emerald-300">Android Studio</strong>.
                         </p>
+
+                        <!-- Developer Rig & Rotation Pill Cards -->
+                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5 pt-2 text-xs font-mono-code">
+                            <div class="p-3 rounded-2xl bg-white/[0.03] border border-white/5">
+                                <span class="text-gray-500 text-[10px] uppercase block">Location</span>
+                                <span class="text-white font-semibold">Dhaka, BD [UTC+6]</span>
+                            </div>
+                            <div class="p-3 rounded-2xl bg-white/[0.03] border border-white/5">
+                                <span class="text-gray-500 text-[10px] uppercase block">Competitive</span>
+                                <span class="text-cyan-400 font-semibold">CS2 • Valorant</span>
+                            </div>
+                            <div class="p-3 rounded-2xl bg-white/[0.03] border border-white/5 col-span-2 sm:col-span-1">
+                                <span class="text-gray-500 text-[10px] uppercase block">Solo RPG</span>
+                                <span class="text-amber-300 font-semibold">Elden Ring</span>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Direct Comms Box (100% Mobile Fluid & High-Contrast) -->

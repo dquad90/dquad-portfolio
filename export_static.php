@@ -82,20 +82,16 @@ file_put_contents($apiDir . '/health', json_encode([
 file_put_contents($apiDir . '/profile', json_encode([
     'developer' => 'Darun Naim Sindid',
     'alias' => 'DQUAD',
-    'title' => 'Full-Stack Web Architect & Game Developer',
+    'title' => 'Software Engineer & Game Developer',
     'status' => 'Available for hire & co-op projects',
-    'location' => 'Dhaka, Bangladesh',
+    'location' => 'Dhaka, Bangladesh [UTC+6]',
+    'games' => ['Counter-Strike 2', 'Valorant', 'Elden Ring'],
+    'stack' => ['Unity 6', 'Godot 4', 'Laravel 13', 'Android Studio'],
     'comms' => [
         'email' => 'dquadofficialgg@gmail.com',
         'phone' => '01888574160',
         'github' => 'https://github.com/dquad90',
         'youtube' => 'https://www.youtube.com/@dquaddq',
-    ],
-    'attributes' => [
-        'game_engineering' => 98,
-        'full_stack_web' => 96,
-        'native_android' => 92,
-        'velocity' => 99,
     ],
 ], JSON_PRETTY_PRINT));
 
