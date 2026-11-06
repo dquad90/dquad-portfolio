@@ -24,6 +24,16 @@ $html = preg_replace('/http:\/\/127\.0\.0\.1:\d+\//', '/', $html);
 $html = str_replace(['href="/build/', 'src="/build/'], ['href="./build/', 'src="./build/'], $html);
 $html = str_replace(['href=\'/build/', 'src=\'/build/'], ['href=\'./build/', 'src=\'./build/'], $html);
 
+// Inline full compiled CSS so the site is 100% styled even if host blocks external CSS or drops them
+$cssFiles = glob(__DIR__ . '/public/build/assets/app-*.css');
+if (!empty($cssFiles)) {
+    $latestCssFile = end($cssFiles);
+    $cssContent = file_get_contents($latestCssFile);
+    $inlinedStyle = "\n<style id=\"dquad-inlined-theme\">\n" . $cssContent . "\n</style>\n";
+    $html = str_replace('</head>', $inlinedStyle . '</head>', $html);
+    echo "✓ Inlined compiled CSS (" . strlen($cssContent) . " bytes) into index.html\n";
+}
+
 // Save index.html
 file_put_contents($distDir . '/index.html', $html);
 echo "✓ Generated dist/index.html (" . strlen($html) . " bytes)\n";
@@ -124,4 +134,28 @@ $headersContent = "
 file_put_contents($distDir . '/_headers', trim($headersContent) . "\n");
 echo "✓ Created dist/_headers\n";
 
-echo "\n🎉 STATIC EXPORT COMPLETE! The 'dist' folder is ready for Netlify!\n";
+// 7. Generate dist.zip for 1-click Netlify Drop
+$zipFile = __DIR__ . '/dist.zip';
+if (file_exists($zipFile)) {
+    unlink($zipFile);
+}
+if (class_exists('ZipArchive')) {
+    $zip = new ZipArchive();
+    if ($zip->open($zipFile, ZipArchive::CREATE | ZipArchive::OVERWRITE) === true) {
+        $files = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($distDir),
+            RecursiveIteratorIterator::LEAVES_ONLY
+        );
+        foreach ($files as $file) {
+            if (!$file->isDir()) {
+                $filePath = $file->getRealPath();
+                $relativePath = substr($filePath, strlen($distDir) + 1);
+                $zip->addFile($filePath, str_replace('\\', '/', $relativePath));
+            }
+        }
+        $zip->close();
+        echo "✓ Generated dist.zip (" . round(filesize($zipFile) / 1024) . " KB) for 1-click Netlify Drop\n";
+    }
+}
+
+echo "\n🎉 STATIC EXPORT COMPLETE! The 'dist' folder and 'dist.zip' are ready for Netlify!\n";
