@@ -62,6 +62,12 @@ if (is_dir(__DIR__ . '/public/build')) {
     echo "✓ Copied public/build to dist/build\n";
 }
 
+// Copy public/models to dist/models
+if (is_dir(__DIR__ . '/public/models')) {
+    copyDir(__DIR__ . '/public/models', $distDir . '/models');
+    echo "✓ Copied public/models to dist/models\n";
+}
+
 // 4. Generate static API endpoints for Netlify
 $apiDir = $distDir . '/api/v1';
 if (!is_dir($apiDir)) {
