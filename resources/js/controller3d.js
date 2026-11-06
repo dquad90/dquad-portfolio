@@ -14,6 +14,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
  * - LB/RB shoulder bumpers & LT/RT ergonomic triggers
  * - Raycast interactive clicking with tactile sound & HUD telemetry
  * - Full 360° mouse/touch orbit inspection & Gamepad API hardware integration
+ * - Ultra-resilient multi-tier CDN + local fallback binary loader (immune to 404 / HTML SPA redirects)
  */
 
 export function initBentoController() {
@@ -28,6 +29,12 @@ export function initBentoController() {
     const pingDot = document.getElementById('controller-ping-dot');
 
     let resetTelemetryTimeout = null;
+
+    if (telemetryText) {
+        telemetryText.textContent = 'VIEWPORT // LOADING 3D XBOX...';
+        telemetryText.classList.remove('text-emerald-400');
+        telemetryText.classList.add('text-cyan-400');
+    }
 
     function triggerInputFeedback(label, isHardware = false) {
         if (telemetryText) {
@@ -92,31 +99,25 @@ export function initBentoController() {
     const ambientLight = new THREE.AmbientLight(0xffffff, 2.0);
     scene.add(ambientLight);
 
-    // Key Light (Soft directional light from top left)
     const keyLight = new THREE.DirectionalLight(0xffffff, 2.4);
     keyLight.position.set(-3, 4.5, 5);
     scene.add(keyLight);
 
-    // Front Center Fill Light
     const frontFill = new THREE.DirectionalLight(0xf1f5f9, 2.0);
     frontFill.position.set(2.5, 2.0, 5.0);
     scene.add(frontFill);
 
-    // Top Rim Light
     const rimLight = new THREE.DirectionalLight(0x38bdf8, 2.0);
     rimLight.position.set(0, 5, -2.5);
     scene.add(rimLight);
 
-    // Subtle Ambient Floor Bounce
     const floorBounce = new THREE.PointLight(0xa855f7, 3.2, 10);
     floorBounce.position.set(0, -3.5, 2.8);
     scene.add(floorBounce);
 
-    // Master Root Group
     const rootGroup = new THREE.Group();
     scene.add(rootGroup);
 
-    // Interactive clickable meshes for raycasting
     const interactiveMeshes = [];
 
     // -------------------------------------------------------------
@@ -224,21 +225,13 @@ export function initBentoController() {
         metalness: 0.15
     });
 
-    // Reference parts for animation & interaction
     let dpadMesh = null;
     let jewelMesh = null;
     let abxyMesh = null;
     let sticksGripMesh = null;
     let bumpersMesh = null;
 
-    const loader = new GLTFLoader();
-    const glbUrl = (typeof window !== 'undefined' && window.location.pathname.includes('/dist/'))
-        ? './models/xbox-wireless-controller.glb'
-        : '/models/xbox-wireless-controller.glb';
-
-    loader.load(glbUrl, (gltf) => {
-        const model = gltf.scene;
-
+    function setupControllerModel(model) {
         model.traverse((child) => {
             if (!child.isMesh) return;
             const name = child.name || '';
@@ -318,12 +311,50 @@ export function initBentoController() {
         });
 
         controllerGroup.add(model);
-    }, undefined, (err) => {
-        console.warn('Fallback loading from alternate path:', err);
-        loader.load('/models/xbox-wireless-controller.glb', (gltf) => {
-            controllerGroup.add(gltf.scene);
-        });
-    });
+
+        if (telemetryText) {
+            telemetryText.textContent = 'VIEWPORT // READY';
+            telemetryText.classList.remove('text-cyan-400');
+            telemetryText.classList.add('text-emerald-400');
+        }
+    }
+
+    // Ultra-resilient multi-tier binary loader
+    async function loadControllerGLB() {
+        const candidateUrls = [
+            'https://cdn.jsdelivr.net/gh/hellstackdev/R3F-Xbox-Wireless-Controller@main/public/models/xbox-wireless-controller.glb',
+            './models/xbox-wireless-controller.glb',
+            '/models/xbox-wireless-controller.glb',
+            'https://raw.githubusercontent.com/hellstackdev/R3F-Xbox-Wireless-Controller/main/public/models/xbox-wireless-controller.glb'
+        ];
+
+        const loader = new GLTFLoader();
+
+        for (const url of candidateUrls) {
+            try {
+                const resp = await fetch(url, { mode: 'cors' });
+                if (!resp.ok) continue;
+                const buffer = await resp.arrayBuffer();
+                // Validate glTF binary magic number: 0x46546C67 ("glTF")
+                if (buffer.byteLength < 12) continue;
+                const header = new DataView(buffer, 0, 4).getUint32(0, true);
+                if (header !== 0x46546C67) {
+                    // Not valid glTF binary (e.g. Netlify returned index.html SPA redirect)
+                    continue;
+                }
+                loader.parse(buffer, '', (gltf) => {
+                    setupControllerModel(gltf.scene);
+                }, (err) => {
+                    console.warn('GLTFLoader parse error from', url, err);
+                });
+                return;
+            } catch (err) {
+                console.warn('Failed candidate GLB URL:', url, err);
+            }
+        }
+    }
+
+    loadControllerGLB();
 
     // -------------------------------------------------------------
     // 5. SHOWCASE ORIENTATION (Facing Forward, matching Product Photo)

@@ -130,6 +130,11 @@ $headersContent = "
   Content-Type: application/json; charset=utf-8
   Access-Control-Allow-Origin: *
 
+/models/*
+  Content-Type: model/gltf-binary
+  Access-Control-Allow-Origin: *
+  Cache-Control: public, max-age=31536000, immutable
+
 /build/assets/*
   Cache-Control: public, max-age=31536000, immutable
 ";
