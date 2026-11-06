@@ -21,8 +21,8 @@
 </head>
 <body class="antialiased bg-[#08080c] text-[#ededed] selection:bg-fuchsia-600 selection:text-white overflow-x-hidden min-h-screen relative">
 
-    <!-- High-End Interactive Liquid Ribbed Mesh & WebGL Fluid Canvas -->
-    <canvas id="ambient-canvas" class="fixed inset-0 w-full h-full pointer-events-none z-0 opacity-90"></canvas>
+    <!-- High-End Interactive Liquid Ribbed Mesh & WebGL Fluid Canvas (DQUAD Dark Obsidian Theme) -->
+    <canvas id="ambient-canvas" class="fixed inset-0 w-full h-full pointer-events-none z-0 opacity-80"></canvas>
 
     <!-- Precision Engineering Dot Matrix Grid (Linear.app style) -->
     <div class="fixed inset-0 bg-grid-subtle [mask-image:radial-gradient(ellipse_75%_65%_at_50%_35%,#000_30%,transparent_100%)] pointer-events-none z-0 opacity-35"></div>

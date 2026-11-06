@@ -1,15 +1,15 @@
 /**
  * High-End Interactive Liquid Ribbed Mesh & Viscous Fluid Gel Distortion
- * Inspired by modern WebGL liquid shaders & Netlify Drop aesthetic.
+ * Styled for DQUAD Theme: Stealth Obsidian Void, Royal Indigo, Cyber Violet & Fuchsia.
  *
  * Features:
  * - Real-time WebGL fragment shader solving organic fluid refraction
- * - Wavy vertical pleated ribbed fabric (emerald/teal on left, deep navy/violet on right)
+ * - Subdued, dark-satin vertical pleated fabric (Deep Indigo, Cyber Violet, Obsidian Black - NO green)
  * - Trailing viscous liquid gel droplet that refracts and bends the background mesh around the cursor
- * - 3D specular light reflections, Fresnel rim, and soft ambient gel shadows
+ * - Subtle 3D specular light reflections, violet Fresnel rim, and soft ambient gel shadows
  * - Interactive click/tap shockwave water ripples
  * - Full touch support on mobile & tablet devices
- * - Graceful high-performance Canvas2D fallback if WebGL is unavailable
+ * - High-performance Canvas2D fallback matching the dark cybernetic aesthetic
  */
 
 export function initAmbientBackground() {
@@ -21,7 +21,6 @@ export function initAmbientBackground() {
             || canvas.getContext('experimental-webgl', { alpha: false, depth: false, antialias: false });
 
     if (!gl) {
-        // Fallback to Canvas2D if WebGL is unsupported
         initCanvas2DFallback(canvas);
         return;
     }
@@ -67,7 +66,7 @@ export function initAmbientBackground() {
                 vec2 delta = stAspect - pAspect;
                 float r2 = dot(delta, delta);
 
-                float radius = 0.22 + p.z * 0.10;
+                float radius = 0.20 + p.z * 0.08;
                 float rMax2 = radius * radius;
 
                 if (r2 < rMax2) {
@@ -75,8 +74,7 @@ export function initAmbientBackground() {
                     float h = t * t * p.z;
                     totalHeight += h;
 
-                    // Exact analytical gradient: d(h)/d(delta)
-                    // dh = 2 * t * (-2 * delta / rMax2) * p.z = -4.0 * t * p.z * delta / rMax2
+                    // Exact analytical gradient
                     vec2 grad = -4.0 * t * p.z * (delta / rMax2);
                     totalGrad += grad;
                 }
@@ -96,48 +94,46 @@ export function initAmbientBackground() {
                     if (waveDist < waveWidth) {
                         float waveFactor = sin((waveDist / waveWidth) * 3.14159265);
                         float decay = exp(-rip.z * 1.6) * exp(-dist * 1.5) * rip.w;
-                        float ripH = waveFactor * decay * 0.25;
+                        float ripH = waveFactor * decay * 0.20;
                         totalHeight += ripH;
                         
                         vec2 waveDir = (dist > 0.0001) ? (delta / dist) : vec2(0.0);
-                        totalGrad += waveDir * waveFactor * decay * 4.0;
+                        totalGrad += waveDir * waveFactor * decay * 3.5;
                     }
                 }
             }
 
             // Smooth displacement to warp UVs (convex lens effect)
-            vec2 displacement = totalGrad * 0.006;
+            vec2 displacement = totalGrad * 0.0055;
             vec2 warpedSt = st + displacement;
 
-            // 3. Color Palette (Netlify Drop / Deep Cybernetic Palette)
-            // Left flank: Emerald / Cyan / Deep Teal
-            // Right flank: Obsidian Midnight / Deep Indigo / Violet
-            vec3 cTealDark   = vec3(0.015, 0.20, 0.16); // #043329
-            vec3 cEmerald    = vec3(0.02, 0.58, 0.42);  // #05946b
-            vec3 cCyanBright = vec3(0.10, 0.82, 0.70);  // #1ad1b2
-            vec3 cIndigo     = vec3(0.06, 0.06, 0.20);  // #0f0f33
-            vec3 cVioletDeep = vec3(0.14, 0.07, 0.30);  // #24124d
-            vec3 cMidnight   = vec3(0.025, 0.025, 0.06); // #06060f
+            // 3. Color Palette: DQUAD Stealth Obsidian, Royal Indigo & Cyber Violet
+            // Zero greenish tones. Deep, moody, premium studio dark aesthetic.
+            vec3 cObsidian   = vec3(0.016, 0.016, 0.028); // #040407 Deep Obsidian Void
+            vec3 cIndigoDeep = vec3(0.032, 0.028, 0.100); // #08071a Midnight Indigo
+            vec3 cRoyalBlue  = vec3(0.050, 0.045, 0.170); // #0d0b2b Royal Indigo
+            vec3 cVioletDeep = vec3(0.080, 0.030, 0.155); // #140827 Cyber Violet
+            vec3 cFuchsiaSub = vec3(0.105, 0.025, 0.145); // #1b0625 Subtle Fuchsia undertone
 
             // Base gradient curve
-            float curve = warpedSt.x + sin(warpedSt.y * 3.14159) * 0.08;
-            vec3 leftColor = mix(cTealDark, cCyanBright, warpedSt.y * 0.65 + 0.1);
-            leftColor = mix(leftColor, cEmerald, sin(warpedSt.y * 4.0 + u_time * 0.3) * 0.25 + 0.5);
+            float curve = warpedSt.x + sin(warpedSt.y * 3.14159) * 0.06;
+            vec3 leftColor = mix(cIndigoDeep, cVioletDeep, warpedSt.y * 0.6 + 0.1);
+            leftColor = mix(leftColor, cRoyalBlue, sin(warpedSt.y * 3.5 + u_time * 0.25) * 0.25 + 0.5);
 
-            vec3 rightColor = mix(cMidnight, cIndigo, (1.0 - warpedSt.y) * 0.7);
-            rightColor = mix(rightColor, cVioletDeep, warpedSt.y * 0.5);
+            vec3 rightColor = mix(cObsidian, cIndigoDeep, (1.0 - warpedSt.y) * 0.6);
+            rightColor = mix(rightColor, cFuchsiaSub, warpedSt.y * 0.45);
 
-            vec3 baseColor = mix(leftColor, rightColor, smoothstep(0.12, 0.88, curve));
+            vec3 baseColor = mix(leftColor, rightColor, smoothstep(0.15, 0.85, curve));
 
-            // 4. Vertical Ribbed Fabric Pleats (Curtain Mesh)
-            float pleatFreq = 44.0;
-            float pleatWarp = sin(warpedSt.y * 3.8 + u_time * 0.4) * 0.025 
-                            + cos(warpedSt.y * 7.5 - u_time * 0.25) * 0.012;
+            // 4. Vertical Ribbed Fabric Pleats (Ultra-Subtle Stealth Satin Mesh)
+            float pleatFreq = 48.0;
+            float pleatWarp = sin(warpedSt.y * 3.8 + u_time * 0.35) * 0.022 
+                            + cos(warpedSt.y * 7.5 - u_time * 0.20) * 0.010;
             float pleatPhase = (warpedSt.x + pleatWarp) * pleatFreq;
             float pleatVal = sin(pleatPhase * 3.14159265 * 2.0);
 
-            // Shading of ribs
-            float pleatShade = pleatVal * 0.20;
+            // Shading of ribs (subtle, non-distracting)
+            float pleatShade = pleatVal * 0.065;
             vec3 finalColor = baseColor * (1.0 + pleatShade);
 
             // 5. Specular Highlights & 3D Glass Refraction on Gel Bubble
@@ -150,25 +146,26 @@ export function initAmbientBackground() {
                 vec3 viewDir = vec3(0.0, 0.0, 1.0);
                 vec3 halfVec = normalize(lightDir + viewDir);
 
-                float spec = pow(max(dot(normal, halfVec), 0.0), 36.0);
+                // Sharp, subtle pin-point specular sheen
+                float spec = pow(max(dot(normal, halfVec), 0.0), 56.0);
                 float fresnel = pow(1.0 - max(dot(normal, viewDir), 0.0), 3.0);
 
-                // Silky glass specular gleam
-                vec3 specColor = vec3(0.85, 0.98, 1.0) * spec * 0.75;
+                // Refined violet-white sheen
+                vec3 specColor = vec3(0.92, 0.88, 1.0) * spec * 0.42;
 
-                // Internal gel luminous core
-                vec3 coreGlow = mix(vec3(0.08, 0.85, 0.65), vec3(0.35, 0.55, 0.95), st.x) * totalHeight * 0.35;
+                // Subtle deep violet/indigo internal refraction (NO green)
+                vec3 coreGlow = mix(vec3(0.18, 0.06, 0.32), vec3(0.06, 0.12, 0.30), st.x) * totalHeight * 0.24;
 
                 // Soft ambient drop-shadow under the liquid edge
-                float rimShadow = smoothstep(0.01, 0.12, totalHeight) * (1.0 - totalHeight) * 0.22;
+                float rimShadow = smoothstep(0.01, 0.12, totalHeight) * (1.0 - totalHeight) * 0.30;
 
-                finalColor = (finalColor * (1.0 - rimShadow)) + coreGlow + specColor + (fresnel * vec3(0.25, 0.65, 0.75) * 0.35);
+                finalColor = (finalColor * (1.0 - rimShadow)) + coreGlow + specColor + (fresnel * vec3(0.35, 0.18, 0.55) * 0.28);
             }
 
             // Cinematic Vignette
             vec2 vCoord = (st - 0.5) * 1.35;
-            float vignette = 1.0 - dot(vCoord, vCoord) * 0.45;
-            finalColor *= clamp(vignette, 0.38, 1.0);
+            float vignette = 1.0 - dot(vCoord, vCoord) * 0.55;
+            finalColor *= clamp(vignette, 0.30, 1.0);
 
             gl_FragColor = vec4(finalColor, 0.96);
         }
@@ -309,9 +306,9 @@ export function initAmbientBackground() {
         }
     }, { passive: true });
 
-    // Initial ambient ripple to invite the user
+    // Initial subtle ambient ripple to invite the user
     setTimeout(() => {
-        triggerRipple(width * 0.45, height * 0.30, 0.8);
+        triggerRipple(width * 0.45, height * 0.30, 0.6);
     }, 800);
 
     // -------------------------------------------------------------
@@ -334,7 +331,7 @@ export function initAmbientBackground() {
         trail[0].y = currentY;
         trail[0].intensity = isMoving 
             ? Math.min(trail[0].intensity + delta * 5.0, 1.0) 
-            : Math.max(trail[0].intensity - delta * 1.5, 0.15);
+            : Math.max(trail[0].intensity - delta * 1.5, 0.12);
 
         for (let i = 1; i < TRAIL_LENGTH; i++) {
             const prev = trail[i - 1];
@@ -381,7 +378,7 @@ export function initAmbientBackground() {
 
 /**
  * High-Performance Canvas2D Fallback
- * Used only if the client's GPU has disabled WebGL.
+ * Styled for DQUAD Theme: Obsidian Midnight, Indigo & Violet.
  */
 function initCanvas2DFallback(canvas) {
     const ctx = canvas.getContext('2d');
@@ -411,19 +408,19 @@ function initCanvas2DFallback(canvas) {
 
         ctx.clearRect(0, 0, width, height);
 
-        // Background Teal-to-Indigo Gradient
+        // Background Deep Obsidian to Indigo Gradient
         const bgGrad = ctx.createLinearGradient(0, 0, width, height);
-        bgGrad.addColorStop(0, '#042f2e');
-        bgGrad.addColorStop(0.45, '#064e3b');
-        bgGrad.addColorStop(0.8, '#0b0f2e');
-        bgGrad.addColorStop(1, '#05050f');
+        bgGrad.addColorStop(0, '#0a081a');
+        bgGrad.addColorStop(0.45, '#120e29');
+        bgGrad.addColorStop(0.8, '#080814');
+        bgGrad.addColorStop(1, '#04040a');
         ctx.fillStyle = bgGrad;
         ctx.fillRect(0, 0, width, height);
 
         // Vertical ribbed bands
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.03)';
-        ctx.lineWidth = 1.5;
-        const spacing = width / 40;
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.018)';
+        ctx.lineWidth = 1.2;
+        const spacing = width / 44;
         for (let x = 0; x < width; x += spacing) {
             ctx.beginPath();
             ctx.moveTo(x, 0);
@@ -431,14 +428,14 @@ function initCanvas2DFallback(canvas) {
             ctx.stroke();
         }
 
-        // Mouse fluid spotlight
-        const gelGlow = ctx.createRadialGradient(mouseX, mouseY, 0, mouseX, mouseY, 280);
-        gelGlow.addColorStop(0, 'rgba(56, 189, 248, 0.25)');
-        gelGlow.addColorStop(0.4, 'rgba(20, 184, 166, 0.12)');
+        // Mouse fluid spotlight (Violet / Indigo)
+        const gelGlow = ctx.createRadialGradient(mouseX, mouseY, 0, mouseX, mouseY, 260);
+        gelGlow.addColorStop(0, 'rgba(168, 85, 247, 0.14)');
+        gelGlow.addColorStop(0.4, 'rgba(99, 102, 241, 0.06)');
         gelGlow.addColorStop(1, 'rgba(0, 0, 0, 0)');
         ctx.fillStyle = gelGlow;
         ctx.beginPath();
-        ctx.arc(mouseX, mouseY, 280, 0, Math.PI * 2);
+        ctx.arc(mouseX, mouseY, 260, 0, Math.PI * 2);
         ctx.fill();
 
         requestAnimationFrame(render);
