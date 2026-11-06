@@ -76,11 +76,11 @@
         </div>
     </div>
 
-    <!-- Navigation Header -->
-    <header class="fixed top-0 left-0 right-0 z-50 pt-4 px-4">
-        <nav class="max-w-5xl mx-auto px-5 py-3 rounded-full border border-white/10 glass-modern shadow-2xl flex items-center justify-between backdrop-blur-2xl">
-            <a href="#home" class="flex items-center gap-3 group">
-                <span class="text-2xl font-black tracking-tighter text-white group-hover:text-fuchsia-400 transition-colors">DQUAD</span>
+    <!-- Navigation Header (Fixed, 100% Mobile Responsive with Opaque Shield Background) -->
+    <header class="fixed top-0 inset-x-0 z-50 pt-2.5 sm:pt-4 px-3 sm:px-4">
+        <nav class="max-w-5xl mx-auto px-3 sm:px-5 py-2 sm:py-2.5 rounded-full border border-white/10 bg-[#090812]/95 shadow-[0_8px_32px_rgba(0,0,0,0.7)] flex items-center justify-between backdrop-blur-2xl">
+            <a href="#home" class="flex items-center gap-2 group shrink-0">
+                <span class="text-lg sm:text-2xl font-black tracking-tighter text-white group-hover:text-fuchsia-400 transition-colors">DQUAD</span>
                 <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
             </a>
 
@@ -91,11 +91,11 @@
                 <a href="#contact" class="nav-section-link text-gray-400 hover:text-white transition-colors">Transmission</a>
             </div>
 
-            <div class="flex items-center gap-3">
-                <!-- Tactile Sci-Fi Audio Synthesizer Toggle -->
-                <button id="audio-toggle-btn" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-white/10 bg-white/[0.03] hover:bg-white/[0.08] text-gray-400 hover:text-cyan-300 transition-all duration-200 cursor-pointer select-none" title="Toggle Tactile Audio Synthesizer (Web Audio API)">
-                    <span id="audio-indicator-dot" class="w-1.5 h-1.5 rounded-full bg-gray-500 transition-colors"></span>
-                    <span id="audio-toggle-label" class="hidden sm:inline uppercase tracking-wider text-[10px] font-mono-code">SFX: OFF</span>
+            <div class="flex items-center gap-1.5 sm:gap-3 shrink-0">
+                <!-- Tactile Sci-Fi Audio Synthesizer Toggle (Compact circle on mobile, pill on desktop) -->
+                <button id="audio-toggle-btn" class="flex items-center justify-center w-8 h-8 sm:w-auto sm:h-auto sm:px-3 sm:py-1.5 rounded-full border border-white/10 bg-white/[0.04] hover:bg-white/[0.08] text-gray-300 hover:text-cyan-300 transition-all cursor-pointer select-none" title="Toggle Tactile Audio Synthesizer (Web Audio API)">
+                    <span id="audio-indicator-dot" class="w-1.5 h-1.5 rounded-full bg-gray-500 transition-colors hidden sm:inline-block"></span>
+                    <span id="audio-toggle-label" class="hidden sm:inline uppercase tracking-wider text-[10px] font-mono-code ml-1.5">SFX: OFF</span>
                     <svg id="audio-icon-off" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
@@ -105,13 +105,15 @@
                     </svg>
                 </button>
 
-                <a href="https://github.com/dquad90" target="_blank" rel="noopener noreferrer" class="p-2 text-gray-400 hover:text-white transition-colors" title="GitHub">
+                <!-- Social Icons (Hidden on mobile to preserve layout, visible on sm+) -->
+                <a href="https://github.com/dquad90" target="_blank" rel="noopener noreferrer" class="hidden sm:flex p-1.5 text-gray-400 hover:text-white transition-colors" title="GitHub">
                     <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd" /></svg>
                 </a>
-                <a href="https://www.youtube.com/@dquaddq" target="_blank" rel="noopener noreferrer" class="p-2 text-gray-400 hover:text-red-500 transition-colors" title="YouTube">
+                <a href="https://www.youtube.com/@dquaddq" target="_blank" rel="noopener noreferrer" class="hidden sm:flex p-1.5 text-gray-400 hover:text-red-500 transition-colors" title="YouTube">
                     <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M19.812 5.418c.861.23 1.538.907 1.768 1.768C21.998 8.746 22 12 22 12s0 3.255-.418 4.814a2.504 2.504 0 0 1-1.768 1.768c-1.56.419-7.814.419-7.814.419s-6.255 0-7.814-.419a2.505 2.505 0 0 1-1.768-1.768C2 15.255 2 12 2 12s0-3.255.417-4.814a2.507 2.507 0 0 1 1.768-1.768C5.744 5 12 5 12 5s6.255 0 7.812.418ZM15.194 12 10 15V9l5.194 3Z" clip-rule="evenodd" /></svg>
                 </a>
-                <a href="#contact" class="relative group/btn overflow-hidden px-4 py-2 rounded-full bg-white text-black font-semibold text-xs transition-all duration-300 shadow-md hover:text-white hover:shadow-[0_0_26px_rgba(168,85,247,0.7)] hover:-translate-y-0.5 active:translate-y-0 border border-transparent hover:border-purple-400/50">
+
+                <a href="#contact" class="relative group/btn overflow-hidden px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-white text-black font-semibold text-[11px] sm:text-xs transition-all duration-300 shadow-md hover:text-white hover:shadow-[0_0_26px_rgba(168,85,247,0.7)] hover:-translate-y-0.5 active:translate-y-0 border border-transparent hover:border-purple-400/50 whitespace-nowrap shrink-0">
                     <span class="absolute inset-0 bg-gradient-to-r from-purple-600 via-fuchsia-600 to-violet-600 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300 rounded-full"></span>
                     <span class="relative z-10 flex items-center gap-1.5">
                         Initiate Co-Op
@@ -155,15 +157,15 @@
                             <span class="px-3.5 py-1.5 rounded-lg border border-white/10 bg-white/[0.03] text-xs font-medium text-gray-300">Tailwind & Flowbite</span>
                         </div>
 
-                        <!-- Channels / Quick Actions -->
-                        <div class="flex flex-wrap gap-4 pt-3">
-                            <a href="https://github.com/dquad90" target="_blank" rel="noopener noreferrer" class="px-5 py-2.5 rounded-full border border-white/15 bg-white/[0.04] hover:bg-white/10 hover:border-white/30 text-white text-sm font-medium transition-all flex items-center gap-2.5 group">
-                                <svg class="w-4 h-4 text-gray-400 group-hover:text-white" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd" /></svg>
+                        <!-- Channels / Quick Actions (100% Mobile Fluid & Non-Overflowing) -->
+                        <div class="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 pt-3 w-full">
+                            <a href="https://github.com/dquad90" target="_blank" rel="noopener noreferrer" class="w-full sm:w-auto px-4 sm:px-5 py-2.5 rounded-full border border-white/15 bg-white/[0.04] hover:bg-white/10 hover:border-white/30 text-white text-xs sm:text-sm font-medium transition-all flex items-center justify-center gap-2.5 group">
+                                <svg class="w-4 h-4 text-gray-400 group-hover:text-white shrink-0" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd" /></svg>
                                 <span>github.com/dquad90</span>
                             </a>
 
-                            <a href="https://www.youtube.com/@dquaddq" target="_blank" rel="noopener noreferrer" class="px-5 py-2.5 rounded-full border border-white/15 bg-white/[0.04] hover:bg-red-500/10 hover:border-red-500/40 text-white text-sm font-medium transition-all flex items-center gap-2.5 group">
-                                <svg class="w-4 h-4 text-red-500 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M19.812 5.418c.861.23 1.538.907 1.768 1.768C21.998 8.746 22 12 22 12s0 3.255-.418 4.814a2.504 2.504 0 0 1-1.768 1.768c-1.56.419-7.814.419-7.814.419s-6.255 0-7.814-.419a2.505 2.505 0 0 1-1.768-1.768C2 15.255 2 12 2 12s0-3.255.417-4.814a2.507 2.507 0 0 1 1.768-1.768C5.744 5 12 5 12 5s6.255 0 7.812.418ZM15.194 12 10 15V9l5.194 3Z" clip-rule="evenodd" /></svg>
+                            <a href="https://www.youtube.com/@dquaddq" target="_blank" rel="noopener noreferrer" class="w-full sm:w-auto px-4 sm:px-5 py-2.5 rounded-full border border-white/15 bg-white/[0.04] hover:bg-red-500/10 hover:border-red-500/40 text-white text-xs sm:text-sm font-medium transition-all flex items-center justify-center gap-2.5 group">
+                                <svg class="w-4 h-4 text-red-500 group-hover:scale-110 transition-transform shrink-0" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M19.812 5.418c.861.23 1.538.907 1.768 1.768C21.998 8.746 22 12 22 12s0 3.255-.418 4.814a2.504 2.504 0 0 1-1.768 1.768c-1.56.419-7.814.419-7.814.419s-6.255 0-7.814-.419a2.505 2.505 0 0 1-1.768-1.768C2 15.255 2 12 2 12s0-3.255.417-4.814a2.507 2.507 0 0 1 1.768-1.768C5.744 5 12 5 12 5s6.255 0 7.812.418ZM15.194 12 10 15V9l5.194 3Z" clip-rule="evenodd" /></svg>
                                 <span>youtube.com/@dquaddq</span>
                             </a>
                         </div>
@@ -617,35 +619,44 @@
                         </p>
                     </div>
 
-                    <!-- Direct Comms Box -->
-                    <div class="bento-card p-8 rounded-3xl space-y-6">
-                        <h3 class="text-xl font-bold text-white tracking-tight">Direct Comms Channels</h3>
+                    <!-- Direct Comms Box (100% Mobile Fluid & High-Contrast) -->
+                    <div class="bento-card p-5 sm:p-7 rounded-3xl space-y-4 sm:space-y-5">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-lg sm:text-xl font-bold text-white tracking-tight">Direct Comms Channels</h3>
+                            <span class="text-[10px] font-mono-code text-cyan-400 px-2 py-0.5 rounded-full bg-cyan-400/10 border border-cyan-400/20 font-semibold tracking-wider">LIVE</span>
+                        </div>
                         
-                        <div class="space-y-4">
-                            <a href="tel:01888574160" class="p-4 rounded-2xl bg-white/[0.03] border border-white/5 hover:border-white/20 transition-all flex items-center justify-between group">
-                                <div class="flex items-center gap-4">
-                                    <div class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-white">
+                        <div class="space-y-3">
+                            <!-- Voice Comms -->
+                            <a href="tel:01888574160" class="p-3.5 sm:p-4 rounded-2xl bg-white/[0.03] border border-white/10 hover:border-emerald-500/40 hover:bg-emerald-500/[0.04] transition-all flex items-center justify-between gap-3 group">
+                                <div class="flex items-center gap-3 sm:gap-4 min-w-0 flex-1">
+                                    <div class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 group-hover:scale-105 transition-transform shrink-0">
                                         <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
                                     </div>
-                                    <div>
-                                        <p class="text-xs font-mono-code text-gray-500 uppercase">Voice Comms</p>
-                                        <p class="text-base font-semibold text-white">01888574160</p>
+                                    <div class="min-w-0 flex-1">
+                                        <p class="text-[10px] sm:text-xs font-mono-code text-gray-400 uppercase tracking-wider">Voice Comms</p>
+                                        <p class="text-sm sm:text-base font-semibold text-white tracking-wide truncate">01888574160</p>
                                     </div>
                                 </div>
-                                <span class="text-xs text-gray-500 group-hover:text-white transition-colors">Call →</span>
+                                <span class="px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 group-hover:bg-emerald-500/25 group-hover:border-emerald-400 text-[11px] sm:text-xs font-mono-code font-semibold whitespace-nowrap shrink-0 transition-all flex items-center gap-1">
+                                    Call <span class="group-hover:translate-x-0.5 transition-transform">→</span>
+                                </span>
                             </a>
 
-                            <a href="mailto:dquadofficialgg@gmail.com" class="p-4 rounded-2xl bg-white/[0.03] border border-white/5 hover:border-white/20 transition-all flex items-center justify-between group">
-                                <div class="flex items-center gap-4">
-                                    <div class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-white">
+                            <!-- Official Email -->
+                            <a href="mailto:dquadofficialgg@gmail.com" class="p-3.5 sm:p-4 rounded-2xl bg-white/[0.03] border border-white/10 hover:border-cyan-500/40 hover:bg-cyan-500/[0.04] transition-all flex items-center justify-between gap-3 group">
+                                <div class="flex items-center gap-3 sm:gap-4 min-w-0 flex-1">
+                                    <div class="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 group-hover:scale-105 transition-transform shrink-0">
                                         <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
                                     </div>
-                                    <div>
-                                        <p class="text-xs font-mono-code text-gray-500 uppercase">Official Email</p>
-                                        <p class="text-base font-semibold text-white">dquadofficialgg@gmail.com</p>
+                                    <div class="min-w-0 flex-1">
+                                        <p class="text-[10px] sm:text-xs font-mono-code text-gray-400 uppercase tracking-wider">Official Email</p>
+                                        <p class="text-xs sm:text-sm md:text-base font-semibold text-white tracking-tight truncate" title="dquadofficialgg@gmail.com">dquadofficialgg@gmail.com</p>
                                     </div>
                                 </div>
-                                <span class="text-xs text-gray-500 group-hover:text-white transition-colors">Send →</span>
+                                <span class="px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-xl bg-cyan-500/15 border border-cyan-500/30 text-cyan-300 group-hover:bg-cyan-500/25 group-hover:border-cyan-400 text-[11px] sm:text-xs font-mono-code font-semibold whitespace-nowrap shrink-0 transition-all flex items-center gap-1">
+                                    Email <span class="group-hover:translate-x-0.5 transition-transform">→</span>
+                                </span>
                             </a>
                         </div>
                     </div>
