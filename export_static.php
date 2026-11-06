@@ -20,6 +20,10 @@ $html = str_replace(['http://localhost/', 'http://127.0.0.1:8000/', 'http://loca
 $html = preg_replace('/http:\/\/localhost:\d+\//', '/', $html);
 $html = preg_replace('/http:\/\/127\.0\.0\.1:\d+\//', '/', $html);
 
+// Ensure all asset references use robust relative paths (./build/...) for maximum compatibility with Netlify & iframes
+$html = str_replace(['href="/build/', 'src="/build/'], ['href="./build/', 'src="./build/'], $html);
+$html = str_replace(['href=\'/build/', 'src=\'/build/'], ['href=\'./build/', 'src=\'./build/'], $html);
+
 // Save index.html
 file_put_contents($distDir . '/index.html', $html);
 echo "✓ Generated dist/index.html (" . strlen($html) . " bytes)\n";
@@ -106,7 +110,6 @@ echo "✓ Created dist/_redirects\n";
 // 6. Netlify _headers file for maximum performance
 $headersContent = "
 /*
-  X-Frame-Options: SAMEORIGIN
   X-XSS-Protection: 1; mode=block
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
