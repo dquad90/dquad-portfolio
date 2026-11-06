@@ -30,7 +30,7 @@ Route::get('/api/v1/profile', function () {
         'alias' => 'DQUAD',
         'title' => 'Full-Stack Web Architect & Game Developer',
         'status' => 'Available for hire & co-op projects',
-        'location' => 'Dhaka, Bangladesh',
+        'location' => 'Remote / Worldwide',
         'comms' => [
             'email' => 'dquadofficialgg@gmail.com',
             'phone' => '01888574160',
@@ -76,7 +76,7 @@ Route::post('/api/transmission', function (Request $request) {
             "DQUAD MISSION BRIEFING TRANSMISSION\n\n" .
             "Sender: {$senderEmail}\n" .
             "Timestamp: " . now()->toRfc2822String() . "\n" .
-            "Gateway: Dhaka Node [TLS 1.3]\n\n" .
+            "Gateway: Secure Edge Node [TLS 1.3]\n\n" .
             "================ BRIEFING MESSAGE ================\n\n" .
             $briefingMessage . "\n\n" .
             "==================================================\n" .

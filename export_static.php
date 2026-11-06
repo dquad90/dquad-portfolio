@@ -84,7 +84,7 @@ file_put_contents($apiDir . '/profile', json_encode([
     'alias' => 'DQUAD',
     'title' => 'Software Engineer & Game Developer',
     'status' => 'Available for hire & co-op projects',
-    'location' => 'Dhaka, Bangladesh [UTC+6]',
+    'location' => 'Remote / Worldwide',
     'games' => ['Counter-Strike 2', 'Valorant', 'Elden Ring'],
     'stack' => ['Unity 6', 'Godot 4', 'Laravel 13', 'Android Studio'],
     'comms' => [

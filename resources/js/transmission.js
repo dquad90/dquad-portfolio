@@ -210,7 +210,7 @@ export function initTransmissionDispatcher() {
                     <svg class="w-4 h-4 animate-spin text-cyan-400" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                         <circle cx="12" cy="12" r="10" stroke-width="2" stroke="currentColor" stroke-dasharray="32" stroke-linecap="round"></circle>
                     </svg>
-                    <span>[2/3] TRANSMITTING TO DHAKA GATEWAY [12ms]...</span>
+                    <span>[2/3] TRANSMITTING TO SECURE GATEWAY [12ms]...</span>
                 `;
             }
 
@@ -218,7 +218,7 @@ export function initTransmissionDispatcher() {
                 hudLog.innerHTML += `
                     <div class="flex items-center gap-2 text-cyan-400 pt-1.5 border-t border-white/5">
                         <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
-                        <span>&gt; BDIX HIGH-SPEED CORE ROUTE ESTABLISHED [LATENCY: 12ms]</span>
+                        <span>&gt; HIGH-SPEED SECURE CORE ROUTE ESTABLISHED [LATENCY: 12ms]</span>
                     </div>
                     <div class="text-gray-400 pl-3.5">&gt; HANDSHAKE ACK: OPERATOR RECIPIENT [${OPERATOR_EMAIL}]</div>
                 `;
@@ -266,7 +266,7 @@ export function initTransmissionDispatcher() {
 
             // Construct real prefilled mail links
             const emailSubject = `[DQUAD Mission Briefing] Project Transmission from ${senderEmail}`;
-            const emailBody = `Hi Darun (DQUAD),\n\nA new mission briefing has been dispatched via your portfolio:\n\n========================================\nSENDER: ${senderEmail}\nTIMESTAMP: ${new Date().toLocaleString()}\nGATEWAY: Dhaka Node [Port 443 / TLS 1.3]\n========================================\n\nMISSION BRIEFING:\n${messageBody}\n\n----------------------------------------\nDispatched from DQUAD Cybernetic Command (portfolio v2.0)`;
+            const emailBody = `Hi Darun (DQUAD),\n\nA new mission briefing has been dispatched via your portfolio:\n\n========================================\nSENDER: ${senderEmail}\nTIMESTAMP: ${new Date().toLocaleString()}\nGATEWAY: Secure Edge Node [Port 443 / TLS 1.3]\n========================================\n\nMISSION BRIEFING:\n${messageBody}\n\n----------------------------------------\nDispatched from DQUAD Cybernetic Command (portfolio v2.0)`;
 
             // Web Gmail URL: 1-click compose tab in Gmail
             const webGmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(OPERATOR_EMAIL)}&su=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;

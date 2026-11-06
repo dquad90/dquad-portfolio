@@ -65,7 +65,7 @@
                     SECRET ARCHITECT
                 </h4>
                 <p class="text-gray-400 text-[11px] font-mono-code truncate">
-                    Overclocked Dhaka Core // Konami Overdrive [10s]
+                    Overclocked Core // Konami Overdrive [10s]
                 </p>
             </div>
 
@@ -146,7 +146,7 @@
                         </div>
 
                         <p class="text-base sm:text-lg text-gray-300 font-normal leading-relaxed max-w-xl">
-                            Full-stack engineer & game developer based in <strong class="text-white font-semibold">Dhaka, Bangladesh</strong>. Hacking on physics in <span class="text-cyan-400 font-medium">Unity & Godot</span>, architecting backends in <span class="text-purple-400 font-medium">Laravel</span>, and clicking heads in <span class="text-white font-medium">CS2, Valorant & Elden Ring</span>.
+                            Full-stack engineer & game developer. Hacking on physics in <span class="text-cyan-400 font-medium">Unity & Godot</span>, architecting backends in <span class="text-purple-400 font-medium">Laravel</span>, and clicking heads in <span class="text-white font-medium">CS2, Valorant & Elden Ring</span>.
                         </p>
 
                         <!-- Tech Chips -->
@@ -237,7 +237,7 @@
                                                 <div class="w-0.5 h-full bg-gray-400"></div>
                                                 <div class="w-1.5 h-full bg-gray-400"></div>
                                             </div>
-                                            <span>778-DQUAD-BD</span>
+                                            <span>778-DQUAD-PASS</span>
                                         </div>
                                         <span class="text-fuchsia-400 hover:text-fuchsia-300 font-semibold flex items-center gap-1 transition-colors">
                                             <span>CLICK TO FLIP</span>
@@ -258,7 +258,7 @@
                                             <span class="font-mono-code text-[11px] text-cyan-400 uppercase tracking-widest font-semibold">DEV LOADOUT // SPECS</span>
                                         </div>
                                         <span class="text-[10px] font-mono-code px-2 py-0.5 rounded bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 uppercase font-bold tracking-wider">
-                                            DHAKA, BD [UTC+6]
+                                            GLOBAL REMOTE [UTC+6]
                                         </span>
                                     </div>
 
@@ -574,7 +574,7 @@
                             CODE. CLUTCH.<br>BUILD THINGS THAT FEEL GOOD<span class="text-cyan-400">.</span>
                         </h2>
                         <p class="text-gray-300 text-base sm:text-lg leading-relaxed">
-                            I'm <strong class="text-white font-semibold">Darun Naim Sindid</strong> (in lobbies and repos, everyone knows me as <strong class="text-white font-semibold">DQUAD</strong>) — a developer from Dhaka, Bangladesh who grew up obsessed with how games feel under your fingers and how solid backends run under the hood.
+                            I'm <strong class="text-white font-semibold">Darun Naim Sindid</strong> (in lobbies and repos, everyone knows me as <strong class="text-white font-semibold">DQUAD</strong>) — a developer who grew up obsessed with how games feel under your fingers and how solid backends run under the hood.
                         </p>
                         <p class="text-gray-400 text-sm sm:text-base leading-relaxed">
                             When I'm taking a break from code, you'll catch me holding bombsite in <strong class="text-white">Counter-Strike 2</strong>, queuing ranked in <strong class="text-white">Valorant</strong>, or getting tested by late-game bosses in <strong class="text-white">Elden Ring</strong>. That gamer mentality carries straight into engineering: I obsess over input responsiveness in <strong class="text-cyan-300">Unity 6 & Godot 4</strong>, clean REST APIs in <strong class="text-purple-300">Laravel 13</strong>, and fluid mobile UX in <strong class="text-emerald-300">Android Studio</strong>.
@@ -583,8 +583,8 @@
                         <!-- Developer Rig & Rotation Pill Cards -->
                         <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5 pt-2 text-xs font-mono-code">
                             <div class="p-3 rounded-2xl bg-white/[0.03] border border-white/5">
-                                <span class="text-gray-500 text-[10px] uppercase block">Location</span>
-                                <span class="text-white font-semibold">Dhaka, BD [UTC+6]</span>
+                                <span class="text-gray-500 text-[10px] uppercase block">Availability</span>
+                                <span class="text-white font-semibold">Worldwide Remote</span>
                             </div>
                             <div class="p-3 rounded-2xl bg-white/[0.03] border border-white/5">
                                 <span class="text-gray-500 text-[10px] uppercase block">Competitive</span>
@@ -679,7 +679,7 @@
                             <div class="flex items-center justify-between pb-2 border-b border-white/10 text-[9px] uppercase tracking-wider text-gray-400">
                                 <span class="flex items-center gap-1.5">
                                     <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping"></span>
-                                    <span>ENCRYPTED DISPATCH // DHAKA GATEWAY</span>
+                                    <span>ENCRYPTED DISPATCH // SECURE GATEWAY</span>
                                 </span>
                                 <span class="text-cyan-400 font-bold">PORT 443 [TLS 1.3]</span>
                             </div>

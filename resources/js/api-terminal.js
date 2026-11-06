@@ -50,7 +50,7 @@ export function initApiTerminal() {
                 developer: "Darun Naim Sindid",
                 alias: "DQUAD",
                 title: "Full-Stack Web Architect & Game Developer",
-                location: "Dhaka, Bangladesh",
+                location: "Remote / Worldwide",
                 email: "dquadofficialgg@gmail.com"
             }
         }
