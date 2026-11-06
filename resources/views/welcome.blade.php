@@ -77,8 +77,8 @@
     </div>
 
     <!-- Navigation Header (Fixed, 100% Mobile Responsive with Opaque Shield Background) -->
-    <header class="fixed top-0 inset-x-0 z-50 pt-2.5 sm:pt-4 px-3 sm:px-4">
-        <nav class="max-w-5xl mx-auto px-3 sm:px-5 py-2 sm:py-2.5 rounded-full border border-white/10 bg-[#090812]/95 shadow-[0_8px_32px_rgba(0,0,0,0.7)] flex items-center justify-between backdrop-blur-2xl">
+    <header class="fixed top-0 inset-x-0 z-50 pt-2.5 sm:pt-4 px-3 sm:px-4 bg-gradient-to-b from-[#05040a] via-[#05040a]/85 to-transparent pb-3 pointer-events-none">
+        <nav class="pointer-events-auto max-w-5xl mx-auto px-3 sm:px-5 py-2 sm:py-2.5 rounded-full border border-white/10 bg-[#090812]/95 shadow-[0_8px_32px_rgba(0,0,0,0.7)] flex items-center justify-between backdrop-blur-2xl">
             <a href="#home" class="flex items-center gap-2 group shrink-0">
                 <span class="text-lg sm:text-2xl font-black tracking-tighter text-white group-hover:text-fuchsia-400 transition-colors">DQUAD</span>
                 <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>

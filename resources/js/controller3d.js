@@ -2,14 +2,15 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 /**
- * EXACT 3D XBOX SERIES X|S WIRELESS CONTROLLER (ROBOT BLACK)
+ * DQUAD CUSTOM 3D APEX WIRELESS CONTROLLER
  * 
- * Renders the authentic official 3D CAD/Blender mesh of the Xbox Wireless Controller:
- * - Exact official unibody ergonomic shell & textured palm grip edges
- * - Exact asymmetrical concave rubber thumbsticks with knurled grip rings
- * - Exact 8-way faceted metallic gunmetal hybrid D-Pad dish
- * - Exact 4 diamond action buttons with official Xbox colors (Green A, Red B, Blue X, Yellow Y)
- * - Exact glowing white illuminated Xbox Jewel / Guide Button
+ * Renders the authentic official 3D CAD mesh customized with DQUAD's Cybernetic Insignia:
+ * - Authentic ergonomic unibody shell & textured palm grip edges
+ * - Asymmetrical concave rubber thumbsticks with knurled grip rings
+ * - 8-way faceted gunmetal metallic hybrid D-Pad dish
+ * - Translucent glossy action buttons with official colored letters (Green A, Red B, Blue X, Yellow Y)
+ * - Custom glowing neon cyan DQUAD "D" Apex Emblem (with illuminated circuit core) replacing standard Xbox jewel
+ * - Dual-tone studio rim lighting (Vibrant Cool Cyan Left Rim + Warm Golden-Amber Right Rim)
  * - View (⧉), Share (↑), Menu (☰) center auxiliary buttons
  * - LB/RB shoulder bumpers & LT/RT ergonomic triggers
  * - Raycast interactive clicking with tactile sound & HUD telemetry
@@ -31,14 +32,14 @@ export function initBentoController() {
     let resetTelemetryTimeout = null;
 
     if (telemetryText) {
-        telemetryText.textContent = 'VIEWPORT // LOADING 3D XBOX...';
+        telemetryText.textContent = 'VIEWPORT // LOADING 3D CONTROLLER...';
         telemetryText.classList.remove('text-emerald-400');
         telemetryText.classList.add('text-cyan-400');
     }
 
     function triggerInputFeedback(label, isHardware = false) {
         if (telemetryText) {
-            telemetryText.textContent = isHardware ? 'XBOX // HARDWARE ACTIVE' : 'XBOX // INPUT DETECTED';
+            telemetryText.textContent = isHardware ? 'DQUAD // HARDWARE ACTIVE' : 'DQUAD // INPUT DETECTED';
             telemetryText.classList.remove('text-cyan-400');
             telemetryText.classList.add('text-emerald-400');
         }
@@ -91,28 +92,40 @@ export function initBentoController() {
     renderer.setSize(width, height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.15;
+    renderer.toneMappingExposure = 1.20;
 
     // -------------------------------------------------------------
-    // 2. Balanced Studio Lighting (Fine-grain Carbon Black Satin)
+    // 2. Dual-Tone Studio Lighting (Matching User's Reference)
+    // Left: Vibrant Cool Cyan Rim Light
+    // Right: Warm Golden-Amber / Orange Rim Light
+    // Center-Top: Soft Neutral Studio Key Fill
     // -------------------------------------------------------------
-    const ambientLight = new THREE.AmbientLight(0xffffff, 2.0);
+    const ambientLight = new THREE.AmbientLight(0x121420, 1.3);
     scene.add(ambientLight);
 
-    const keyLight = new THREE.DirectionalLight(0xffffff, 2.4);
-    keyLight.position.set(-3, 4.5, 5);
+    // Front-Top Key Fill
+    const keyLight = new THREE.DirectionalLight(0xfff8ee, 1.8);
+    keyLight.position.set(0, 3.8, 4.5);
     scene.add(keyLight);
 
-    const frontFill = new THREE.DirectionalLight(0xf1f5f9, 2.0);
-    frontFill.position.set(2.5, 2.0, 5.0);
-    scene.add(frontFill);
+    // Left Rim Light - Vibrant Cyan / Ice Blue (matches reference left edge)
+    const leftCyanRim = new THREE.DirectionalLight(0x00f5ff, 4.2);
+    leftCyanRim.position.set(-5.0, 1.5, -1.2);
+    scene.add(leftCyanRim);
 
-    const rimLight = new THREE.DirectionalLight(0x38bdf8, 2.0);
-    rimLight.position.set(0, 5, -2.5);
-    scene.add(rimLight);
+    // Right Rim Light - Warm Amber / Orange (matches reference right edge)
+    const rightAmberRim = new THREE.DirectionalLight(0xf59e0b, 4.5);
+    rightAmberRim.position.set(5.0, 1.5, -1.2);
+    scene.add(rightAmberRim);
 
-    const floorBounce = new THREE.PointLight(0xa855f7, 3.2, 10);
-    floorBounce.position.set(0, -3.5, 2.8);
+    // Top Bumper / Trigger Edge Highlight
+    const topRimLight = new THREE.DirectionalLight(0x38bdf8, 1.8);
+    topRimLight.position.set(0, 5.0, -2.5);
+    scene.add(topRimLight);
+
+    // Subtle Ground Glow
+    const floorBounce = new THREE.PointLight(0x9333ea, 1.5, 10);
+    floorBounce.position.set(0, -3.5, 2.5);
     scene.add(floorBounce);
 
     const rootGroup = new THREE.Group();
@@ -156,43 +169,33 @@ export function initBentoController() {
     controllerGroup.position.set(0, 0.02, 0);
     rootGroup.add(controllerGroup);
 
-    // PBR Materials calibrated directly against official Xbox Product Photography
+    // PBR Materials calibrated directly against official DQUAD Controller Photography
     const chassisMat = new THREE.MeshPhysicalMaterial({
-        color: 0x151518,
-        roughness: 0.50,
-        metalness: 0.06,
-        clearcoat: 0.22,
-        clearcoatRoughness: 0.32,
-        reflectivity: 0.38
+        color: 0x141417,
+        roughness: 0.60,
+        metalness: 0.05,
+        clearcoat: 0.08,
+        clearcoatRoughness: 0.45,
+        reflectivity: 0.25
     });
 
     const rearGripMat = new THREE.MeshStandardMaterial({
         color: 0x111114,
-        roughness: 0.75,
+        roughness: 0.80,
         metalness: 0.04
     });
 
     const dpadMat = new THREE.MeshPhysicalMaterial({
-        color: 0x22222a,
+        color: 0x222228,
         roughness: 0.38,
-        metalness: 0.52,
-        clearcoat: 0.45,
-        clearcoatRoughness: 0.22
-    });
-
-    const jewelMat = new THREE.MeshPhysicalMaterial({
-        color: 0xffffff,
-        emissive: 0xffffff,
-        emissiveIntensity: 1.15,
-        roughness: 0.08,
-        metalness: 0.04,
-        clearcoat: 1.0,
-        clearcoatRoughness: 0.05
+        metalness: 0.60,
+        clearcoat: 0.30,
+        clearcoatRoughness: 0.25
     });
 
     const stickGripMat = new THREE.MeshStandardMaterial({
-        color: 0x18181e,
-        roughness: 0.88,
+        color: 0x16161c,
+        roughness: 0.90,
         metalness: 0.03
     });
 
@@ -203,24 +206,24 @@ export function initBentoController() {
     });
 
     const bumperMat = new THREE.MeshPhysicalMaterial({
-        color: 0x17171d,
-        roughness: 0.38,
+        color: 0x16161c,
+        roughness: 0.40,
         metalness: 0.10,
-        clearcoat: 0.28
+        clearcoat: 0.20
     });
 
     const buttonExteriorMat = new THREE.MeshPhysicalMaterial({
-        color: 0x0c0c10,
+        color: 0x08080c,
         transparent: true,
-        opacity: 0.45,
-        roughness: 0.10,
-        metalness: 0.10,
+        opacity: 0.55,
+        roughness: 0.08,
+        metalness: 0.12,
         clearcoat: 1.0,
-        clearcoatRoughness: 0.04
+        clearcoatRoughness: 0.03
     });
 
     const auxBtnMat = new THREE.MeshStandardMaterial({
-        color: 0x222228,
+        color: 0x202026,
         roughness: 0.42,
         metalness: 0.15
     });
@@ -231,43 +234,67 @@ export function initBentoController() {
     let sticksGripMesh = null;
     let bumpersMesh = null;
 
+    // Load high-resolution DQUAD "D" Cybernetic Emblem textures
+    const texLoader = new THREE.TextureLoader();
+    const emblemTex = texLoader.load('./models/dquad_emblem.png');
+    const glowTex = texLoader.load('./models/dquad_emblem_glow.png');
+    emblemTex.colorSpace = THREE.SRGBColorSpace;
+    glowTex.colorSpace = THREE.SRGBColorSpace;
+
     function setupControllerModel(model) {
+        const toRemove = [];
+
         model.traverse((child) => {
             if (!child.isMesh) return;
             const name = child.name || '';
 
-            if (name === 'body-top-case' || name === 'body-side-caps' || name === 'back-case' || name === 'battery-door' || name === 'battery-door-gloss' || name === 'ports') {
+            if (name === 'body-top-case' || name === 'back-case' || name === 'battery-door' || name === 'battery-door-gloss') {
                 child.material = chassisMat;
+            } else if (name === 'body-side-caps') {
+                child.material = chassisMat;
+                // Eliminate the 1522 vertices inside the guide sphere that form the Xbox cutout logo
+                const pos = child.geometry.attributes.position;
+                for (let i = 0; i < pos.count; i++) {
+                    const x = pos.getX(i);
+                    const y = pos.getY(i);
+                    const z = pos.getZ(i);
+                    const d = Math.sqrt(x * x + (y - 4.214) * (y - 4.214) + (z - 0.792) * (z - 0.792));
+                    if (d < 0.65) {
+                        pos.setXYZ(i, 0, -100, 0);
+                    }
+                }
+                pos.needsUpdate = true;
+                child.geometry.computeVertexNormals();
+            } else if (name === 'ports' || name === 'nexus-quads') {
+                // Completely destroy and detach Xbox logo geometry & guide housing
+                child.visible = false;
+                child.geometry = new THREE.BufferGeometry();
+                toRemove.push(child);
             } else if (name === 'side-grip-edges' || name === 'back-grip-edges') {
                 child.material = rearGripMat;
             } else if (name === 'd-pad') {
                 child.material = dpadMat;
-                child.userData = { id: 'DPAD', label: 'XBOX // HYBRID D-PAD', type: 'dpad' };
+                child.userData = { id: 'DPAD', label: 'DQUAD // HYBRID D-PAD', type: 'dpad' };
                 interactiveMeshes.push(child);
                 dpadMesh = child;
-            } else if (name === 'nexus-quads') {
-                child.material = jewelMat;
-                child.userData = { id: 'BTN_XBOX_GUIDE', label: 'XBOX GUIDE // HOME', type: 'jewel' };
-                interactiveMeshes.push(child);
-                jewelMesh = child;
             } else if (name === 'thumbsticks-grip') {
                 child.material = stickGripMat;
-                child.userData = { id: 'STICKS', label: 'XBOX // THUMBSTICKS', type: 'stick' };
+                child.userData = { id: 'STICKS', label: 'DQUAD // PRECISION THUMBSTICKS', type: 'stick' };
                 interactiveMeshes.push(child);
                 sticksGripMesh = child;
             } else if (name === 'thumbsticks-base') {
                 child.material = stickBaseMat;
             } else if (name === 'bumpers' || name === 'triggers') {
                 child.material = bumperMat;
-                child.userData = { id: name.toUpperCase(), label: `XBOX // ${name.toUpperCase()}`, type: 'bumper' };
+                child.userData = { id: name.toUpperCase(), label: `DQUAD // ${name.toUpperCase()}`, type: 'bumper' };
                 interactiveMeshes.push(child);
                 if (name === 'bumpers') bumpersMesh = child;
             } else if (name === 'view-menu-share-buttons') {
                 child.material = auxBtnMat;
-                child.userData = { id: 'AUX_BTNS', label: 'XBOX // VIEW • SHARE • MENU', type: 'aux' };
+                child.userData = { id: 'AUX_BTNS', label: 'DQUAD // VIEW • SHARE • MENU', type: 'aux' };
                 interactiveMeshes.push(child);
             } else if (name === 'abxy-buttons') {
-                // Official Xbox Colored Letters
+                // Exact Action Button Colors matching reference photo
                 const pos = child.geometry.attributes.position;
                 const colors = new Float32Array(pos.count * 3);
                 const centerY = (1.168 + 4.097) / 2;
@@ -281,35 +308,83 @@ export function initBentoController() {
 
                     if (dy > Math.abs(dx)) {
                         // Y = Golden Yellow (#facc15)
-                        colors[i * 3] = 0.98; colors[i * 3 + 1] = 0.80; colors[i * 3 + 2] = 0.08;
+                        colors[i * 3] = 0.98; colors[i * 3 + 1] = 0.82; colors[i * 3 + 2] = 0.08;
                     } else if (-dy > Math.abs(dx)) {
                         // A = Emerald Green (#22c55e)
-                        colors[i * 3] = 0.13; colors[i * 3 + 1] = 0.77; colors[i * 3 + 2] = 0.37;
+                        colors[i * 3] = 0.13; colors[i * 3 + 1] = 0.80; colors[i * 3 + 2] = 0.35;
                     } else if (-dx > Math.abs(dy)) {
                         // X = Sky Blue (#38bdf8)
-                        colors[i * 3] = 0.22; colors[i * 3 + 1] = 0.74; colors[i * 3 + 2] = 0.97;
+                        colors[i * 3] = 0.20; colors[i * 3 + 1] = 0.74; colors[i * 3 + 2] = 0.98;
                     } else {
                         // B = Crimson Red (#ef4444)
-                        colors[i * 3] = 0.94; colors[i * 3 + 1] = 0.27; colors[i * 3 + 2] = 0.27;
+                        colors[i * 3] = 0.94; colors[i * 3 + 1] = 0.22; colors[i * 3 + 2] = 0.22;
                     }
                 }
 
                 child.geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
                 child.material = new THREE.MeshStandardMaterial({
                     vertexColors: true,
-                    roughness: 0.14,
-                    metalness: 0.10
+                    roughness: 0.15,
+                    metalness: 0.10,
+                    emissive: 0x181820
                 });
-                child.userData = { id: 'ABXY', label: 'XBOX // ABXY BUTTONS', type: 'abxy' };
+                child.userData = { id: 'ABXY', label: 'DQUAD // ACTION BUTTONS (ABXY)', type: 'abxy' };
                 interactiveMeshes.push(child);
                 abxyMesh = child;
             } else if (name === 'abxy-buttons-exterior') {
                 child.material = buttonExteriorMat;
-                child.userData = { id: 'ABXY_CAP', label: 'XBOX // ACTION BUTTONS', type: 'abxy' };
+                child.userData = { id: 'ABXY_CAP', label: 'DQUAD // ACTION BUTTONS (ABXY)', type: 'abxy' };
                 interactiveMeshes.push(child);
             }
         });
 
+        toRemove.forEach(c => {
+            if (c.parent) c.parent.remove(c);
+        });
+
+        // ---------------------------------------------------------
+        // CUSTOM DQUAD "D" APEX EMBLEM
+        // Replaces the Xbox jewel with the exact custom cybernetic D badge
+        // ---------------------------------------------------------
+        const dquadEmblemGroup = new THREE.Group();
+        dquadEmblemGroup.position.set(0, 4.214, 0.792);
+        dquadEmblemGroup.rotation.x = -0.360;
+
+        // Dark flat patch seamlessly sealing the chassis housing hole (no bevel rim)
+        const buttonPlateGeo = new THREE.CircleGeometry(0.57, 32);
+        const buttonPlate = new THREE.Mesh(buttonPlateGeo, chassisMat);
+        dquadEmblemGroup.add(buttonPlate);
+
+        // High-res DQUAD "D" Badge Plane with diffuse + cyan neon emissive glow
+        // Scaled to fit comfortably inside the guide dish without edge clipping
+        const badgeGeo = new THREE.PlaneGeometry(1.10, 1.00);
+        const badgeMat = new THREE.MeshStandardMaterial({
+            map: emblemTex,
+            emissive: 0x00f5ff,
+            emissiveMap: glowTex,
+            emissiveIntensity: 2.2,
+            transparent: true,
+            roughness: 0.22,
+            metalness: 0.20,
+            depthWrite: false
+        });
+        const badgeMesh = new THREE.Mesh(badgeGeo, badgeMat);
+        badgeMesh.position.z = 0.055;
+        dquadEmblemGroup.add(badgeMesh);
+
+        badgeMesh.userData = {
+            id: 'BTN_DQUAD_EMBLEM',
+            label: 'DQUAD // APEX EMBLEM',
+            type: 'jewel',
+            group: dquadEmblemGroup,
+            mat: badgeMat
+        };
+        buttonPlate.userData = badgeMesh.userData;
+        interactiveMeshes.push(badgeMesh);
+        interactiveMeshes.push(buttonPlate);
+        jewelMesh = badgeMesh;
+
+        model.add(dquadEmblemGroup);
         controllerGroup.add(model);
 
         if (telemetryText) {
@@ -357,14 +432,14 @@ export function initBentoController() {
     loadControllerGLB();
 
     // -------------------------------------------------------------
-    // 5. SHOWCASE ORIENTATION (Facing Forward, matching Product Photo)
+    // 5. SHOWCASE ORIENTATION (Facing Forward, matching Reference Photo)
     // -------------------------------------------------------------
-    const HERO_ROT_X = 0.05;
-    const HERO_ROT_Y = -0.10;
+    const HERO_ROT_X = 0.04;
+    const HERO_ROT_Y = -0.02;
 
     rootGroup.rotation.x = HERO_ROT_X;
     rootGroup.rotation.y = HERO_ROT_Y;
-    rootGroup.rotation.z = -0.01;
+    rootGroup.rotation.z = 0.0;
 
     // -------------------------------------------------------------
     // 6. RAYCASTING & BUTTON PRESS PHYSICS
@@ -379,9 +454,19 @@ export function initBentoController() {
         u.isPressed = true;
 
         if (u.type === 'jewel') {
-            mesh.scale.set(0.92, 0.92, 0.92);
+            if (u.group) {
+                u.group.position.z -= 0.06;
+            }
+            if (u.mat) {
+                u.mat.emissiveIntensity = 3.6;
+            }
             setTimeout(() => {
-                mesh.scale.set(1, 1, 1);
+                if (u.group) {
+                    u.group.position.z += 0.06;
+                }
+                if (u.mat) {
+                    u.mat.emissiveIntensity = 2.2;
+                }
                 u.isPressed = false;
             }, 140);
         } else if (u.type === 'dpad') {
