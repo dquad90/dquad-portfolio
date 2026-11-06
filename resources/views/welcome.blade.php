@@ -580,19 +580,182 @@
                             When I'm taking a break from code, you'll catch me holding bombsite in <strong class="text-white">Counter-Strike 2</strong>, queuing ranked in <strong class="text-white">Valorant</strong>, or getting tested by late-game bosses in <strong class="text-white">Elden Ring</strong>. That gamer mentality carries straight into engineering: I obsess over input responsiveness in <strong class="text-cyan-300">Unity 6 & Godot 4</strong>, clean REST APIs in <strong class="text-purple-300">Laravel 13</strong>, and fluid mobile UX in <strong class="text-emerald-300">Android Studio</strong>.
                         </p>
 
-                        <!-- Developer Rig & Rotation Pill Cards -->
-                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5 pt-2 text-xs font-mono-code">
-                            <div class="p-3 rounded-2xl bg-white/[0.03] border border-white/5">
-                                <span class="text-gray-500 text-[10px] uppercase block">Availability</span>
-                                <span class="text-white font-semibold">Worldwide Remote</span>
-                            </div>
-                            <div class="p-3 rounded-2xl bg-white/[0.03] border border-white/5">
-                                <span class="text-gray-500 text-[10px] uppercase block">Competitive</span>
-                                <span class="text-cyan-400 font-semibold">CS2 • Valorant</span>
-                            </div>
-                            <div class="p-3 rounded-2xl bg-white/[0.03] border border-white/5 col-span-2 sm:col-span-1">
-                                <span class="text-gray-500 text-[10px] uppercase block">Solo RPG</span>
-                                <span class="text-amber-300 font-semibold">Elden Ring</span>
+                        <!-- Availability Status Pill -->
+                        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.03] border border-white/10 text-xs font-mono-code text-gray-300">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                            <span>AVAILABILITY: <strong class="text-white">Worldwide Remote</strong></span>
+                        </div>
+
+                        <!-- 3D Interactive Game Arsenal Flip Card (Categories <-> Games Played) -->
+                        <div class="game-flip-container pt-1">
+                            <div id="game-arsenal-flip-card" class="game-flip-card group" tabindex="0" role="button" aria-label="Toggle game categories and titles played">
+                                
+                                <!-- FRONT FACE: Game Categories -->
+                                <div class="game-flip-front bento-card rounded-3xl p-5 sm:p-6 border border-white/10 bg-[#0c0b16]/95 group-hover:border-cyan-500/40 transition-all shadow-2xl flex flex-col justify-between select-none min-h-[460px] sm:min-h-[470px]">
+                                    <!-- Header -->
+                                    <div class="flex items-center justify-between pb-3.5 border-b border-white/10">
+                                        <div class="flex items-center gap-2">
+                                            <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+                                            <span class="font-mono-code text-[11px] sm:text-xs text-cyan-400 uppercase tracking-widest font-bold">GAME CATEGORIES // ARSENAL</span>
+                                        </div>
+                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 text-[10px] font-mono-code font-semibold tracking-wider group-hover:bg-cyan-500/20 transition-colors">
+                                            <span>FLIP FOR TITLES</span>
+                                            <span class="text-xs transition-transform group-hover:rotate-180 duration-500">↻</span>
+                                        </span>
+                                    </div>
+
+                                    <!-- Category Grid -->
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 py-3">
+                                        <!-- 1. Tactical & Extraction -->
+                                        <div class="p-2.5 rounded-2xl bg-white/[0.03] border border-white/5 hover:border-cyan-400/30 transition-all">
+                                            <div class="flex items-center justify-between">
+                                                <span class="text-xs font-bold text-white">Tactical & Extraction FPS</span>
+                                                <span class="text-[9px] font-mono-code px-1.5 py-0.5 rounded bg-cyan-500/15 text-cyan-300 font-semibold">FPS</span>
+                                            </div>
+                                            <p class="text-[11px] font-mono-code text-gray-400 mt-1">Delta Force • Valorant • CS2</p>
+                                        </div>
+
+                                        <!-- 2. Battle Royale -->
+                                        <div class="p-2.5 rounded-2xl bg-white/[0.03] border border-white/5 hover:border-fuchsia-400/30 transition-all">
+                                            <div class="flex items-center justify-between">
+                                                <span class="text-xs font-bold text-white">Battle Royale & Survival</span>
+                                                <span class="text-[9px] font-mono-code px-1.5 py-0.5 rounded bg-fuchsia-500/15 text-fuchsia-300 font-semibold">BR</span>
+                                            </div>
+                                            <p class="text-[11px] font-mono-code text-gray-400 mt-1">Fortnite (Build & Zero Build)</p>
+                                        </div>
+
+                                        <!-- 3. Hero Shooter -->
+                                        <div class="p-2.5 rounded-2xl bg-white/[0.03] border border-white/5 hover:border-blue-400/30 transition-all">
+                                            <div class="flex items-center justify-between">
+                                                <span class="text-xs font-bold text-white">Hero Team Shooter</span>
+                                                <span class="text-[9px] font-mono-code px-1.5 py-0.5 rounded bg-blue-500/15 text-blue-300 font-semibold">HERO</span>
+                                            </div>
+                                            <p class="text-[11px] font-mono-code text-gray-400 mt-1">Marvel Rivals</p>
+                                        </div>
+
+                                        <!-- 4. Open-World ARPG -->
+                                        <div class="p-2.5 rounded-2xl bg-white/[0.03] border border-white/5 hover:border-sky-400/30 transition-all">
+                                            <div class="flex items-center justify-between">
+                                                <span class="text-xs font-bold text-white">Open-World Action RPG</span>
+                                                <span class="text-[9px] font-mono-code px-1.5 py-0.5 rounded bg-sky-500/15 text-sky-300 font-semibold">ARPG</span>
+                                            </div>
+                                            <p class="text-[11px] font-mono-code text-gray-400 mt-1">Genshin Impact</p>
+                                        </div>
+
+                                        <!-- 5. Mobile MOBA -->
+                                        <div class="p-2.5 rounded-2xl bg-white/[0.03] border border-white/5 hover:border-amber-400/30 transition-all">
+                                            <div class="flex items-center justify-between">
+                                                <span class="text-xs font-bold text-white">Competitive Mobile MOBA</span>
+                                                <span class="text-[9px] font-mono-code px-1.5 py-0.5 rounded bg-amber-500/15 text-amber-300 font-semibold">MOBA</span>
+                                            </div>
+                                            <p class="text-[11px] font-mono-code text-gray-400 mt-1">Mobile Legends: Bang Bang</p>
+                                        </div>
+
+                                        <!-- 6. Solo & Souls-like -->
+                                        <div class="p-2.5 rounded-2xl bg-white/[0.03] border border-white/5 hover:border-yellow-400/30 transition-all">
+                                            <div class="flex items-center justify-between">
+                                                <span class="text-xs font-bold text-white">Solo Campaign & Souls</span>
+                                                <span class="text-[9px] font-mono-code px-1.5 py-0.5 rounded bg-yellow-500/15 text-yellow-300 font-semibold">SOLO</span>
+                                            </div>
+                                            <p class="text-[11px] font-mono-code text-gray-400 mt-1">Call of Duty Series • Elden Ring</p>
+                                        </div>
+                                    </div>
+
+                                    <!-- Footer -->
+                                    <div class="pt-3 border-t border-white/10 flex items-center justify-between text-[11px] font-mono-code text-gray-400">
+                                        <span class="flex items-center gap-1.5">
+                                            <span class="text-emerald-400">●</span> 7 GENRES IN ROTATION
+                                        </span>
+                                        <span class="text-cyan-400 font-semibold flex items-center gap-1">
+                                            CLICK CARD TO REVEAL <span class="text-xs">↻</span>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <!-- BACK FACE: The Specific Games I Play -->
+                                <div class="game-flip-back bento-card rounded-3xl p-5 sm:p-6 border border-white/10 bg-[#0c0b16]/95 group-hover:border-fuchsia-500/40 transition-all shadow-2xl flex flex-col justify-between select-none min-h-[460px] sm:min-h-[470px]">
+                                    <!-- Header -->
+                                    <div class="flex items-center justify-between pb-3.5 border-b border-white/10">
+                                        <div class="flex items-center gap-2">
+                                            <span class="w-2 h-2 rounded-full bg-fuchsia-400 animate-pulse"></span>
+                                            <span class="font-mono-code text-[11px] sm:text-xs text-fuchsia-400 uppercase tracking-widest font-bold">TITLES IN ROTATION // DQUAD</span>
+                                        </div>
+                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-fuchsia-500/10 border border-fuchsia-500/30 text-fuchsia-300 text-[10px] font-mono-code font-semibold tracking-wider group-hover:bg-fuchsia-500/20 transition-colors">
+                                            <span>FLIP BACK</span>
+                                            <span class="text-xs transition-transform group-hover:-rotate-180 duration-500">↺</span>
+                                        </span>
+                                    </div>
+
+                                    <!-- Games Grid (User's Exact Requested Games) -->
+                                    <div class="grid grid-cols-2 gap-2.5 py-3 text-left">
+                                        <!-- 1. Fortnite -->
+                                        <div class="p-2.5 rounded-2xl bg-white/[0.03] border border-fuchsia-500/25 hover:border-fuchsia-400/60 hover:bg-fuchsia-500/10 transition-all">
+                                            <span class="text-[9px] font-mono-code text-fuchsia-400 font-semibold uppercase block">Battle Royale</span>
+                                            <h4 class="text-xs sm:text-sm font-bold text-white mt-0.5">Fortnite</h4>
+                                            <span class="text-[10px] font-mono-code text-gray-400 block mt-0.5">Build & Zero Build</span>
+                                        </div>
+
+                                        <!-- 2. Delta Force -->
+                                        <div class="p-2.5 rounded-2xl bg-white/[0.03] border border-emerald-500/25 hover:border-emerald-400/60 hover:bg-emerald-500/10 transition-all">
+                                            <span class="text-[9px] font-mono-code text-emerald-400 font-semibold uppercase block">Tactical FPS</span>
+                                            <h4 class="text-xs sm:text-sm font-bold text-white mt-0.5">Delta Force</h4>
+                                            <span class="text-[10px] font-mono-code text-gray-400 block mt-0.5">Extraction Warfare</span>
+                                        </div>
+
+                                        <!-- 3. Valorant -->
+                                        <div class="p-2.5 rounded-2xl bg-white/[0.03] border border-rose-500/25 hover:border-rose-400/60 hover:bg-rose-500/10 transition-all">
+                                            <span class="text-[9px] font-mono-code text-rose-400 font-semibold uppercase block">5v5 Shooter</span>
+                                            <h4 class="text-xs sm:text-sm font-bold text-white mt-0.5">Valorant</h4>
+                                            <span class="text-[10px] font-mono-code text-gray-400 block mt-0.5">Ranked Clutch</span>
+                                        </div>
+
+                                        <!-- 4. Marvel Rivals -->
+                                        <div class="p-2.5 rounded-2xl bg-white/[0.03] border border-blue-500/25 hover:border-blue-400/60 hover:bg-blue-500/10 transition-all">
+                                            <span class="text-[9px] font-mono-code text-blue-400 font-semibold uppercase block">Hero Shooter</span>
+                                            <h4 class="text-xs sm:text-sm font-bold text-white mt-0.5">Marvel Rivals</h4>
+                                            <span class="text-[10px] font-mono-code text-gray-400 block mt-0.5">Team Synergy</span>
+                                        </div>
+
+                                        <!-- 5. Genshin Impact -->
+                                        <div class="p-2.5 rounded-2xl bg-white/[0.03] border border-cyan-500/25 hover:border-cyan-400/60 hover:bg-cyan-500/10 transition-all">
+                                            <span class="text-[9px] font-mono-code text-cyan-400 font-semibold uppercase block">Open-World RPG</span>
+                                            <h4 class="text-xs sm:text-sm font-bold text-white mt-0.5">Genshin Impact</h4>
+                                            <span class="text-[10px] font-mono-code text-gray-400 block mt-0.5">Spiral Abyss 36★</span>
+                                        </div>
+
+                                        <!-- 6. Mobile Legends -->
+                                        <div class="p-2.5 rounded-2xl bg-white/[0.03] border border-amber-500/25 hover:border-amber-400/60 hover:bg-amber-500/10 transition-all">
+                                            <span class="text-[9px] font-mono-code text-amber-400 font-semibold uppercase block">Mobile MOBA</span>
+                                            <h4 class="text-xs sm:text-sm font-bold text-white mt-0.5">Mobile Legends</h4>
+                                            <span class="text-[10px] font-mono-code text-gray-400 block mt-0.5">Mythic Macro</span>
+                                        </div>
+
+                                        <!-- 7. COD Series -->
+                                        <div class="p-2.5 rounded-2xl bg-white/[0.03] border border-purple-500/25 hover:border-purple-400/60 hover:bg-purple-500/10 transition-all">
+                                            <span class="text-[9px] font-mono-code text-purple-400 font-semibold uppercase block">Solo Campaign</span>
+                                            <h4 class="text-xs sm:text-sm font-bold text-white mt-0.5">COD Series</h4>
+                                            <span class="text-[10px] font-mono-code text-gray-400 block mt-0.5">Veteran Operations</span>
+                                        </div>
+
+                                        <!-- 8. Elden Ring -->
+                                        <div class="p-2.5 rounded-2xl bg-white/[0.03] border border-yellow-500/25 hover:border-yellow-400/60 hover:bg-yellow-500/10 transition-all">
+                                            <span class="text-[9px] font-mono-code text-yellow-400 font-semibold uppercase block">Action RPG / Souls</span>
+                                            <h4 class="text-xs sm:text-sm font-bold text-white mt-0.5">Elden Ring</h4>
+                                            <span class="text-[10px] font-mono-code text-gray-400 block mt-0.5">Erdtree & Malenia</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Footer -->
+                                    <div class="pt-3 border-t border-white/10 flex items-center justify-between text-[11px] font-mono-code text-gray-400">
+                                        <span class="flex items-center gap-1.5">
+                                            <span class="text-fuchsia-400">●</span> 8 SIGNATURE TITLES
+                                        </span>
+                                        <span class="text-fuchsia-400 font-semibold flex items-center gap-1">
+                                            CLICK CARD TO FLIP BACK <span class="text-xs">↺</span>
+                                        </span>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
                     </div>

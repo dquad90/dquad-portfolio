@@ -215,6 +215,40 @@
     transition: opacity 0.25s ease;
   }
 
+  /* -------------------------------------------------------------
+     3D Interactive Game Arsenal Flip Card
+  ------------------------------------------------------------- */
+  .game-flip-container {
+    perspective: 1200px;
+    width: 100%;
+  }
+  .game-flip-card {
+    position: relative;
+    width: 100%;
+    transform-style: preserve-3d;
+    transition: transform 0.65s cubic-bezier(0.2, 0.8, 0.2, 1);
+    cursor: pointer;
+  }
+  .game-flip-card.is-flipped {
+    transform: rotateY(180deg);
+  }
+  .game-flip-front,
+  .game-flip-back {
+    width: 100%;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    border-radius: 1.5rem;
+  }
+  .game-flip-front {
+    transform: rotateY(0deg);
+    position: relative;
+  }
+  .game-flip-back {
+    position: absolute;
+    inset: 0;
+    transform: rotateY(180deg);
+  }
+
   /* Floating 3D Sector HUD */
   .sector-dot {
     transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
