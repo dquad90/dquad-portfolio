@@ -1,0 +1,28 @@
+{
+    "core_languages": [
+        "PHP 8.4",
+        "C#",
+        "Kotlin",
+        "Java",
+        "JavaScript (ESNext)",
+        "GDScript"
+    ],
+    "frameworks": [
+        "Laravel 13",
+        "Tailwind CSS v4",
+        "Unity 6",
+        "Godot 4",
+        "Android Studio"
+    ],
+    "architecture": [
+        "Modular DDD \/ Clean MVC",
+        "RESTful JSON API",
+        "WebSockets",
+        "Web Audio API"
+    ],
+    "database": [
+        "SQLite",
+        "PostgreSQL 16",
+        "Redis Cache"
+    ]
+}

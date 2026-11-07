@@ -129,34 +129,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // -----------------------------------------------------------
-    // 2b. Game Arsenal 3D Flip Card (Categories <-> Games Played)
-    // -----------------------------------------------------------
-    const gameFlipCard = document.getElementById('game-arsenal-flip-card');
-    if (gameFlipCard) {
-        let isGameFlipped = false;
-        gameFlipCard.addEventListener('click', (e) => {
-            if (e.target.closest('a')) return;
-            isGameFlipped = !isGameFlipped;
-            if (isGameFlipped) {
-                gameFlipCard.classList.add('is-flipped');
-            } else {
-                gameFlipCard.classList.remove('is-flipped');
-            }
-
-            if (window.DQUAD_AUDIO) {
-                window.DQUAD_AUDIO.playCardFlip();
-            }
-        });
-
-        gameFlipCard.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                gameFlipCard.click();
-            }
-        });
-    }
-
-    // -----------------------------------------------------------
     // 3. Bento Grid & Controller Viscous Hairline Spotlight Physics
     // -----------------------------------------------------------
     const spotlightCards = document.querySelectorAll('.bento-card, .hairline-spotlight');
